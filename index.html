@@ -779,8 +779,8 @@ function todayKey(){return keyOf(new Date())}
 function dateOfKey(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)}
 function addDays(k,n){const d=dateOfKey(k);d.setDate(d.getDate()+n);return keyOf(d)}
 function puzzleNum(k=todayKey()){return Math.round((dateOfKey(k)-EPOCH)/864e5)+1}
-// Share the address the player is using: the GitHub Pages site, or the Claude-hosted copy.
-const SHARE_URL = (typeof location!=="undefined" && location.hostname.endsWith("github.io"))
+// Share the address the player is using: the Cloudflare or GitHub Pages site, or the Claude-hosted copy.
+const SHARE_URL = (typeof location!=="undefined" && /(\.github\.io|\.pages\.dev)$/.test(location.hostname))
   ? location.origin+location.pathname.replace(/index\.html$/,"")
   : "https://claude.ai/artifact/TnpPVyRojpdPJXhndMrAuy";
 const store = {

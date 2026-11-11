@@ -8,6 +8,7 @@
 import { PLAYER_NAMES } from "./players.js";
 
 const ALLOWED_ORIGINS = [
+  "https://owdoku.pages.dev",
   "https://kiiokat.github.io",
   "http://localhost:8000", "http://127.0.0.1:8000",   // local testing
 ];
