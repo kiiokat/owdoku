@@ -5,7 +5,7 @@ A free daily grid puzzle for Overwatch esports fans, in the style of
 pro player who fits both its row and its column, such as a player who played for the
 London Spitfire and won an Overwatch League title.
 
-**Play:** https://claude.ai/artifact/TnpPVyRojpdPJXhndMrAuy
+**Play:** https://kiiokat.github.io/owdoku/ (also at https://claude.ai/artifact/TnpPVyRojpdPJXhndMrAuy)
 
 OWdoku is a non-commercial fan project with no ads or paid features.
 
@@ -15,6 +15,7 @@ OWdoku is a non-commercial fan project with no ads or paid features.
 - Any player with recorded Overwatch League play from 2018 to 2023 counts as an answer
 - Three strikes, then the remaining answers are revealed
 - Stats, streaks and a shareable result
+- After the daily puzzle: what share of players picked each answer, and a rarity score
 - Player cards with the player's most-played hero, role and country
 
 ## How it works
@@ -26,13 +27,15 @@ are all inside it. To run it locally, serve the folder with any static web serve
 - Daily grids are generated from the date, so everyone gets the same puzzle. Each square
   must have at least three well-known answers (15+ hours of OWL play), and each day
   avoids the categories used in the two previous puzzles.
-- Progress, stats and settings are saved in the player's own browser. Nothing is sent
-  to a server.
+- Progress, stats and settings are saved in the player's own browser. The only thing sent
+  to a server is a finished daily game's answers, anonymously, for pick percentages; see
+  [`worker/`](worker/README.md).
 - Testing tools: type `owdev` on the page, tap "OWdoku" in the credits five times, or add
   `#dev` to the address.
 
 Player data is built by the scripts in [`data-pipeline/`](data-pipeline/README.md).
 Hero portraits are downloaded separately; see [`heroes/`](heroes/README.md).
+The site at kiiokat.github.io/owdoku is served from the `gh-pages` branch, which includes the portraits.
 
 ## Planned
 

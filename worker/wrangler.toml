@@ -1,0 +1,9 @@
+name = "owdoku-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# Created in the Cloudflare dashboard (Storage & Databases > D1). Paste its ID here.
+[[d1_databases]]
+binding = "DB"
+database_name = "owdoku"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
