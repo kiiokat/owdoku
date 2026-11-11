@@ -1007,7 +1007,7 @@ function finish(){
 // A small server (Cloudflare Worker, see /worker) counts the answers in each finished daily game.
 // When it can't be reached (no server set, offline, or the Claude-hosted copy, which blocks
 // outside requests), these features stay hidden and the game works as before.
-const API_DEFAULT = "";   // set to the Worker's address once it's deployed
+const API_DEFAULT = "https://owdoku-api.personal-4b0.workers.dev";   // the Worker (see /worker)
 const API_BASE = store.get("owdoku-api-override", null) || API_DEFAULT;   // override is for testing
 let PICKS = null;         // {plays, cells:[{name:count}]} for the loaded daily puzzle
 function sharedStatsOn(){ return !!API_BASE && mode==="daily" && !store.get("owdoku-testseed",null) }

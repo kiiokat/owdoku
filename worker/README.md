@@ -23,7 +23,7 @@ Answers must be real players from the game data (`src/players.js`), each used on
 3. **Set the database ID:** copy the database ID into `database_id` in `wrangler.toml` (already set for this repo).
 4. **Deploy:** Workers & Pages > Create > Import a repository > this repo, with root directory
    `worker`. Cloudflare deploys again on every push.
-5. **Connect the game:** set `API_DEFAULT` in `../index.html` to the Worker's address.
+5. **Connect the game:** set `API_DEFAULT` in `../index.html` to the Worker's address (already set: https://owdoku-api.personal-4b0.workers.dev).
 
 ## Free plan limits
 
