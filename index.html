@@ -1602,42 +1602,32 @@ function init(){
   document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode="practice";setTabs();load()};
   document.getElementById("tabArchive").onclick=openArchive;
   document.getElementById("statsBtn").onclick=openStats;
-  // Logo: hover makes the dots rumble for half a second, then they fire one by one from the top
-  // of the ring, turning like a revolver cylinder so the next dot slides into place. The center
-  // dot goes last. The ring stays empty until the pointer leaves, then the dots fade back in.
-  // A tap on a phone plays it once.
+  // Logo: hover makes the dots rumble for half a second, then they burst out toward the viewer one
+  // after another in a random order, each from its own spot. The ring stays empty until the pointer
+  // leaves, then the dots fade back in. A tap on a phone plays it once.
   { const L=document.querySelector("h1.logo"), ic=L&&L.querySelector(".logo-ic"); let timers=[];
-    const SLOTS=[[32,21],[43,21],[43,32],[43,43],[32,43],[21,43],[21,32],[21,21]];   // clockwise, slot 0 = firing point
-    const STEP=80;                                                                  // ms between shots
+    const STEP=55;                                                    // ms between shots
     const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
     const clear=()=>{ timers.forEach(clearTimeout); timers=[] };
-    const dots=()=>[...ic.querySelectorAll(".o")];
-    const core=()=>ic.querySelector(".core");
-    const place=(el,x,y)=>{ const hx=+el.getAttribute("cx"), hy=+el.getAttribute("cy"); el.style.transform=`translate(${x-hx}px,${y-hy}px)` };
-    // every shot leaves from the same spot: the firing slot at the top of the ring
+    const all=()=>[...ic.querySelectorAll(".o,.core")];
     const burst=el=>{ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       const R=ic.getBoundingClientRect(), k=R.width/64, rad=+el.getAttribute("r")*k, d=document.createElement("i");
-      const x=R.left+SLOTS[0][0]*k, y=R.top+SLOTS[0][1]*k;
+      const cx=+el.getAttribute("cx"), cy=+el.getAttribute("cy"), x=R.left+cx*k, y=R.top+cy*k;
       d.className="burst"+(el.classList.contains("core")?" core":"");
       Object.assign(d.style,{left:(x-rad)+"px",top:(y-rad)+"px",width:2*rad+"px",height:2*rad+"px"});
-      d.style.setProperty("--dx","0px"); d.style.setProperty("--dy",(-7*k)+"px");
-      document.body.appendChild(d); setTimeout(()=>d.remove(),800); };
-    const fire=el=>{ burst(el); el.classList.add("gone") };
-    const reset=()=>{ [...dots(),core()].forEach(el=>{ el.style.transition="none"; el.style.transform=""; el.classList.remove("gone") });
-      void ic.getBoundingClientRect(); [...dots(),core()].forEach(el=>el.style.transition="") };
+      d.style.setProperty("--dx",((cx-32)*1.4*k)+"px"); d.style.setProperty("--dy",((cy-32)*1.4*k)+"px");
+      document.body.appendChild(d); setTimeout(()=>d.remove(),600); };
+    const reset=()=>all().forEach(el=>el.classList.remove("gone"));
     const back=()=>{ clear(); ic.classList.remove("rumble","firing"); ic.classList.add("empty"); reset();
       requestAnimationFrame(()=>requestAnimationFrame(()=>ic.classList.remove("empty"))) };
     const play=auto=>{ clear(); reset(); ic.classList.remove("empty","firing"); ic.classList.add("rumble");
-      later(()=>{ ic.classList.remove("rumble"); ic.classList.add("firing");
-        const D=dots(), home=D.map(el=>SLOTS.findIndex(([x,y])=>x==el.getAttribute("cx")&&y==el.getAttribute("cy")));
-        for(let k=0;k<8;k++) later(()=>{
-          const i=home.findIndex(h=>(h+k)%8===0);        // dot sitting at the firing point after k turns
-          fire(D[i]);
-          D.forEach((el,j)=>{ if(!el.classList.contains("gone")){ const [x,y]=SLOTS[(home[j]+k+1)%8]; place(el,x,y) } });
-        }, k*STEP);
-        later(()=>place(core(),...SLOTS[0]), 8*STEP-30);    // the center dot moves up last...
-        later(()=>{ fire(core()); ic.classList.remove("firing"); ic.classList.add("empty");
-          if(auto) later(back,800) }, 8*STEP+70);           // ...and fires
+      later(()=>{
+        const order=all().sort(()=>Math.random()-.5);                  // a fresh random order every time
+        order.forEach((el,n)=>later(()=>{
+          if(n===0){ ic.classList.remove("rumble"); ic.classList.add("firing"); }
+          burst(el); el.classList.add("gone");
+        }, n*STEP));
+        later(()=>{ ic.classList.remove("firing"); ic.classList.add("empty"); if(auto) later(back,800) }, order.length*STEP+40);
       },500) };
     if(ic){ L.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse") play(false) });
       L.addEventListener("pointerleave",e=>{ if(e.pointerType==="mouse") back() });
