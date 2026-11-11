@@ -39,9 +39,11 @@
 
   /* segmented tabs with a sliding indicator (--ti is set from JS) */
   .tabs{position:relative;display:flex;padding:4px;margin-bottom:16px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
-  .tabs::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);border-radius:999px;
+  .tabs::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/2);border-radius:999px;
     background:var(--surface-2);box-shadow:0 0 0 1px var(--line-2),0 4px 12px rgba(0,0,0,.35);
-    transform:translateX(calc(var(--ti,0)*100%));transition:transform .46s var(--spring)}
+    transform:translateX(calc(var(--ti,0)*100%));transition:transform .46s var(--spring),opacity .25s}
+  .tabs.none::before{opacity:0}
+  .help.on{color:var(--accent-2);box-shadow:0 0 0 1px rgba(255,157,46,.6),0 0 14px rgba(255,157,46,.2)}
   .tab{position:relative;z-index:1;flex:1;padding:9px 4px;border:0;background:none;border-radius:999px;
     color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;transition:color .2s,transform .09s}
   .tab.on{color:var(--text)}
@@ -354,6 +356,38 @@
   .nudge:active{transform:scale(.97)}
   .nudge span{flex:1} .nudge i{font-style:normal;color:var(--accent-2);transition:transform .3s var(--spring)}
   .nudge:hover i{transform:translateX(3px)}
+
+  /* ---- Headers: icon on top, label in a fixed two-line box, so everything lines up ---- */
+  .hdr.col{align-items:flex-end}
+  .hd{display:flex;flex-direction:column;align-items:center;gap:6px;width:100%}
+  .hd-ico{height:38px;display:grid;place-items:center}
+  .hd-txt{height:2.3em;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.15}
+  .cbadge{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;position:relative;overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.14);transition:transform .4s var(--bouncy)}
+  .hdr:hover .cbadge{transform:scale(1.08) rotate(-4deg)}
+  .cbadge svg{width:52%;height:52%}
+  .cbadge.r-tank{background:radial-gradient(circle at 35% 30%,#2f6db8,#173b6a);color:#cfe6ff;border:3px solid #5aa9ff}
+  .cbadge.r-dps{background:radial-gradient(circle at 35% 30%,#b8323a,#651a20);color:#ffd9da;border:3px solid #ff6468}
+  .cbadge.r-support{background:radial-gradient(circle at 35% 30%,#23874f,#124a2b);color:#d6ffe6;border:3px solid #5ee08f}
+  .cbadge.champ{background:radial-gradient(circle at 35% 30%,#8a6510,#3d2b05);color:#ffd84a;border:3px solid #e8b52c}
+  .cbadge.season{background:radial-gradient(circle at 35% 30%,#5b3fb0,#2b1b5e);border:3px solid #a682f5}
+  .cbadge.season svg{width:60%;height:60%;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.4))}
+  .cbadge.hero{border:3px solid var(--accent);background:#222}
+  .cbadge.hero img{width:100%;height:100%;object-fit:cover}
+  /* B: each header is a tab fixed to its column (top) or row (left) */
+  .hs-b .hdr{padding:0;align-items:stretch}
+  .hs-b .tabhd{width:100%;display:flex;align-items:center;justify-content:center;padding:9px 4px 8px;
+    background:linear-gradient(180deg,#1d2230,#171b24);border-radius:14px 14px 5px 5px;box-shadow:0 0 0 1px var(--line),inset 0 -2px 0 var(--accent)}
+  .hs-b .hdr.row .tabhd{border-radius:14px 5px 5px 14px;box-shadow:0 0 0 1px var(--line),inset -2px 0 0 var(--accent)}
+  .hs-b .hd{gap:5px}
+  .hs-b .hd-ico{height:32px}
+  .hs-b .badge,.hs-b .cbadge{width:32px;height:32px}
+  .hs-b .badge.icon,.hs-b .cbadge{border-width:2.5px}
+  #hsPick{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:20;display:flex;gap:4px;padding:4px;border-radius:999px;
+    background:rgba(28,32,42,.92);backdrop-filter:blur(10px);box-shadow:0 0 0 1px var(--line-2),0 10px 26px rgba(0,0,0,.5);font-size:12px}
+  #hsPick span{padding:7px 8px;color:var(--muted)}
+  #hsPick button{border:0;border-radius:999px;padding:7px 13px;background:none;color:var(--text);font-weight:650;cursor:pointer}
+  #hsPick button.on{background:var(--accent);color:#241300}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
     animation:fall var(--t,1.6s) cubic-bezier(.25,.6,.4,1) forwards}
@@ -372,12 +406,11 @@
   <div class="ld-text" id="ldText">Loading heroes…</div>
 </div>
 <div class="app">
-  <header><h1>OW<span>doku</span></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
+  <header><h1>OW<span>doku</span></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="tabArchive" aria-label="Archive of past grids" title="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
   <div class="sub">Name an Overwatch League player (2018–2023) who fits both the row and the column.</div>
   <div class="tabs">
     <button class="tab on" id="tabDaily">Daily</button>
     <button class="tab" id="tabPractice">Practice</button>
-    <button class="tab" id="tabArchive">Archive</button>
   </div>
   <div class="grid" id="grid"></div>
   <div class="stats">
@@ -1061,13 +1094,27 @@ function load(){
 function save(){ if(mode!=="practice") store.set("owdoku-day-"+dayKey, state); }
 function score(){return state.cells.filter(Boolean).length}
 
+function teamBadge(c){
+  const t=TEAMS[c.team], ic=TEAM_ICONS[c.team];
+  return `<div class="badge${ic?" icon":""}" style="${ic&&TEAM_BADGE[c.team]?`background:${TEAM_BADGE[c.team].bg};border-color:${TEAM_BADGE[c.team].ring}`:`background:${t.c}`}" title="${c.team}">${ic?`<img src="${ic}" alt="${TEAM_ICON_NAMES[c.team]}">`:c.team}</div>`;
+}
+// Header look: "a" icon badges, "b" column tabs. Every header is an icon over a two-line label,
+// so icons and text line up across the row no matter how long a label is.
+let HDR_STYLE = "a";   // "b" (column tabs) is kept in the CSS as an alternative
+const TROPHY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V18h3v3H8v-3h3v-3.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3V3zm0 4H6v1a2 2 0 0 0 1 1.7V7zm10 0v2.7A2 2 0 0 0 18 8V7h-1z"/></svg>';
+function catParts(c){
+  if(c.kind==="team")   return {name:TEAMS[c.team].n};
+  if(c.kind==="role")   return {cls:"r-"+c.role.toLowerCase(), ico:ROLE_ICONS[c.role], name:c.role+" player"};
+  if(c.kind==="champ")  return {cls:"champ", ico:TROPHY, name:"OWL<br>Champion", tip:"Won an OWL title"};
+  if(c.kind==="season"){ const y=c.id.slice(2); return {cls:"season", ico:`<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3.2" fill="#f4efff"/><path d="M3 7.7A3.2 3.2 0 0 1 6.2 4.5h11.6A3.2 3.2 0 0 1 21 7.7V9H3z" fill="#8f6af0"/><rect x="7" y="2.5" width="2" height="4" rx="1" fill="#f4efff"/><rect x="15" y="2.5" width="2" height="4" rx="1" fill="#f4efff"/><text x="12" y="18.6" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-weight="800" font-size="8.4" fill="#3a2470">${y.slice(2)}</text></svg>`, name:"Played in<br>"+y, tip:"Played in "+y+" for any team"}; }
+  if(c.kind==="hero")   return {cls:"hero", ico:`<img src="heroes/${heroSlug(c.hero)}.png" alt="">`, name:"Most-played<br>"+c.hero};
+  return {cls:"", ico:"", name:c.label};
+}
 function headerHTML(c){
-  if (c.kind==="team"){
-    const t=TEAMS[c.team];
-    const ic=TEAM_ICONS[c.team];
-    return `<div class="chip"><div class="badge${ic?" icon":""}" style="${ic&&TEAM_BADGE[c.team]?`background:${TEAM_BADGE[c.team].bg};border-color:${TEAM_BADGE[c.team].ring}`:`background:${t.c}`}" title="${c.team}">${ic?`<img src="${ic}" alt="${TEAM_ICON_NAMES[c.team]}">`:c.team}</div>${t.n}</div>`;
-  }
-  return `<div class="attr">${c.label}</div>`;
+  const p=catParts(c);
+  const ico = c.kind==="team" ? teamBadge(c) : `<div class="cbadge ${p.cls}">${p.ico}</div>`;
+  const hd=`<div class="hd" title="${p.tip||p.name.replace(/<br>/g," ")}"><div class="hd-ico">${ico}</div><div class="hd-txt">${p.name}</div></div>`;
+  return HDR_STYLE==="b" ? `<div class="tabhd">${hd}</div>` : hd;
 }
 // Team icons: Fluent Emoji (flat) by Microsoft, MIT license, built into the page.
 // Each team gets an emoji that fits its name; no official logos are used.
@@ -1121,12 +1168,13 @@ function cardNote(p,n,revealed,i){
   return revealed?"Answer":"1 of "+n;
 }
 function render(){
+  document.body.className="hs-"+HDR_STYLE;
   document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey)+(mode==="archive"?" · archive":"");
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
-  grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr";d.innerHTML=headerHTML(c);g.appendChild(d)});
+  grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr col";d.innerHTML=headerHTML(c);g.appendChild(d)});
   grid.rows.forEach((row,ri)=>{
-    const h=document.createElement("div");h.className="hdr";h.innerHTML=headerHTML(row);g.appendChild(h);
+    const h=document.createElement("div");h.className="hdr row";h.innerHTML=headerHTML(row);g.appendChild(h);
     grid.cols.forEach((col,ci)=>g.appendChild(buildCell(ri*3+ci)));
   });
   g.classList.toggle("intro",introNext);
@@ -1579,7 +1627,8 @@ function init(){
 }
 function setTabs(){const T=[["tabDaily","daily"],["tabPractice","practice"],["tabArchive","archive"]];
   for(const [id,m] of T) document.getElementById(id).classList.toggle("on",mode===m);
-  document.querySelector(".tabs").style.setProperty("--ti",Math.max(0,T.findIndex(t=>t[1]===mode)))}
+  const tabs=document.querySelector(".tabs"), ti=T.findIndex(t=>t[1]===mode);
+  tabs.classList.toggle("none",ti>1); if(ti<=1) tabs.style.setProperty("--ti",ti)}
 function openStats(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null});
   const days=Object.values(hist).filter(h=>!h.a), played=days.length;
