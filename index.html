@@ -509,7 +509,7 @@
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<div id="defeat" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="def-word">Defeat</div><div class="def-sub">Out of strikes</div></div>
+<div id="defeat" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="def-word">Defeat</div><div class="def-sub" id="defSub">Out of strikes</div></div>
 <div id="victory" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="vic-shine"></div><div class="def-word">Victory</div><div class="def-sub">Perfect grid</div></div>
 
 <script>
@@ -1346,7 +1346,7 @@ function showCard(id,ms,sound,shake){
     setTimeout(()=>{ d.classList.remove("show"); app.classList.remove("quake"); res(); }, reduce?1600:ms);
   });
 }
-const showDefeat=()=>showCard("defeat",2700,()=>SFX.defeat(),true);
+const showDefeat=(sub="Out of strikes")=>{ document.getElementById("defSub").textContent=sub; return showCard("defeat",2700,()=>SFX.defeat(),true); };
 // VICTORY card (gold) for a perfect 9/9, with confetti
 const showVictory=()=>{ setTimeout(confetti,420); return showCard("victory",3000,()=>SFX.victory(),false); };
 let activeCell=null, hl=0, justFilled=-1, popStyle="pop";
@@ -1548,7 +1548,10 @@ function init(){
   });
   document.getElementById("mClose").onclick=closePicker;
   document.getElementById("scrim").onclick=e=>{if(e.target.id==="scrim")closePicker()};
-  document.getElementById("giveUpBtn").onclick=()=>{finish();save();render();endAndReveal()};
+  document.getElementById("giveUpBtn").onclick=()=>{ if(revealing||state.over) return;
+    finish(); save(); render(); window.scrollTo({top:0,behavior:"smooth"});
+    const st=state, sent=afterGame();
+    showDefeat("You gave up").then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) openMore() }) })); };
   document.getElementById("shareBtn").onclick=async()=>{
     try{await navigator.clipboard.writeText(shareText());SFX.copy();toast("Copied!")}catch(e){toast("Couldn't copy here")}};
   document.getElementById("answersBtn").onclick=()=>{
