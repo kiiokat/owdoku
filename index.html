@@ -411,10 +411,10 @@
   .logo-ic.rumble .o:nth-of-type(3n){animation-delay:-.03s}
   .burst{position:fixed;z-index:60;border-radius:50%;pointer-events:none;will-change:transform,opacity;
     background:radial-gradient(circle at 38% 35%,#ffe2b5,#ffbf6b 45%,#ff8a1f);box-shadow:0 0 6px rgba(255,157,46,.6);
-    animation:shoot .6s cubic-bezier(.2,.7,.3,1) forwards}
+    animation:shoot .34s cubic-bezier(.2,.7,.3,1) forwards}
   .burst.core{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.8);animation-delay:.04s}
   .logo-ic.empty .o,.logo-ic.empty .core{animation:none;opacity:0}
-  .logo-ic.firing .o,.logo-ic.firing .core{animation:none;transition:transform .08s cubic-bezier(.3,.7,.4,1)}
+  .logo-ic.firing .o,.logo-ic.firing .core{animation:none;transition:transform .065s cubic-bezier(.3,.7,.4,1)}
   .logo-ic .o.gone,.logo-ic .core.gone{opacity:0!important;transition:none!important}
   @keyframes rumble{0%{transform:translate(0,0)}25%{transform:translate(.7px,-.6px)}50%{transform:translate(-.6px,.7px)}75%{transform:translate(.6px,.5px)}100%{transform:translate(-.5px,-.6px)}}
   @keyframes shoot{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(5.5);opacity:0;filter:blur(1.5px)}}
@@ -1608,18 +1608,19 @@ function init(){
   // A tap on a phone plays it once.
   { const L=document.querySelector("h1.logo"), ic=L&&L.querySelector(".logo-ic"); let timers=[];
     const SLOTS=[[32,21],[43,21],[43,32],[43,43],[32,43],[21,43],[21,32],[21,21]];   // clockwise, slot 0 = firing point
-    const STEP=95;                                                                  // ms between shots
+    const STEP=80;                                                                  // ms between shots
     const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
     const clear=()=>{ timers.forEach(clearTimeout); timers=[] };
     const dots=()=>[...ic.querySelectorAll(".o")];
     const core=()=>ic.querySelector(".core");
     const place=(el,x,y)=>{ const hx=+el.getAttribute("cx"), hy=+el.getAttribute("cy"); el.style.transform=`translate(${x-hx}px,${y-hy}px)` };
+    // every shot leaves from the same spot: the firing slot at the top of the ring
     const burst=el=>{ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      const R=ic.getBoundingClientRect(), r=el.getBoundingClientRect(), d=document.createElement("i");
+      const R=ic.getBoundingClientRect(), k=R.width/64, rad=+el.getAttribute("r")*k, d=document.createElement("i");
+      const x=R.left+SLOTS[0][0]*k, y=R.top+SLOTS[0][1]*k;
       d.className="burst"+(el.classList.contains("core")?" core":"");
-      Object.assign(d.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});
-      d.style.setProperty("--dx",((r.left+r.width/2-(R.left+R.width/2))*1.4)+"px");
-      d.style.setProperty("--dy",((r.top+r.height/2-(R.top+R.height/2))*1.4)+"px");
+      Object.assign(d.style,{left:(x-rad)+"px",top:(y-rad)+"px",width:2*rad+"px",height:2*rad+"px"});
+      d.style.setProperty("--dx","0px"); d.style.setProperty("--dy",(-7*k)+"px");
       document.body.appendChild(d); setTimeout(()=>d.remove(),800); };
     const fire=el=>{ burst(el); el.classList.add("gone") };
     const reset=()=>{ [...dots(),core()].forEach(el=>{ el.style.transition="none"; el.style.transform=""; el.classList.remove("gone") });
@@ -1634,9 +1635,9 @@ function init(){
           fire(D[i]);
           D.forEach((el,j)=>{ if(!el.classList.contains("gone")){ const [x,y]=SLOTS[(home[j]+k+1)%8]; place(el,x,y) } });
         }, k*STEP);
-        later(()=>place(core(),...SLOTS[0]), 8*STEP-40);    // the center dot moves up last...
+        later(()=>place(core(),...SLOTS[0]), 8*STEP-30);    // the center dot moves up last...
         later(()=>{ fire(core()); ic.classList.remove("firing"); ic.classList.add("empty");
-          if(auto) later(back,800) }, 8*STEP+90);           // ...and fires
+          if(auto) later(back,800) }, 8*STEP+70);           // ...and fires
       },500) };
     if(ic){ L.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse") play(false) });
       L.addEventListener("pointerleave",e=>{ if(e.pointerType==="mouse") back() });
