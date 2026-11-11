@@ -6,4 +6,4 @@ compatibility_date = "2026-11-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "owdoku"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "2debf8a1-ad8f-4015-bac9-af939890d55c"

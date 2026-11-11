@@ -20,7 +20,7 @@ Answers must be real players from the game data (`src/players.js`), each used on
 
 1. **Create the database:** Storage & Databases > D1 > Create database, named `owdoku`.
 2. **Create the tables:** open the database's Console tab and run the contents of `schema.sql`.
-3. **Set the database ID:** copy the database ID into `database_id` in `wrangler.toml`.
+3. **Set the database ID:** copy the database ID into `database_id` in `wrangler.toml` (already set for this repo).
 4. **Deploy:** Workers & Pages > Create > Import a repository > this repo, with root directory
    `worker`. Cloudflare deploys again on every push.
 5. **Connect the game:** set `API_DEFAULT` in `../index.html` to the Worker's address.
