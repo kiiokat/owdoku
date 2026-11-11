@@ -17,6 +17,11 @@ OWdoku is a non-commercial fan project with no ads or paid features.
 - Stats, streaks and a shareable result
 - After the daily puzzle: what share of players picked each answer, and a rarity score
 - Player cards with the player's most-played hero, role and country
+- An On Fire meter for correct answers in a row (On Fire at 3, Blazing at 6)
+- Overwatch-style VICTORY and DEFEAT screens, and a prompt to play unfinished past grids
+- An archive of past grids behind the calendar button at the top
+- Smooth animations and small sound effects made in the browser, with a mute button
+- Forgiving search: ignores case and accents, and reads digits as letters (SP9RK1E finds "Sparkle")
 
 ## How it works
 
@@ -51,6 +56,9 @@ The site at owdoku.pages.dev is served by Cloudflare Pages from the `gh-pages` b
 - **Flags:** [flag-icons](https://github.com/lipis/flag-icons) (MIT)
 - **Team icons:** [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) by Microsoft (MIT).
   No official team logos are used.
+- **Fonts:** Bricolage Grotesque, Geist, Geist Mono and Saira Extra Condensed via
+  [Google Fonts](https://fonts.google.com/) (SIL Open Font License)
+- **Logo and sounds:** original to OWdoku. Sound effects are generated in the browser; no audio files.
 
 OWdoku is not affiliated with or endorsed by Blizzard Entertainment, the Overwatch League,
 or Liquipedia.
