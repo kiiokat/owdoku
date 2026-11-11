@@ -416,6 +416,13 @@
   }
   @keyframes orb{0%,8%,100%{transform:scale(1)}4%{transform:scale(1.25)}}
   @keyframes core{0%,12%,100%{transform:scale(1)}17%{transform:scale(1.35)}24%{transform:scale(1)}}
+  /* scroll areas: no sideways scrolling, and slim scrollbars that match the dark theme */
+  .archlist,.results,#ansList{overflow-x:hidden!important;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.16) transparent}
+  ::-webkit-scrollbar{width:10px;height:10px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:999px;border:3px solid transparent;background-clip:padding-box}
+  ::-webkit-scrollbar-thumb:hover{background-color:rgba(255,157,46,.55)}
+  ::-webkit-scrollbar-button,::-webkit-scrollbar-corner{display:none;background:transparent}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
     animation:fall var(--t,1.6s) cubic-bezier(.25,.6,.4,1) forwards}
