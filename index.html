@@ -395,18 +395,34 @@
   h1.logo{display:flex;align-items:center;gap:9px}
   h1.logo b{font-weight:800}
   .logo-ic{width:34px;height:34px;flex:none;filter:drop-shadow(0 0 10px rgba(255,157,46,.28));transition:transform .5s var(--bouncy)}
-  h1.logo:hover .logo-ic{transform:rotate(45deg) scale(1.06)}
   .logo-ic .o{transform-box:fill-box;transform-origin:center;animation:orb 6s ease-in-out infinite}
   .logo-ic .o:nth-of-type(2){animation-delay:.12s}.logo-ic .o:nth-of-type(3){animation-delay:.24s}.logo-ic .o:nth-of-type(4){animation-delay:.36s}
   .logo-ic .o:nth-of-type(5){animation-delay:.48s}.logo-ic .o:nth-of-type(6){animation-delay:.6s}.logo-ic .o:nth-of-type(7){animation-delay:.72s}.logo-ic .o:nth-of-type(8){animation-delay:.84s}
   .logo-ic .core{transform-box:fill-box;transform-origin:center;animation:core 6s ease-in-out infinite}
+  /* hover: the dots rumble, then shoot toward the viewer and fade; they fade back when the pointer leaves */
+  .logo-ic{overflow:visible;cursor:default}
+  .logo-ic .o,.logo-ic .core{transition:opacity .45s var(--ease)}
+  .logo-ic:not(.empty) .o:nth-of-type(2){transition-delay:.04s}.logo-ic:not(.empty) .o:nth-of-type(3){transition-delay:.08s}
+  .logo-ic:not(.empty) .o:nth-of-type(4){transition-delay:.12s}.logo-ic:not(.empty) .o:nth-of-type(5){transition-delay:.16s}
+  .logo-ic:not(.empty) .o:nth-of-type(6){transition-delay:.2s}.logo-ic:not(.empty) .o:nth-of-type(7){transition-delay:.24s}
+  .logo-ic:not(.empty) .o:nth-of-type(8){transition-delay:.28s}.logo-ic:not(.empty) .core{transition-delay:.34s}
+  .logo-ic.rumble .o,.logo-ic.rumble .core{animation:rumble .1s linear infinite}
+  .logo-ic.rumble .o:nth-of-type(odd){animation-duration:.08s;animation-direction:reverse}
+  .logo-ic.rumble .o:nth-of-type(3n){animation-delay:-.03s}
+  .burst{position:fixed;z-index:60;border-radius:50%;pointer-events:none;will-change:transform,opacity;
+    background:radial-gradient(circle at 38% 35%,#ffe2b5,#ffbf6b 45%,#ff8a1f);box-shadow:0 0 6px rgba(255,157,46,.6);
+    animation:shoot .6s cubic-bezier(.2,.7,.3,1) forwards}
+  .burst.core{background:#fff;box-shadow:0 0 8px rgba(255,255,255,.8);animation-delay:.04s}
+  .logo-ic.empty .o,.logo-ic.empty .core{animation:none;opacity:0}
+  @keyframes rumble{0%{transform:translate(0,0)}25%{transform:translate(.7px,-.6px)}50%{transform:translate(-.6px,.7px)}75%{transform:translate(.6px,.5px)}100%{transform:translate(-.5px,-.6px)}}
+  @keyframes shoot{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(5.5);opacity:0;filter:blur(1.5px)}}
   @media (max-width:410px){
     h1.logo{gap:7px} .logo-ic{width:28px;height:28px}
     .help{width:29px!important;height:29px!important} .hdr-right{gap:4px!important} #pnum{padding:5px 6px!important}
     .hdr-right{gap:5px} .help{width:30px;height:30px} #pnum{padding:5px 7px;font-size:11px}
   }
-  @keyframes orb{0%,8%,100%{opacity:1;transform:scale(1)}4%{transform:scale(1.25)}}
-  @keyframes core{0%,12%,100%{opacity:.85;transform:scale(1)}17%{opacity:1;transform:scale(1.35)}24%{transform:scale(1)}}
+  @keyframes orb{0%,8%,100%{transform:scale(1)}4%{transform:scale(1.25)}}
+  @keyframes core{0%,12%,100%{transform:scale(1)}17%{transform:scale(1.35)}24%{transform:scale(1)}}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
     animation:fall var(--t,1.6s) cubic-bezier(.25,.6,.4,1) forwards}
@@ -1584,6 +1600,26 @@ function init(){
   document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode="practice";setTabs();load()};
   document.getElementById("tabArchive").onclick=openArchive;
   document.getElementById("statsBtn").onclick=openStats;
+  // Logo: hover makes the dots rumble for half a second, then shoot out toward the viewer.
+  // They stay gone until the pointer leaves, then fade back in. A tap on a phone plays it once.
+  { const L=document.querySelector("h1.logo"), ic=L&&L.querySelector(".logo-ic"); let t1,t2,t3;
+    const clear=()=>{clearTimeout(t1);clearTimeout(t2);clearTimeout(t3)};
+    const back=()=>{ clear(); ic.classList.remove("rumble"); ic.classList.add("empty");
+      requestAnimationFrame(()=>requestAnimationFrame(()=>ic.classList.remove("empty"))) };
+    const play=auto=>{ clear(); ic.classList.remove("empty"); ic.classList.add("rumble");
+      t1=setTimeout(()=>{ ic.classList.remove("rumble"); shoot(); ic.classList.add("empty");
+        if(auto) t3=setTimeout(back,1300) },500) };
+    // copies of each dot fly out from the icon, growing and fading, so they look like they come at the viewer
+    const shoot=()=>{ if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const R=ic.getBoundingClientRect(), cx=R.left+R.width/2, cy=R.top+R.height/2;
+      ic.querySelectorAll(".o,.core").forEach(el=>{ const r=el.getBoundingClientRect(), d=document.createElement("i");
+        d.className="burst"+(el.classList.contains("core")?" core":"");
+        Object.assign(d.style,{left:r.left+"px",top:r.top+"px",width:r.width+"px",height:r.height+"px"});
+        d.style.setProperty("--dx",((r.left+r.width/2-cx)*1.6)+"px"); d.style.setProperty("--dy",((r.top+r.height/2-cy)*1.6)+"px");
+        document.body.appendChild(d); setTimeout(()=>d.remove(),800); }); };
+    if(ic){ L.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse") play(false) });
+      L.addEventListener("pointerleave",e=>{ if(e.pointerType==="mouse") back() });
+      L.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse") play(true) }); } }
   const more=document.getElementById("moreScrim");
   document.getElementById("moreClose").onclick=closeMore;
   document.getElementById("moreArch").onclick=()=>{closeMore();openArchive()};
