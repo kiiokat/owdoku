@@ -58,15 +58,12 @@
   @keyframes rise{from{opacity:0;transform:translateY(10px) scale(.96)}}
   .hdr{display:flex;align-items:center;justify-content:center;text-align:center;
     min-height:78px;padding:4px;font-family:var(--display);font-weight:700;font-size:12.5px;line-height:1.15;letter-spacing:-.01em}
-  .chip{display:flex;flex-direction:column;align-items:center;gap:6px}
   .badge{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
     font-size:10px;font-weight:800;letter-spacing:.3px;color:#fff;border:2px solid rgba(255,255,255,.25);
     box-shadow:0 4px 10px rgba(0,0,0,.35);transition:transform .4s var(--bouncy)}
   .hdr:hover .badge{transform:scale(1.08) rotate(-4deg)}
   .badge.icon{border:3px solid;box-shadow:0 0 0 1px rgba(255,255,255,.18),inset 0 2px 4px rgba(255,255,255,.12),0 4px 10px rgba(0,0,0,.35)}
   .badge img{width:64%;height:64%;display:block;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.45))}
-  .attr{border-radius:14px;width:100%;height:100%;background:var(--surface);box-shadow:var(--sh-1);
-    display:flex;align-items:center;justify-content:center;padding:6px}
 
   .cell{position:relative;aspect-ratio:1;border-radius:14px;
     background:linear-gradient(180deg,#1a1e28,#151820);box-shadow:var(--sh-1);
@@ -376,20 +373,6 @@
   .cbadge.season svg{width:60%;height:60%;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.4))}
   .cbadge.hero{border:3px solid var(--accent);background:#222}
   .cbadge.hero img{width:100%;height:100%;object-fit:cover}
-  /* B: each header is a tab fixed to its column (top) or row (left) */
-  .hs-b .hdr{padding:0;align-items:stretch}
-  .hs-b .tabhd{width:100%;display:flex;align-items:center;justify-content:center;padding:9px 4px 8px;
-    background:linear-gradient(180deg,#1d2230,#171b24);border-radius:14px 14px 5px 5px;box-shadow:0 0 0 1px var(--line),inset 0 -2px 0 var(--accent)}
-  .hs-b .hdr.row .tabhd{border-radius:14px 5px 5px 14px;box-shadow:0 0 0 1px var(--line),inset -2px 0 0 var(--accent)}
-  .hs-b .hd{gap:5px}
-  .hs-b .hd-ico{height:32px}
-  .hs-b .badge,.hs-b .cbadge{width:32px;height:32px}
-  .hs-b .badge.icon,.hs-b .cbadge{border-width:2.5px}
-  #hsPick{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:20;display:flex;gap:4px;padding:4px;border-radius:999px;
-    background:rgba(28,32,42,.92);backdrop-filter:blur(10px);box-shadow:0 0 0 1px var(--line-2),0 10px 26px rgba(0,0,0,.5);font-size:12px}
-  #hsPick span{padding:7px 8px;color:var(--muted)}
-  #hsPick button{border:0;border-radius:999px;padding:7px 13px;background:none;color:var(--text);font-weight:650;cursor:pointer}
-  #hsPick button.on{background:var(--accent);color:#241300}
 
   /* ---- logo icon: a ring of glowing orbs; they light up in turn now and then ---- */
   h1.logo{display:flex;align-items:center;gap:9px}
@@ -480,6 +463,7 @@
     <p><b>Hero portraits:</b> <a href="https://overwatch.blizzard.com/en-us/heroes/">overwatch.blizzard.com</a>.
       Overwatch and all related characters and artwork are © and ™ Blizzard Entertainment, Inc.</p>
     <p><b>Flags:</b> <a href="https://github.com/lipis/flag-icons">flag-icons</a> (MIT). <b>Team icons:</b> <a href="https://github.com/microsoft/fluentui-emoji">Fluent Emoji</a> by Microsoft (MIT).</p>
+    <p><b>Fonts:</b> Bricolage Grotesque, Geist, Geist Mono and Saira Extra Condensed, via <a href="https://fonts.google.com/">Google Fonts</a> (SIL Open Font License).</p>
     <p><span id="devTap">OWdoku</span> is a free, non-commercial fan project. It is not affiliated with or endorsed by
       Blizzard Entertainment or the Overwatch League. Early beta: some answers may be missing.</p>
   </footer>
@@ -503,7 +487,7 @@
       <li>Each player can only be used once per grid.</li>
       <li>A wrong guess is a strike. After <b>3 strikes</b>, the game ends and the remaining answers are revealed.</li>
       <li>After the daily puzzle, see what share of players picked each of your answers. Your <b>rarity score</b> adds those up (plus 100 per missed square), so lower means more unique picks.</li>
-      <li>A new grid arrives every day at midnight. Missed one? Play it from the <b>Archive</b>. Practice mode has unlimited random grids.</li>
+      <li>A new grid arrives every day at midnight. Missed one? Tap the calendar button at the top to play past grids from the <b>Archive</b>. Practice mode has unlimited random grids.</li>
     </ol>
     <p class="help-key"><b>On each card:</b> the player's most-played hero, their country flag (where known),
       and their role badge: <span class="k tank">Tank</span> <span class="k dps">DPS</span> <span class="k sup">Support</span></p>
@@ -1135,9 +1119,8 @@ function teamBadge(c){
   const t=TEAMS[c.team], ic=TEAM_ICONS[c.team];
   return `<div class="badge${ic?" icon":""}" style="${ic&&TEAM_BADGE[c.team]?`background:${TEAM_BADGE[c.team].bg};border-color:${TEAM_BADGE[c.team].ring}`:`background:${t.c}`}" title="${c.team}">${ic?`<img src="${ic}" alt="${TEAM_ICON_NAMES[c.team]}">`:c.team}</div>`;
 }
-// Header look: "a" icon badges, "b" column tabs. Every header is an icon over a two-line label,
+// Every header is an icon over a two-line label,
 // so icons and text line up across the row no matter how long a label is.
-let HDR_STYLE = "a";   // "b" (column tabs) is kept in the CSS as an alternative
 const TROPHY='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 3h10v2h3v3a4 4 0 0 1-4 4h-.3A5 5 0 0 1 13 14.9V18h3v3H8v-3h3v-3.1A5 5 0 0 1 8.3 12H8a4 4 0 0 1-4-4V5h3V3zm0 4H6v1a2 2 0 0 0 1 1.7V7zm10 0v2.7A2 2 0 0 0 18 8V7h-1z"/></svg>';
 function catParts(c){
   if(c.kind==="team")   return {name:TEAMS[c.team].n};
@@ -1151,7 +1134,7 @@ function headerHTML(c){
   const p=catParts(c);
   const ico = c.kind==="team" ? teamBadge(c) : `<div class="cbadge ${p.cls}">${p.ico}</div>`;
   const hd=`<div class="hd" title="${p.tip||p.name.replace(/<br>/g," ")}"><div class="hd-ico">${ico}</div><div class="hd-txt">${p.name}</div></div>`;
-  return HDR_STYLE==="b" ? `<div class="tabhd">${hd}</div>` : hd;
+  return hd;
 }
 // Team icons: Fluent Emoji (flat) by Microsoft, MIT license, built into the page.
 // Each team gets an emoji that fits its name; no official logos are used.
@@ -1205,7 +1188,6 @@ function cardNote(p,n,revealed,i){
   return revealed?"Answer":"1 of "+n;
 }
 function render(){
-  document.body.className="hs-"+HDR_STYLE;
   document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey)+(mode==="archive"?" · archive":"");
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
@@ -1290,8 +1272,6 @@ const SFX = (()=>{
     wrong(){ tone(160,{dur:.22,vol:.13,type:"sawtooth",slide:.55,filter:700}); tone(120,{t:.07,dur:.2,vol:.1,type:"square",slide:.6,filter:500}) },
     reveal(k=0){ tick(.05,1400); tone(N(67+[0,2,4,7,9,12,14,16,19][k%9]),{t:.18,dur:.18,vol:.05,type:"sine"}) },
     finish(){ [67,72,76].forEach((n,k)=>tone(N(n),{t:k*.09,dur:.35,vol:.07,type:"triangle"})) },
-    perfect(){ [72,76,79,84,88,91].forEach((n,k)=>tone(N(n),{t:k*.07,dur:.4,vol:.08,type:"triangle"}));
-      [96,100,103].forEach((n,k)=>tone(N(n),{t:.45+k*.06,dur:.5,vol:.03})) },
     ignite(big){ const c=ac(); if(!c) return;
       const len=Math.floor(c.sampleRate*.5), b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
       for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/len);
