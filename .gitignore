@@ -4,3 +4,6 @@ heroes/heroes.json
 # Stats Lab source files and the intermediate build output (see data-pipeline/README.md)
 data-pipeline/raw_data/
 data-pipeline/players_full.json
+
+# Liquipedia API downloads (regenerate with tools/fetch-liquipedia.py)
+tools/liquipedia_data/
