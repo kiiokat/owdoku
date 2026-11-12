@@ -496,6 +496,7 @@
   .diff.hard{color:var(--bad)} .diff.hard i.on{background:var(--bad);box-shadow:none}
   .sq-filled{margin-top:8px;font-size:12px;color:var(--good)}
   #sqCard .sq-body{animation:sqIn .25s var(--ease);height:178px;overflow:hidden}
+  #sqCard .sq-empty{height:197px}
   @keyframes sqIn{from{opacity:.3;transform:translateY(3px)}}
   .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
   .week .d{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--faint);font-weight:600;letter-spacing:.04em}
@@ -1451,7 +1452,7 @@ function renderFire(){
 // "This square": what the square under the pointer needs, how many answers it has, how hard it is.
 const CAT_DESC = c =>
   c.kind==="team"   ? `Played for ${TEAMS[c.team].n} in the OWL` :
-  c.kind==="role"   ? `Played ${c.role} in the OWL (a main role, any season)` :
+  c.kind==="role"   ? `Played ${c.role} in the OWL` :
   c.kind==="champ"  ? "Won an OWL championship, with any team" :
   c.kind==="season" ? `Played in the ${c.id.slice(2)} OWL season, for any team` :
   c.kind==="hero"   ? `${c.hero} was their most-played hero` : c.label;
@@ -1462,7 +1463,7 @@ function renderSqCard(){
   const el=document.getElementById("sqCard"); if(!el||!grid) return;
   const i=sqHover;
   if(i<0){
-    el.innerHTML=`<h4>This square</h4><div class="sq-body sq-empty"><div class="sq-mini">${[...Array(9).keys()].map(k=>`<i class="${state.cells[k]?"done":""}"></i>`).join("")}</div>
+    el.innerHTML=`<div class="sq-body sq-empty"><div class="sq-mini">${[...Array(9).keys()].map(k=>`<i class="${state.cells[k]?"done":""}"></i>`).join("")}</div>
       Point at a square to see what it needs, how many answers it has and how hard it is.</div>`;
     return;
   }
