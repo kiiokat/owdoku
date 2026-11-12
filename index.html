@@ -1481,7 +1481,8 @@ function cardHTML(p, row, n, revealed, col, i){
 function cardNote(p,n,revealed,i){
   const pc = (state.over && i!=null) ? pickPct(i,p.n) : null;
   if (pc!=null && !(revealed && pc===0)) return revealed ? "Answer · "+pctText(pc) : pctText(pc)+" picked";
-  return revealed?"Answer":"1 of "+n;
+  if (revealed) return pc===0 ? "Answer · 0%" : "Rarity pending";   // no pick data for this square yet
+  return "1 of "+n;
 }
 function render(){
   document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
