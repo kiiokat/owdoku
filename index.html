@@ -598,9 +598,12 @@
   .pp-pin .pinbadge{border-width:3px}
   .pin-pop.show .pp-pin{animation:pinDrop .7s var(--bouncy) both;animation-delay:calc(.1s + var(--k)*.12s)}
   .pin-pop{cursor:pointer}
-  .rk-pins{position:relative;border-radius:999px}
+  /* the pins sit on a recessed "shelf": a darker inset tray with an inner shadow along the top and a faint lit lower edge */
+  .rk-pins{position:relative;--shelf:inset 0 2px 4px rgba(0,0,0,.55),inset 0 -1px 0 rgba(255,255,255,.06),0 1px 0 rgba(255,255,255,.04)}
+  .rk-pins:not(.sm){background:var(--bg);border-radius:12px;padding:8px 10px;box-shadow:var(--shelf)}
+  .rk-pins.sm{background:var(--bg);border-radius:999px;padding:3px 6px;box-shadow:var(--shelf)}
   .rk-pins.glow{animation:pinsGlow 1.6s ease-in-out 4}
-  @keyframes pinsGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,214,102,0)}50%{box-shadow:0 0 0 4px rgba(255,214,102,.18),0 0 18px 4px rgba(255,214,102,.35)}}
+  @keyframes pinsGlow{0%,100%{box-shadow:var(--shelf),0 0 0 0 rgba(255,214,102,0)}50%{box-shadow:var(--shelf),0 0 0 3px rgba(255,214,102,.2),0 0 18px 4px rgba(255,214,102,.32)}}
   .rk-pins.has-new::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:#ffd666;box-shadow:0 0 6px #ffd666}
   .ps-pin{position:relative} .ps-pin.new::after{content:"NEW";position:absolute;top:5px;right:6px;font-size:8.5px;font-weight:800;letter-spacing:.06em;color:#1a1300;background:#ffd666;border-radius:6px;padding:1px 4px} 
   @keyframes pinDrop{0%{transform:translateY(-40px) rotate(-25deg) scale(1.4);opacity:0}100%{transform:none;opacity:1}}
