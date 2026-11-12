@@ -576,6 +576,9 @@
   .pinbadge.t2{box-shadow:0 0 12px rgba(255,210,80,.35),0 2px 6px rgba(0,0,0,.4)}
   @keyframes pinSpin{to{transform:rotate(360deg)}}
   .pin-modal{max-width:420px}
+  .ps-count{display:inline-block;margin:2px 0 10px;padding:5px 12px;border-radius:999px;background:var(--bg);font-size:12px;color:var(--muted);
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.55),inset 0 -1px 0 rgba(255,255,255,.06),0 1px 0 rgba(255,255,255,.04)}
+  .ps-count b{color:var(--text);font-family:var(--display);font-size:13px}
   #pinGrid h5{margin:14px 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
   .ps-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
   .ps-pin{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:0;border-radius:12px;background:var(--bg);cursor:pointer;color:var(--text)}
@@ -827,7 +830,8 @@
 <div class="scrim" id="pinScrim">
   <div class="modal pin-modal">
     <h2 class="mtitle">Pins</h2>
-    <p class="sub">Earned by playing the daily, the archive and themed Sundays. Hover or tap a pin.</p>
+    <div class="ps-count" id="pinCount"></div>
+    <p class="sub">Earned by playing the daily, the archive and themed Sundays.</p>
     <div id="pinGrid"></div>
     <div class="ps-info" id="pinInfo"></div>
     <button class="btn ghost" id="pinClose">Close</button>
@@ -2858,7 +2862,8 @@ function openPins(){
   box.innerHTML=PIN_SECTIONS.map(([sec,label])=>`<h5>${label}</h5><div class="ps-row">${PIN_DEFS.filter(d=>d.sec===sec).map(d=>{
     const got=P.earned[d.id], fresh=got&&(P.unseen||[]).includes(d.id); return `<button class="ps-pin${got?"":" locked"}${fresh?" new":""}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` }).join("")}</div>`).join("");
   const n=PIN_DEFS.filter(d=>P.earned[d.id]).length;
-  const idle=`${n} of ${PIN_DEFS.length} pins earned`; info.innerHTML=idle;
+  document.getElementById("pinCount").innerHTML=`<b>${n}</b> / ${PIN_DEFS.length} pins earned`;
+  const idle=`Hover or tap a pin to see how it's earned`; info.innerHTML=idle;
   const show=b=>{ const d=PIN_DEFS.find(x=>x.id===b.dataset.pin), got=P.earned[d.id];
     info.innerHTML = got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`; };
   box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); b.onmouseleave=()=>{ info.innerHTML=idle } });
