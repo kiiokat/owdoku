@@ -585,7 +585,7 @@
   .ps-count b{color:var(--text);font-family:var(--display);font-size:13px}
   #pinGrid h5{margin:14px 0 8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;align-items:baseline;gap:8px}
   #pinGrid h5 .ps-note{margin-left:auto;font-size:11px;letter-spacing:0;text-transform:none;font-weight:500;color:var(--faint)}
-  .ps-more{margin-top:16px;border-radius:12px;background:var(--bg);padding:0 10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.05)}
+  .ps-more{margin-top:10px;border-radius:12px;background:var(--bg);padding:0 10px;box-shadow:inset 0 2px 4px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.05)}
   .ps-more summary{list-style:none;display:flex;align-items:center;gap:8px;padding:11px 2px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
   .ps-more summary::-webkit-details-marker{display:none}
   .ps-more summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s;margin-left:6px}
@@ -593,7 +593,7 @@
   .ps-more summary em{margin-left:auto;font-style:normal;font-weight:600;letter-spacing:0;color:var(--faint)}
   .ps-more summary .ps-dot{width:7px;height:7px;border-radius:50%;background:#ffd666}
   @media (hover:hover){.ps-more summary:hover{color:var(--text)}}
-  .ps-more[open]{padding-bottom:10px} .ps-more h5:first-of-type{margin-top:2px}
+  .ps-more[open]{padding-bottom:10px} .ps-more h5:first-of-type{margin-top:2px} #pinGrid>.ps-more:first-child{margin-top:4px}
   .ps-more .ps-pin{background:var(--surface-2)}
   .ps-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
   .ps-pin{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border:0;border-radius:12px;background:var(--bg);cursor:pointer;color:var(--text)}
@@ -2813,8 +2813,9 @@ PIN_DEFS.push(
   {id:"arch-3",sec:"Habits",icon:"books",chain:"arch",tier:2,name:"Loremaster",  how:"Finished 100 archive grids"},
   {id:"dedicated",sec:"Habits",icon:"cal",name:"Dedicated",how:"Reached a 30-day daily streak"});
 const PIN_SECTIONS=[["Daily","🎮 Every grid"],["Sunday","☀️ Sundays"],["Habits","📚 Habits"]];
-const PIN_LEAGUES=[["APEX","⛰️ APEX"],["Contenders","🌱 Contenders"]];   // inside a fold-out below the main sections
-let PIN_LG_OPEN=false;
+const PIN_LEAGUES=[["APEX","⛰️ APEX"],["Contenders","🌱 Contenders"]];   // share one fold-out below the main sections
+// Each group is a fold-out; "Every grid" starts open. Open/closed state lasts until the page reloads.
+const PIN_FOLD={Daily:true,Sunday:false,Habits:false,Leagues:false};
 const PIN_COL={APEX:["#ff8a8f","#d33a44","#7a1420","#f4c95d"], Contenders:["#9ff0c3","#2fae6f","#11553a","#e6f7ee"]};
 let PIN_NEW=[];
 function pinStore(){ const P=store.get("owdoku-pins",null)||{}; P.earned=P.earned||{}; P.good=P.good||{}; P.good.APEX=P.good.APEX||[]; P.good.Contenders=P.good.Contenders||[];
@@ -2896,13 +2897,14 @@ function openPins(){
   const P=pinStore(), sc=document.getElementById("pinScrim"), box=document.getElementById("pinGrid"), info=document.getElementById("pinInfo");
   const fmt=k=>{ const d=dateOfKey(k); return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}) };
   const pinBtn=d=>{ const got=P.earned[d.id], fresh=got&&(P.unseen||[]).includes(d.id); return `<button class="ps-pin${got?"":" locked"}${fresh?" new":""}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` };
-  const sect=([sec,label],note)=>`<h5>${label}${note?`<span class="ps-note">${note}</span>`:""}</h5><div class="ps-row">${PIN_DEFS.filter(d=>d.sec===sec).map(pinBtn).join("")}</div>`;
-  const lgDefs=PIN_DEFS.filter(d=>d.sec==="APEX"||d.sec==="Contenders"), lgGot=lgDefs.filter(d=>P.earned[d.id]).length;
-  const lgNew=lgDefs.some(d=>(P.unseen||[]).includes(d.id));
-  box.innerHTML=PIN_SECTIONS.map(s=>sect(s)).join("")
-    + `<details class="ps-more"${PIN_LG_OPEN||lgNew?" open":""}><summary><span>⛰️ APEX &amp; 🌱 Contenders</span><em>${lgGot} / ${lgDefs.length}</em>${lgNew?'<i class="ps-dot"></i>':""}</summary>`
-    + PIN_LEAGUES.map(s=>sect(s,"Playable on Sundays")).join("") + `</details>`;
-  box.querySelector(".ps-more").ontoggle=e=>{ PIN_LG_OPEN=e.target.open };
+  const row=sec=>`<div class="ps-row">${PIN_DEFS.filter(d=>d.sec===sec).map(pinBtn).join("")}</div>`;
+  const fold=(key,label,secs,body)=>{ const defs=PIN_DEFS.filter(d=>secs.includes(d.sec)), got=defs.filter(d=>P.earned[d.id]).length,
+      fresh=defs.some(d=>(P.unseen||[]).includes(d.id));
+    return `<details class="ps-more" data-fold="${key}"${PIN_FOLD[key]||fresh?" open":""}><summary><span>${label}</span><em>${got} / ${defs.length}</em>${fresh?'<i class="ps-dot"></i>':""}</summary>${body}</details>` };
+  box.innerHTML=PIN_SECTIONS.map(([sec,label])=>fold(sec,label,[sec],row(sec))).join("")
+    + fold("Leagues","⛰️ APEX &amp; 🌱 Contenders",["APEX","Contenders"],
+        PIN_LEAGUES.map(([sec,label])=>`<h5>${label}<span class="ps-note">Playable on Sundays</span></h5>${row(sec)}`).join(""));
+  box.querySelectorAll(".ps-more").forEach(d=>d.ontoggle=()=>{ PIN_FOLD[d.dataset.fold]=d.open });
   const n=PIN_DEFS.filter(d=>P.earned[d.id]).length;
   document.getElementById("pinCount").innerHTML=`<b>${n}</b> / ${PIN_DEFS.length} achievements earned`;
   const idle=`Hover or tap an achievement to see how it's earned`; info.innerHTML=""; info.style.height=""; setPinInfo(idle);
