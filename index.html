@@ -1459,23 +1459,24 @@ const CAT_DESC = c =>
 function catIcon(c){ const p=catParts(c); return c.kind==="team"?teamBadge(c):`<div class="cbadge ${p.cls}">${p.ico}</div>` }
 function catName(c){ return c.kind==="team"?TEAMS[c.team].n:(c.kind==="hero"?"Top hero: "+c.hero:(c.kind==="role"?c.role+" player":c.kind==="champ"?"OWL Champion":"Played in "+c.id.slice(2))) }
 let sqHover=-1;
+const setCard=(el,html)=>{ if(el._html===html) return false; el._html=html; el.innerHTML=html; return true };
 function renderSqCard(){
   const el=document.getElementById("sqCard"); if(!el||!grid) return;
   const i=sqHover;
   if(i<0){
-    el.innerHTML=`<div class="sq-body sq-empty"><div class="sq-mini">${[...Array(9).keys()].map(k=>`<i class="${state.cells[k]?"done":""}"></i>`).join("")}</div>
-      Point at a square to see what it needs, how many answers it has and how hard it is.</div>`;
+    setCard(el,`<div class="sq-body sq-empty"><div class="sq-mini">${[...Array(9).keys()].map(k=>`<i class="${state.cells[k]?"done":""}"></i>`).join("")}</div>
+      Point at a square to see what it needs, how many answers it has and how hard it is.</div>`);
     return;
   }
   const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3], n=answersFor(row,col).length;
   const lvl = n>=12?["easy","Easy",1]:n>=6?["medium","Medium",2]:["hard","Hard",3];
   const filled=state.cells[i]||state.rev[i];
-  el.innerHTML=`<h4>This square</h4><div class="sq-body">
+  setCard(el,`<h4>This square</h4><div class="sq-body">
     <div class="sq-row">${catIcon(row)}<div><b>${catName(row)}</b><span>${CAT_DESC(row)}</span></div></div>
     <div class="sq-row">${catIcon(col)}<div><b>${catName(col)}</b><span>${CAT_DESC(col)}</span></div></div>
     <div class="sq-foot"><span><b>${n}</b> possible answer${n===1?"":"s"}</span>
       <span class="diff ${lvl[0]}">${[1,2,3].map(k=>`<i class="${k<=lvl[2]?"on":""}"></i>`).join("")}${lvl[1]}</span></div>
-    ${filled?`<div class="sq-filled">${state.cells[i]?"✓ You answered "+state.cells[i]:"Revealed: "+state.rev[i]}</div>`:""}</div>`;
+    ${filled?`<div class="sq-filled">${state.cells[i]?"✓ You answered "+state.cells[i]:"Revealed: "+state.rev[i]}</div>`:""}</div>`);
 }
 // "Your week": the last 7 daily grids, played / perfect / missed, plus streaks.
 function renderWeekCard(){
@@ -1483,7 +1484,7 @@ function renderWeekCard(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null}), first=keyOf(EPOCH), today=todayKey();
   const cur=(s.last===today||s.last===addDays(today,-1))?s.n:0;
   const days=[...Array(7).keys()].map(k=>addDays(today,k-6));
-  el.innerHTML=`<h4>Your week</h4><div class="week">${days.map(k=>{
+  if(!setCard(el,`<h4>Your week</h4><div class="week">${days.map(k=>{
       const d=dateOfKey(k).toLocaleDateString(undefined,{weekday:"narrow"}), h=hist[k], isToday=k===today;
       let cls="dot", txt="", tip="";
       if(k<first){ cls+=" pre"; tip="Before OWdoku launched"; }
@@ -1492,7 +1493,7 @@ function renderWeekCard(){
       else { cls+=" miss"; txt="+"; tip=`#${puzzleNum(k)}: not played yet, tap to play`; }
       if(isToday) cls+=" today";
       return `<div class="d"><div class="${cls}" data-k="${k}" title="${tip}">${txt}</div>${d}</div>`; }).join("")}</div>
-    <div class="week-foot"><span>Streak <b>${cur}</b></span><span>Best <b>${Math.max(s.best||0,cur)}</b></span></div>`;
+    <div class="week-foot"><span>Streak <b>${cur}</b></span><span>Best <b>${Math.max(s.best||0,cur)}</b></span></div>`)) return;
   el.querySelectorAll(".dot.miss").forEach(b=>b.onclick=()=>{ if(revealing) return; dayKey=b.dataset.k; mode="archive"; setTabs(); load(); });
 }
 function renderSide(){ renderSqCard(); renderWeekCard(); }
