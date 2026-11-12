@@ -40,7 +40,7 @@
   .intro{margin:2px 0 16px}
   .intro .era{display:block;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
   .intro p{margin:0;color:var(--muted);font-size:14px;line-height:1.4;text-wrap:balance}
-  #pnum{font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);padding:5px 9px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
+  #pnum{white-space:nowrap;font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);padding:5px 9px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
 
   /* segmented tabs with a sliding indicator (--ti is set from JS) */
   .tabs{position:relative;display:flex;padding:4px;margin-bottom:16px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
@@ -648,6 +648,7 @@
   <button class="btn ghost" id="devVictory" style="border-style:dashed;color:var(--muted);font-size:13px">🏆 Play VICTORY screen (testing)</button>
   <button class="btn ghost" id="devRankUp" style="border-style:dashed;color:var(--muted);font-size:13px">🏅 Rank up a tier (testing)</button>
   <button class="btn ghost" id="devRankDown" style="border-style:dashed;color:var(--muted);font-size:13px">🔻 Rank down a division (testing)</button>
+  <button class="btn ghost" id="devRankReset" style="border-style:dashed;color:var(--muted);font-size:13px">⟲ Reset rank to Unranked (testing)</button>
   <button class="btn ghost" id="devReset" style="border-style:dashed;color:var(--muted);font-size:13px">↺ Reset today (testing)</button>
   </div>
   </div>
@@ -1406,7 +1407,7 @@ function cardNote(p,n,revealed,i){
   return revealed?"Answer":"1 of "+n;
 }
 function render(){
-  document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey)+(mode==="archive"?" · archive":"");
+  document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
   grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr col";d.innerHTML=headerHTML(c);g.appendChild(d)});
@@ -2079,6 +2080,7 @@ function init(){
     RANK_RESULT={delta:R.last.delta,from,to,up:to.tier>from.tier?"tier":to.d>from.d?"div":null,down:to.d<from.d}; renderSide(); return RANK_RESULT };
   document.getElementById("devRankUp").onclick=()=>{ devRank((p,r)=>divStart(Math.min(LAST_D,(r.tier+1)*DIVS))+5); window.scrollTo({top:0,behavior:"smooth"}); showRankUp() };
   document.getElementById("devRankDown").onclick=()=>{ devRank((p,r)=>divStart(Math.max(0,r.d-1))+20); showRankUp() };
+  document.getElementById("devRankReset").onclick=()=>{ store.set("owdoku-rank",null); RANK_RESULT=null; renderSide(); toast("Rank reset: Unranked") };
   document.getElementById("devReset").onclick=()=>{
     try{localStorage.removeItem("owdoku-day-"+todayKey());localStorage.removeItem("owdoku-streak");
         localStorage.removeItem("owdoku-testseed");                  // also returns to the real daily grid
