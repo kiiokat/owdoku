@@ -576,6 +576,10 @@
   .pinbadge.t2{box-shadow:0 0 12px rgba(255,210,80,.35),0 2px 6px rgba(0,0,0,.4)}
   @keyframes pinSpin{to{transform:rotate(360deg)}}
   .pin-modal{max-width:420px}
+  /* close (×) in the top-right of a pop-up; sticky so it stays reachable while the pop-up scrolls */
+  .mx{position:sticky;top:0;float:right;z-index:4;width:32px;height:32px;margin:-2px -2px 0 10px;border:0;border-radius:50%;
+    display:grid;place-items:center;background:var(--surface-2);color:var(--muted);cursor:pointer;box-shadow:var(--sh-1);transition:color .15s,background .15s,transform .2s var(--bouncy)}
+  @media (hover:hover){.mx:hover{color:var(--text);background:#232836;transform:rotate(90deg)}}
   .ps-count{display:inline-block;margin:2px 0 10px;padding:5px 12px;border-radius:999px;background:var(--bg);font-size:12px;color:var(--muted);
     box-shadow:inset 0 2px 4px rgba(0,0,0,.55),inset 0 -1px 0 rgba(255,255,255,.06),0 1px 0 rgba(255,255,255,.04)}
   .ps-count b{color:var(--text);font-family:var(--display);font-size:13px}
@@ -812,6 +816,7 @@
 </div>
 <div class="scrim" id="helpScrim">
   <div class="modal help-modal">
+    <button class="mx" id="helpX" aria-label="Close" data-nosfx><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h2>How to play</h2>
     <div class="hv-main">
       <div class="hv-grid" id="hvGrid"></div>
@@ -833,6 +838,7 @@
 </div>
 <div class="scrim" id="pinScrim">
   <div class="modal pin-modal">
+    <button class="mx" id="pinX" aria-label="Close" data-nosfx><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <h2 class="mtitle">Pins</h2>
     <div class="ps-count" id="pinCount"></div>
     <p class="sub">Earned by playing the daily, the archive and themed Sundays.</p>
@@ -3358,6 +3364,8 @@ function init(){
   const help=document.getElementById("helpScrim");
   document.getElementById("helpBtn").onclick=()=>help.classList.add("open");
   document.getElementById("helpClose").onclick=()=>{help.classList.remove("open");store.set("owdoku-seen-help",true)};
+  document.getElementById("helpX").onclick=()=>document.getElementById("helpClose").click();
+  document.getElementById("pinX").onclick=()=>{ document.getElementById("pinScrim").classList.remove("open"); SFX.tap() };
   help.onclick=e=>{if(e.target===help){help.classList.remove("open");store.set("owdoku-seen-help",true)}};
   if(!store.get("owdoku-seen-help",false)) help.classList.add("open");   // first visit
   // DEV-ONLY: testing buttons appear only when the address ends in #dev
