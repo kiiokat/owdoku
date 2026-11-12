@@ -449,18 +449,20 @@
   }
   /* very short phone screens: shrink the grid a little so the button still shows */
   @media (max-width:640px) and (max-height:700px){
-    .board{max-width:calc((100vh - 290px)*1.3);margin:0 auto}
+    .board{max-width:calc((100vh - 380px)*1.35);margin:0 auto}
+    .intro{display:none}
     .cell .avatar{width:38px;height:38px}
   }
   /* wide screens: grid on the left, score and buttons on the right */
   @media (min-width:860px){
-    .app{--bw:min(520px,calc((100vh - 230px)*1.27));max-width:none;width:calc(var(--bw) + 336px);display:grid;
-      grid-template-columns:var(--bw) 300px;grid-template-rows:auto auto 1fr auto;grid-template-areas:"head head" "board intro" "board side" "foot foot";
+    .app{--bw:min(520px,calc((100vh - 270px)*1.27));max-width:none;width:calc(var(--bw) + 336px);display:grid;
+      grid-template-columns:var(--bw) 300px;grid-template-rows:auto auto 1fr auto;grid-template-areas:"head head" "intro side" "board side" "foot foot";
       column-gap:36px;align-content:start;justify-content:center;padding-top:22px}
     .app>header{grid-area:head;margin-bottom:14px}
     .intro{grid-area:intro;margin:0 0 14px}
     .board{grid-area:board;width:var(--bw);align-self:start}
     .side{grid-area:side;align-self:start}
+    .side>.card:first-child{margin-top:0;margin-bottom:10px}
     .credits{grid-area:foot}
     .stats{margin-top:0}
   }
@@ -512,6 +514,52 @@
   .week .dot.prog{background:none;box-shadow:inset 0 0 0 1.5px var(--line-2);color:var(--muted)}
   .week-foot{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
   .week-foot b{color:var(--text);font-family:var(--display)}
+
+  /* ---- Rank ---- */
+  .emblem{display:block;width:100%;height:100%;overflow:visible}
+  .emblem.unranked{filter:grayscale(1) brightness(.6);opacity:.6}
+  .rank-card .rk-top{display:flex;align-items:center;gap:14px}
+  .rk-em{width:58px;height:58px;flex:none}
+  .rk-txt{flex:1;min-width:0}
+  .rk-txt b{display:block;font-family:var(--display);font-size:20px;letter-spacing:-.02em;line-height:1.1}
+  .rk-txt span{display:block;color:var(--muted);font-size:12px;margin-top:2px;font-variant-numeric:tabular-nums}
+  .rk-txt i,.rank-line i{font-style:normal;font-weight:700} .pos{color:var(--good)} .neg{color:var(--bad)}
+  .rk-bar{height:6px;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);margin-top:7px;overflow:hidden}
+  .rk-bar div{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .8s var(--spring)}
+  #rankWeek{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+  #rankWeek .week .dot{width:22px;height:22px;font-size:10px}
+  #rankWeek .week-foot{margin-top:6px}
+  .rk-pop{animation:rkPop .7s var(--bouncy)}
+  @keyframes rkPop{0%{transform:scale(1)}35%{transform:scale(1.3) rotate(-6deg);filter:brightness(1.4)}100%{transform:none}}
+  .rank-row{display:none;width:100%;align-items:center;gap:9px;margin:-2px 0 7px;padding:5px 12px;border:0;border-radius:999px;cursor:pointer;
+    background:var(--surface);box-shadow:var(--sh-1);color:var(--text);font-family:inherit;text-align:left}
+  .rank-row .emblem{width:22px;height:22px;flex:none}
+  .rank-row b{font-family:var(--display);font-size:14px;white-space:nowrap}
+  .rank-row .rk-bar{flex:1;margin:0}
+  .rank-row span{color:var(--muted);font-size:11px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  @media (max-width:859px){ .rank-row{display:flex} }
+  .rank-line{text-align:center;font-size:13px;color:var(--muted);margin:0 0 8px}
+  .rank-line b{color:var(--text)}
+  .rank-big{display:flex;align-items:center;gap:14px;padding:10px 12px;margin:0 0 12px;border-radius:16px;background:var(--bg);box-shadow:var(--sh-1)}
+  .rank-big .emblem{width:64px;height:64px;flex:none}
+  .rank-big b{display:block;font-family:var(--display);font-size:20px}
+  .rank-big span{display:block;color:var(--muted);font-size:12px}
+  /* rank-up card: same frame as VICTORY, colored by the new tier */
+  #rankup{background:radial-gradient(ellipse 120% 70% at 50% 50%,rgba(20,24,40,.85),rgba(4,5,10,.95) 72%)}
+  #rankup .def-band{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--rk) 35%,transparent) 18%,color-mix(in srgb,var(--rk) 35%,transparent) 82%,transparent)}
+  #rankup .def-band::before,#rankup .def-band::after{background:linear-gradient(90deg,transparent,var(--rk),transparent)}
+  .ru-em{position:absolute;top:50%;left:50%;width:150px;height:150px;margin:-150px 0 0 -75px}
+  #rankup.show .ru-em{animation:ruEm 3s var(--ease) both}
+  @keyframes ruEm{0%{transform:scale(.2) rotate(-40deg);opacity:0}14%{transform:scale(1.15) rotate(6deg);opacity:1}22%{transform:scale(1) rotate(0)}100%{transform:scale(1.04)}}
+  .ru-name{position:absolute;top:calc(50% + 14px);font-family:"Saira Extra Condensed",var(--display);font-weight:900;font-size:clamp(40px,11vw,64px);
+    text-transform:uppercase;letter-spacing:.05em;transform:skewX(-9deg);color:#fff;text-shadow:0 0 22px var(--rk)}
+  #rankup.show .ru-name{animation:subIn 3s var(--ease) both}
+  #rankup .ru-sub{top:calc(50% - 2px)}
+  #rankup.show{animation:defBg 3s var(--ease) forwards}
+  .down-modal{text-align:center;max-width:340px}
+  .down-em{width:84px;height:84px;margin:6px auto 4px;opacity:.9}
+  .down-modal .mtitle{margin:4px 0 6px}
+  .down-txt{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 6px;text-wrap:balance}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
     animation:fall var(--t,1.6s) cubic-bezier(.25,.6,.4,1) forwards}
@@ -540,14 +588,17 @@
   <div class="grid" id="grid"></div>
   </div>
   <div class="side">
+  <div class="card rank-card" id="rankCard"></div>
   <div class="stats">
     <div><b id="score">0/9</b><span>Score</span></div>
     <div><b id="strikes" class="strikes"></b><span>Strikes</span></div>
     <div><b id="streak">0</b><span>Streak</span></div>
   </div>
+  <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="fire" id="fire" title="Correct answers in a row: 3 sets you On Fire, 6 is Blazing"><svg class="fire-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.6 3.4-1.6 5.3-3.2 7.2C7.3 11 6 12.8 6 15.2A6 6 0 0 0 12 21a6 6 0 0 0 6-5.8c0-2.4-1.1-4.2-2.3-5.6-.2 1.4-.9 2.5-2 3 .5-3.9-.6-7.7-1.7-10.6zm-.4 11.3c.3 1.5 2.4 2.3 2.4 4.2a2.1 2.1 0 0 1-4.1.7c-.4-1.6.8-3.1 1.7-4.9z"/></svg><span class="fire-label" id="fireLabel">On Fire</span><div class="fire-track"><div class="fire-fill" id="fireFill"></div></div><span class="fire-n" id="fireN">0×</span></div>
   <div id="endBox" style="display:none">
     <div class="rarity" id="rarityBox" style="display:none"></div>
+    <div class="rank-line" id="rankLine" style="display:none"></div>
     <div class="next" id="nextBox">Next puzzle in <b data-countdown>--:--:--</b></div>
     <button class="btn primary" id="shareBtn" data-nosfx>Copy result</button>
     <button class="btn ghost" id="answersBtn">See all answers</button>
@@ -556,7 +607,6 @@
   <button class="btn ghost" id="giveUpBtn">Give up</button>
   <button class="btn ghost" id="newPracticeBtn" style="display:none">New practice grid</button>
   <div class="card" id="sqCard"></div>
-  <div class="card" id="weekCard"></div>
   <!-- DEV-ONLY: testing tools, shown only when the address ends in #dev -->
   <div id="devTools" style="display:none">
   <button class="btn ghost" id="devRandom" style="border-style:dashed;color:var(--muted);font-size:13px">🎲 New random grid (testing)</button>
@@ -564,6 +614,8 @@
   <button class="btn ghost" id="devFire" style="border-style:dashed;color:var(--muted);font-size:13px">🔥 Add to On Fire meter (testing)</button>
   <button class="btn ghost" id="devDefeat" style="border-style:dashed;color:var(--muted);font-size:13px">💀 Play DEFEAT screen (testing)</button>
   <button class="btn ghost" id="devVictory" style="border-style:dashed;color:var(--muted);font-size:13px">🏆 Play VICTORY screen (testing)</button>
+  <button class="btn ghost" id="devRankUp" style="border-style:dashed;color:var(--muted);font-size:13px">🏅 Rank up a tier (testing)</button>
+  <button class="btn ghost" id="devRankDown" style="border-style:dashed;color:var(--muted);font-size:13px">🔻 Rank down a division (testing)</button>
   <button class="btn ghost" id="devReset" style="border-style:dashed;color:var(--muted);font-size:13px">↺ Reset today (testing)</button>
   </div>
   </div>
@@ -604,9 +656,18 @@
     <button class="btn primary" id="helpClose">Let's play</button>
   </div>
 </div>
+<div class="scrim" id="downScrim">
+  <div class="modal down-modal">
+    <div class="down-em" id="downEm"></div>
+    <h2 class="mtitle" id="downTitle"></h2>
+    <p class="down-txt">You slipped a division today. Come back tomorrow, one decent grid will win it back.</p>
+    <button class="btn primary" id="downClose">See you tomorrow</button>
+  </div>
+</div>
 <div class="scrim" id="statsScrim">
   <div class="modal">
     <h2 class="mtitle">Your stats</h2>
+    <div class="rank-big" id="rankBig"></div>
     <div class="statgrid" id="statGrid"></div>
     <h3 class="sub2">Score distribution</h3>
     <div id="dist"></div>
@@ -641,6 +702,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <div id="defeat" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="def-word">Defeat</div><div class="def-sub" id="defSub">Out of strikes</div></div>
+<div id="rankup" class="owcard" aria-live="polite"><div class="def-band"></div><div class="ru-em"></div><div class="ru-sub def-sub"></div><div class="ru-name"></div></div>
 <div id="victory" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="vic-shine"></div><div class="def-word">Victory</div><div class="def-sub">Perfect grid</div></div>
 
 <script>
@@ -1219,7 +1281,7 @@ function load(){
     grid = makeGrid("practice-"+Math.random());
     state = freshState();
   }
-  lastScore=null; lastStrikes=null; lastCombo=null; introNext=true; sqHover=-1;
+  lastScore=null; lastStrikes=null; lastCombo=null; introNext=true; sqHover=-1; RANK_RESULT=null; applyDecay();
   render();
 }
 function save(){ if(mode!=="practice") store.set("owdoku-day-"+dayKey, state); }
@@ -1395,7 +1457,7 @@ const SFX = (()=>{
     close(){ tone(N(81),{dur:.07,vol:.04,type:"triangle",slide:.8}) },
     correct(){ [72,76,79,84].forEach((n,k)=>tone(N(n),{t:k*.055,dur:.22,vol:.09,type:"triangle"})); tone(N(96),{t:.2,dur:.3,vol:.025}) },
     wrong(){ tone(160,{dur:.22,vol:.13,type:"sawtooth",slide:.55,filter:700}); tone(120,{t:.07,dur:.2,vol:.1,type:"square",slide:.6,filter:500}) },
-    reveal(k=0){ tick(.05,1400); tone(N(67+[0,2,4,7,9,12,14,16,19][k%9]),{t:.18,dur:.18,vol:.05,type:"sine"}) },
+    reveal(k=0){ tick(.05,1400); tone(N(67+[0,2,4,7,9,12,14,16,19][Math.min(8,k)]),{t:.18,dur:.2,vol:.06,type:"sine"}); if(k>=8) tone(N(91),{t:.24,dur:.35,vol:.025}) },
     finish(){ [67,72,76].forEach((n,k)=>tone(N(n),{t:k*.09,dur:.35,vol:.07,type:"triangle"})) },
     ignite(big){ const c=ac(); if(!c) return;
       const len=Math.floor(c.sampleRate*.5), b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
@@ -1411,6 +1473,12 @@ const SFX = (()=>{
       [60,64,67,72].forEach((n,k)=>tone(N(n),{t:.1+k*.09,dur:.5,vol:.07,type:"triangle"}));
       [72,76,79,84].forEach(n=>tone(N(n),{t:.5,dur:1.3,vol:.045,type:"triangle"}));
       [91,96,100].forEach((n,k)=>tone(N(n),{t:.6+k*.08,dur:.6,vol:.025})) },
+    rankUp(){ tone(N(48),{dur:1,vol:.18,type:"sine",slide:.8}); [60,67,72,76,79,84].forEach((n,k)=>tone(N(n),{t:.15+k*.08,dur:.5,vol:.06,type:"triangle"}));
+      [88,91,96].forEach((n,k)=>tone(N(n),{t:.7+k*.07,dur:.6,vol:.025})) },
+    rankDown(){ [76,72,67].forEach((n,k)=>tone(N(n),{t:k*.13,dur:.45,vol:.065,type:"triangle"})); tone(N(43),{t:.26,dur:.6,vol:.07,type:"sine"}) },
+    popOpen(){ tone(N(74),{dur:.09,vol:.05,type:"triangle"}); tone(N(81),{t:.06,dur:.14,vol:.045,type:"triangle"}) },
+    popClose(){ tone(N(79),{dur:.08,vol:.04,type:"triangle"}); tone(N(72),{t:.05,dur:.12,vol:.035,type:"triangle"}) },
+    rankDiv(){ [72,79,84].forEach((n,k)=>tone(N(n),{t:k*.06,dur:.25,vol:.05,type:"triangle"})) },
     drain(){ tone(N(67),{dur:.25,vol:.05,type:"triangle",slide:.6}) },
     copy(){ tone(N(88),{dur:.06,vol:.05,type:"triangle"}); tone(N(93),{t:.06,dur:.1,vol:.05,type:"triangle"}) },
   };
@@ -1448,6 +1516,122 @@ function renderFire(){
 }
 
 
+// ---- Ranks -------------------------------------------------------------------------------
+// Daily puzzles played on their own day move your rank. Practice and archive grids never do.
+// 8 tiers x 5 divisions (5 = lowest). Below Master a division is 50 points and a decent day
+// (6-8 squares) moves you about one division; from Master up divisions are 100 points and the
+// rank expects near-perfect play. Rank lives in this browser, like stats and streaks.
+const RANK_TIERS=["Bronze","Silver","Gold","Platinum","Diamond","Master","Grandmaster","Champion"];
+const DIVS=5, MASTER_D=25, LAST_D=RANK_TIERS.length*DIVS-1;            // division index 0 = Bronze 5 ... 39 = Champion 1
+const divSize=d=>d<MASTER_D?50:100;
+const divStart=d=>{let t=0;for(let i=0;i<d;i++)t+=divSize(i);return t};
+const MAX_PTS=divStart(LAST_D)+divSize(LAST_D)-1;
+function rankOf(pts){ let d=0; while(d<LAST_D && pts>=divStart(d+1)) d++;
+  const tier=Math.floor(d/DIVS), div=DIVS-(d%DIVS);
+  return {d,tier,div,name:RANK_TIERS[tier]+" "+div,into:pts-divStart(d),size:divSize(d)} }
+// first daily game places you (never above Diamond 5)
+function placementDiv(s,x){ let d = s>=9?20 : s>=7?17 : s>=5?12 : s>=3?7 : 2; if(x>0) d=Math.max(0,d-1); return d }
+// points for a daily result at a given division
+function rankDelta(d,s,x){
+  if(d<MASTER_D){ const T=[-35,-30,-26,-20,-5,10,40,48,58,75]; let v=T[s]-4*x; if(s===9&&x===0) v=80; return v }
+  const expect=[7,7.8,8.5][Math.floor(d/DIVS)-5]; return Math.max(-40,Math.min(40,Math.round(12*(s-0.5*x-expect))));
+}
+function rankState(){ return store.get("owdoku-rank",null) }
+// Called once when a daily game on its own day finishes. Returns what changed, for the end-of-game display.
+function applyRank(s,x){
+  const day=todayKey(); let R=rankState();
+  if(R && R.lastDay===day) return null;                              // already counted today
+  if(!R){ const d=placementDiv(s,x), pts=divStart(d)+10;
+    R={pts,peak:pts,lastDay:day,protect:false,decayDay:day,last:{delta:0,from:null,to:rankOf(pts).name,placed:true}};
+    store.set("owdoku-rank",R); return {placed:true,up:"tier",to:rankOf(pts)} }
+  const before=rankOf(R.pts); let delta=rankDelta(before.d,s,x), pts=Math.max(0,Math.min(MAX_PTS,R.pts+delta)), prot=false;
+  if(delta<0 && R.protect && pts<divStart(before.d)){ pts=divStart(before.d); prot=true }   // promotion protection
+  const after=rankOf(pts);
+  R.protect = after.d>before.d;                                       // fresh promotion: protect the next game
+  if(prot) R.protect=false;
+  R.pts=pts; R.peak=Math.max(R.peak||0,pts); R.lastDay=day; R.decayDay=day;
+  R.last={delta:pts-before.pts||delta, from:before.name, to:after.name, prot};
+  R.last.delta=pts-(before.into+divStart(before.d));
+  store.set("owdoku-rank",R);
+  return {delta:R.last.delta,from:before,to:after,prot, up: after.tier>before.tier?"tier": after.d>before.d?"div":null, down: after.d<before.d};
+}
+// Master and above lose 10 points per missed day after 2 days off, but never drop below Master 5.
+function applyDecay(){
+  const R=rankState(); if(!R) return; const today=todayKey(); if(R.decayDay===today) return;
+  const r=rankOf(R.pts); let missed=0;
+  for(let k=addDays(R.lastDay,1); k<today; k=addDays(k,1)) missed++;
+  const charged=R.decayCharged||0, due=Math.max(0,missed-2);
+  if(r.d>=MASTER_D && due>charged){ R.pts=Math.max(divStart(MASTER_D), R.pts-10*(due-charged)); R.decayCharged=due }
+  if(missed===0) R.decayCharged=0;
+  R.decayDay=today; store.set("owdoku-rank",R);
+}
+// ---- Emblems (original "orb ring" set). Master and up are animated. ----
+const EPAL=[["#f0b98a","#c07a45","#6b3a18"],["#f4f6fb","#b9c0cc","#5f6676"],["#fff0a8","#f2b928","#8a5a06"],
+ ["#c9fff4","#5fd6c4","#1f6f68"],["#cfe9ff","#5aa9ff","#1d4fa8"],["#ead7ff","#a77bff","#4b2596"],
+ ["#d4fbff","#45d6ec","#11708a"],["#ffe9a8","#9b6bff","#3a1680"]];
+let EUID=0;
+function emblem(t,still){
+  const id="em"+(EUID++), c=EPAL[t], G=`url(#${id}g)`, anim=!still;
+  const star=(n,r1,r2,rot=0)=>{let p=[];for(let i=0;i<n*2;i++){const a=Math.PI/n*i+rot-Math.PI/2,r=i%2?r2:r1;p.push((50+r*Math.cos(a)).toFixed(1)+","+(50+r*Math.sin(a)).toFixed(1))}return p.join(" ")};
+  const spin=(dur,rev)=>anim?`<animateTransform attributeName="transform" type="rotate" from="${rev?360:0} 50 50" to="${rev?0:360} 50 50" dur="${dur}s" repeatCount="indefinite"/>`:"";
+  const pulse=(a,b,dur)=>anim?`<animate attributeName="opacity" values="${a};${b};${a}" dur="${dur}s" repeatCount="indefinite"/>`:"";
+  let s="";
+  if(t>=5) s+=`<circle cx="50" cy="50" r="40" fill="${c[1]}" opacity=".25" filter="url(#${id}b)">${pulse(.15,.45,t===7?1.6:2.4)}</circle>`;
+  if(t>=6) s+=`<g><polygon points="${star(12,45,37)}" fill="${c[2]}" opacity=".85"/>${spin(24,true)}</g>`;
+  if(t>=3) s+=`<g><polygon points="${star(8,41,32,Math.PI/8)}" fill="${G}"/>${t>=5?spin(16):""}</g>`;
+  else if(t>=2) s+=`<polygon points="${star(4,42,26)}" fill="${G}"/>`;
+  s+=`<circle cx="50" cy="50" r="30" fill="${G}"/><circle cx="50" cy="50" r="25" fill="#141821"/>`;
+  if(t>=1) s+=`<circle cx="50" cy="50" r="21.5" fill="none" stroke="${c[1]}" stroke-opacity=".5" stroke-width="1.4"/>`;
+  for(let y=-1;y<=1;y++)for(let x=-1;x<=1;x++){const ctr=!x&&!y; s+=`<circle cx="${50+x*9}" cy="${50+y*9}" r="${ctr?4.1:3.6}" fill="${ctr?(t>=4?c[0]:"#fff"):c[1]}"/>`}
+  if(t>=5) s+=`<circle cx="50" cy="50" r="4.2" fill="#fff">${pulse(.6,1,1.8)}</circle>`;
+  if(t===7) s+=`<g>${[0,120,240].map(a=>`<circle cx="${(50+46*Math.cos(a*Math.PI/180)).toFixed(1)}" cy="${(50+46*Math.sin(a*Math.PI/180)).toFixed(1)}" r="3" fill="#ffe08a"/>`).join("")}${spin(6)}</g>`;
+  return `<svg class="emblem" viewBox="0 0 100 100" overflow="visible" aria-hidden="true"><defs><linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".55" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient><filter id="${id}b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs>${s}</svg>`;
+}
+// ---- Rank display ----
+function rankBits(){ const R=rankState(); if(!R) return null; const r=rankOf(R.pts); return {R,r} }
+function renderRank(){
+  const b=rankBits(), card=document.getElementById("rankCard"), row=document.getElementById("rankRow");
+  const deltaTxt=R=>{ if(!R.last||R.last.placed) return R&&R.last&&R.last.placed?"Placed":""; const d=R.last.delta; return R.last.prot?"Protected":(d>0?"+"+d:d<0?String(d):"±0") };
+  const html = !b ? `<div class="rk-top"><div class="rk-em">${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}</div><div class="rk-txt"><b>Unranked</b><span>Finish today's daily to get placed</span></div></div>`
+    : `<div class="rk-top"><div class="rk-em">${emblem(b.r.tier)}</div><div class="rk-txt"><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size}${b.R.last?` · <i class="${(b.R.last.delta||0)<0?"neg":"pos"}">${deltaTxt(b.R)}</i>`:""}</span>
+       <div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div></div></div>`;
+  if(card && card._html!==html){ card._html=html; card.innerHTML=`<h4>Rank</h4>${html}<div id="rankWeek"></div>`; card._week=null; }
+  if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>Finish today's daily to place</span>`
+      : `${emblem(b.r.tier,true)}<b>${b.r.name}</b><div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div><span>${b.r.into}/${b.r.size}</span>`;
+    if(row._html!==rh){ row._html=rh; row.innerHTML=rh } }
+}
+// After a game: a full card for placement or a new tier, a light pop for a new division,
+// and a quiet line for drops. Returns a promise so the archive panel waits its turn.
+let RANK_RESULT=null;
+function rankLine(){
+  const el=document.getElementById("rankLine"); if(!el) return; const rr=RANK_RESULT;
+  if(!rr || mode!=="daily"){ el.style.display="none"; return }
+  el.style.display="block";
+  el.innerHTML = rr.placed ? `Placed in <b>${rr.to.name}</b>`
+    : rr.prot ? `${rr.from.name} · promotion protected`
+    : rr.from.name===rr.to.name ? `${rr.to.name} · <i class="${rr.delta<0?"neg":"pos"}">${rr.delta>0?"+":""}${rr.delta}</i>`
+    : `${rr.from.name} → <b>${rr.to.name}</b> · <i class="${rr.delta<0?"neg":"pos"}">${rr.delta>0?"+":""}${rr.delta}</i>`;
+}
+function showRankUp(){
+  const rr=RANK_RESULT; if(!rr) return Promise.resolve();
+  if(rr.down) return new Promise(res=>{ const sc=document.getElementById("downScrim");
+    document.getElementById("downEm").innerHTML=emblem(rr.to.tier);
+    document.getElementById("downTitle").textContent=rr.to.name;
+    const done=()=>{ sc.classList.remove("open"); res() };
+    document.getElementById("downClose").onclick=done; sc.onclick=e=>{ if(e.target===sc) done() };
+    sc.classList.add("open"); SFX.rankDown(); });
+  if(!rr.up) return Promise.resolve();
+  if(rr.up==="div"){ const c=document.querySelector("#rankCard .rk-em"), row=document.getElementById("rankRow");
+    [c,row].forEach(e=>{ if(e){ e.classList.remove("rk-pop"); void e.offsetWidth; e.classList.add("rk-pop") } });
+    SFX.rankDiv(); toast("Ranked up: "+rr.to.name); return new Promise(r=>setTimeout(r,900)) }
+  const d=document.getElementById("rankup");
+  d.querySelector(".ru-em").innerHTML=emblem(rr.to.tier);
+  d.querySelector(".ru-name").textContent=rr.to.name;
+  d.querySelector(".ru-sub").textContent=rr.placed?"Placement complete":"Rank up";
+  d.style.setProperty("--rk",EPAL[rr.to.tier][1]);
+  return showCard("rankup",3000,()=>SFX.rankUp(),false);
+}
+
 // ---- Side cards on wide screens ----------------------------------------------------------
 // "This square": what the square under the pointer needs, how many answers it has, how hard it is.
 const CAT_DESC = c =>
@@ -1480,11 +1664,11 @@ function renderSqCard(){
 }
 // "Your week": the last 7 daily grids, played / perfect / missed, plus streaks.
 function renderWeekCard(){
-  const el=document.getElementById("weekCard"); if(!el) return;
+  const el=document.getElementById("rankWeek"); if(!el) return;
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null}), first=keyOf(EPOCH), today=todayKey();
   const cur=(s.last===today||s.last===addDays(today,-1))?s.n:0;
   const days=[...Array(7).keys()].map(k=>addDays(today,k-6));
-  if(!setCard(el,`<h4>Your week</h4><div class="week">${days.map(k=>{
+  if(!setCard(el,`<div class="week">${days.map(k=>{
       const d=dateOfKey(k).toLocaleDateString(undefined,{weekday:"narrow"}), h=hist[k], isToday=k===today;
       let cls="dot", txt="", tip="";
       if(k<first){ cls+=" pre"; tip="Before OWdoku launched"; }
@@ -1496,7 +1680,7 @@ function renderWeekCard(){
     <div class="week-foot"><span>Streak <b>${cur}</b></span><span>Best <b>${Math.max(s.best||0,cur)}</b></span></div>`)) return;
   el.querySelectorAll(".dot.miss").forEach(b=>b.onclick=()=>{ if(revealing) return; dayKey=b.dataset.k; mode="archive"; setTabs(); load(); });
 }
-function renderSide(){ renderSqCard(); renderWeekCard(); }
+function renderSide(){ renderRank(); renderSqCard(); renderWeekCard(); rankLine(); }
 // ---- Archive nudge: past grids this player hasn't finished, newest first ----
 function unfinishedKeys(){
   const hist=store.get("owdoku-history",{}), first=keyOf(EPOCH), out=[];
@@ -1595,7 +1779,7 @@ function guess(p){
   const i=activeCell, row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
   closePicker();
   if (row.test(p)&&col.test(p)){ state.cells[i]=p.n; justFilled=i; state.combo=(state.combo||0)+1; SFX.correct();
-    if(score()===9){ const st=state; setTimeout(()=>showVictory().then(()=>{ if(state===st) setTimeout(openMore,250) }),450) } }
+    if(score()===9){ const st=state; setTimeout(()=>showVictory().then(()=>state===st&&showRankUp()).then(()=>{ if(state===st) setTimeout(openMore,250) }),450) } }
   else {
     state.strikes++; state.combo=0; SFX.wrong();
     toast(state.strikes>=MAX_STRIKES ? `${p.n} doesn't fit. Out of strikes!` : `${p.n} doesn't fit. Strike ${state.strikes} of ${MAX_STRIKES}`);
@@ -1603,7 +1787,7 @@ function guess(p){
   }
   const outOfStrikes = state.strikes>=MAX_STRIKES;
   if (outOfStrikes||score()===9) finish();
-  save(); setTimeout(()=>{render(); if(outOfStrikes){ const st=state, sent=afterGame(); showDefeat().then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) openMore() }) })); }}, state.cells[i]===p.n?0:500);
+  save(); setTimeout(()=>{render(); if(outOfStrikes){ const st=state, sent=afterGame(); showDefeat().then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) showRankUp().then(()=>{ if(state===st) openMore() }) }) })); }}, state.cells[i]===p.n?0:500);
   if(state.over&&!outOfStrikes) afterGame();
 }
 function finish(){
@@ -1613,6 +1797,7 @@ function finish(){
   const hist=store.get("owdoku-history",{});
   if (!hist[dayKey]) { hist[dayKey]={s:score(), x:state.strikes, a:mode==="archive"}; store.set("owdoku-history",hist); }
   if (mode==="daily"){
+    if(dayKey===todayKey() && !store.get("owdoku-testseed",null)){ const rr=applyRank(score(),state.strikes); if(rr) RANK_RESULT=rr; }
     const s=store.get("owdoku-streak",{n:0,last:null,best:0});
     if (s.last!==todayKey()){
       s.n = score()>0 ? (s.last===addDays(todayKey(),-1) ? s.n:0)+1 : 0;
@@ -1700,7 +1885,7 @@ function revealRemaining(asCorrect,done){
     // Only this square is updated, so earlier squares keep animating undisturbed.
     const old=document.getElementById("cell"+i);
     const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-    old.classList.add("flipout"); SFX.reveal(k);
+    old.classList.add("flipout"); SFX.reveal(empty.length>1?Math.round(k*8/(empty.length-1)):8);
     setTimeout(()=>{
       justFilled=i; popStyle="reveal";
       document.getElementById("cell"+i).replaceWith(buildCell(i));
@@ -1715,7 +1900,8 @@ function shareText(){
   const label = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey)+(mode==="archive"?" (archive)":"");
   const strikes = state.strikes ? " "+"❌".repeat(state.strikes) : "";
   const rs = state.over ? rarityScore() : null;
-  let t=`OWdoku ${label}: ${score()}/9${strikes}${score()===9?" 🏆":""}${rs!=null?" · Rarity "+rs:""}\n`;
+  const rk = mode==="daily"&&rankState() ? " · "+rankOf(rankState().pts).name : "";
+  let t=`OWdoku ${label}: ${score()}/9${strikes}${score()===9?" 🏆":""}${rs!=null?" · Rarity "+rs:""}${rk}\n`;
   for(let r=0;r<3;r++){t+=[0,1,2].map(c=>state.cells[r*3+c]?"🟧":"⬛").join("")+"\n"}
   return t+"Play: "+SHARE_URL;
 }
@@ -1743,7 +1929,7 @@ function init(){
   document.getElementById("giveUpBtn").onclick=()=>{ if(revealing||state.over) return;
     finish(); save(); render(); window.scrollTo({top:0,behavior:"smooth"});
     const st=state, sent=afterGame();
-    showDefeat("You gave up").then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) openMore() }) })); };
+    showDefeat("You gave up").then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) showRankUp().then(()=>{ if(state===st) openMore() }) }) })); };
   document.getElementById("shareBtn").onclick=async()=>{
     try{await navigator.clipboard.writeText(shareText());SFX.copy();toast("Copied!")}catch(e){toast("Couldn't copy here")}};
   document.getElementById("answersBtn").onclick=()=>{
@@ -1757,6 +1943,7 @@ function init(){
   document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode="practice";setTabs();load()};
   document.getElementById("tabArchive").onclick=openArchive;
   document.getElementById("statsBtn").onclick=openStats;
+  document.getElementById("rankRow").onclick=openStats;
   // Logo: hover makes the dots rumble for half a second, then they burst out toward the viewer one
   // after another in a random order, each from its own spot. The ring stays empty until the pointer
   // leaves, then the dots fade back in. A tap on a phone plays it once.
@@ -1787,6 +1974,10 @@ function init(){
     if(ic){ L.addEventListener("pointerenter",e=>{ if(e.pointerType==="mouse") play(false) });
       L.addEventListener("pointerleave",e=>{ if(e.pointerType==="mouse") back() });
       L.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse") play(true) }); } }
+  // soft open/close sounds for pop-ups (the search box, archive panel and demotion card have their own)
+  document.querySelectorAll(".scrim").forEach(sc=>{ if(["scrim","moreScrim","downScrim"].includes(sc.id)) return;
+    let was=sc.classList.contains("open");
+    new MutationObserver(()=>{ const now=sc.classList.contains("open"); if(now!==was){ was=now; now?SFX.popOpen():SFX.popClose() } }).observe(sc,{attributes:true,attributeFilter:["class"]}); });
   const more=document.getElementById("moreScrim");
   document.getElementById("moreClose").onclick=closeMore;
   document.getElementById("moreArch").onclick=()=>{closeMore();openArchive()};
@@ -1840,6 +2031,12 @@ function init(){
     toast(state.combo? state.combo+" in a row" : "Meter drained"); };
   document.getElementById("devDefeat").onclick=()=>{ window.scrollTo({top:0,behavior:"smooth"}); showDefeat(); };
   document.getElementById("devVictory").onclick=()=>{ window.scrollTo({top:0,behavior:"smooth"}); showVictory(); };
+  const devRank=(f)=>{ let R=rankState()||{pts:0,peak:0,lastDay:null,protect:false,decayDay:todayKey(),last:null}; const from=rankOf(R.pts);
+    R.pts=Math.max(0,Math.min(MAX_PTS,f(R.pts,from))); R.peak=Math.max(R.peak,R.pts); const to=rankOf(R.pts);
+    R.last={delta:R.pts-(from.into+divStart(from.d)),from:from.name,to:to.name}; store.set("owdoku-rank",R);
+    RANK_RESULT={delta:R.last.delta,from,to,up:to.tier>from.tier?"tier":to.d>from.d?"div":null,down:to.d<from.d}; renderSide(); return RANK_RESULT };
+  document.getElementById("devRankUp").onclick=()=>{ devRank((p,r)=>divStart(Math.min(LAST_D,(r.tier+1)*DIVS))+5); window.scrollTo({top:0,behavior:"smooth"}); showRankUp() };
+  document.getElementById("devRankDown").onclick=()=>{ devRank((p,r)=>divStart(Math.max(0,r.d-1))+20); showRankUp() };
   document.getElementById("devReset").onclick=()=>{
     try{localStorage.removeItem("owdoku-day-"+todayKey());localStorage.removeItem("owdoku-streak");
         localStorage.removeItem("owdoku-testseed");                  // also returns to the real daily grid
@@ -1867,6 +2064,9 @@ function openStats(){
   const max=Math.max(1,...counts), todays=hist[todayKey()];
   document.getElementById("dist").innerHTML=counts.map((c,i)=>({c,i})).reverse().map(({c,i})=>
     `<div class="bar"><i>${i}</i><div class="${todays&&!todays.a&&todays.s===i?"on":""}" style="width:${8+c/max*82}%">${c}</div></div>`).join("");
+  { const b=rankBits(), el=document.getElementById("rankBig");
+    el.innerHTML = b ? `${emblem(b.r.tier)}<div><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size} points</span><span>Peak: ${rankOf(b.R.peak).name}</span></div>`
+      : `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<div><b>Unranked</b><span>Finish a daily puzzle on its day to get placed.</span></div>`; }
   tickCountdown(); document.getElementById("statsScrim").classList.add("open");
 }
 function openArchive(){
