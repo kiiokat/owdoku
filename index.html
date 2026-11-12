@@ -2880,7 +2880,9 @@ function openPins(){
   const idle=`Hover or tap a pin to see how it's earned`; info.innerHTML=""; info.style.height=""; setPinInfo(idle);
   const show=b=>{ const d=PIN_DEFS.find(x=>x.id===b.dataset.pin), got=P.earned[d.id];
     setPinInfo(got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`); };
-  box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); b.onmouseleave=()=>setPinInfo(idle) });
+  box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); });
+  // keep the last pin's details while moving between pins; reset only when the pointer leaves the pin area
+  box.onmouseleave=()=>setPinInfo(idle);
   P.unseen=[]; store.set("owdoku-pins",P); document.querySelectorAll(".rk-pins").forEach(p=>p.classList.remove("glow"));
   document.getElementById("pinClose").onclick=()=>sc.classList.remove("open");
   sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") };
