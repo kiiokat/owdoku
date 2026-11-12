@@ -548,13 +548,17 @@
   #rankup{background:radial-gradient(ellipse 120% 70% at 50% 50%,rgba(20,24,40,.85),rgba(4,5,10,.95) 72%)}
   #rankup .def-band{background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--rk) 35%,transparent) 18%,color-mix(in srgb,var(--rk) 35%,transparent) 82%,transparent)}
   #rankup .def-band::before,#rankup .def-band::after{background:linear-gradient(90deg,transparent,var(--rk),transparent)}
-  .ru-em{position:absolute;top:50%;left:50%;width:150px;height:150px;margin:-150px 0 0 -75px}
+  /* emblem, label and name stack in the middle; the band sits behind the name only */
+  .ru-stack{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}
+  .ru-em{position:relative;width:130px;height:130px}
+  .ru-row{position:relative;width:100vw;display:flex;align-items:center;justify-content:center;padding:16px 0}
+  #rankup .ru-row .def-band{top:0;bottom:0;height:auto;margin:0}
   #rankup.show .ru-em{animation:ruEm 3s var(--ease) both}
   @keyframes ruEm{0%{transform:scale(.2) rotate(-40deg);opacity:0}14%{transform:scale(1.15) rotate(6deg);opacity:1}22%{transform:scale(1) rotate(0)}100%{transform:scale(1.04)}}
-  .ru-name{position:absolute;top:calc(50% + 14px);font-family:"Saira Extra Condensed",var(--display);font-weight:900;font-size:clamp(40px,11vw,64px);
+  .ru-name{position:relative;line-height:1;font-family:"Saira Extra Condensed",var(--display);font-weight:900;font-size:clamp(40px,11vw,64px);
     text-transform:uppercase;letter-spacing:.05em;transform:skewX(-9deg);color:#fff;text-shadow:0 0 22px var(--rk)}
   #rankup.show .ru-name{animation:subIn 3s var(--ease) both}
-  #rankup .ru-sub{top:calc(50% - 2px)}
+  #rankup .ru-sub{position:static;color:rgba(255,255,255,.85)}
   #rankup.show{animation:defBg 3s var(--ease) forwards}
   .down-modal{text-align:center;max-width:340px}
   .down-em{width:84px;height:84px;margin:6px auto 4px;opacity:.9}
@@ -702,7 +706,7 @@
 </div>
 <div class="toast" id="toast"></div>
 <div id="defeat" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="def-word">Defeat</div><div class="def-sub" id="defSub">Out of strikes</div></div>
-<div id="rankup" class="owcard" aria-live="polite"><div class="def-band"></div><div class="ru-em"></div><div class="ru-sub def-sub"></div><div class="ru-name"></div></div>
+<div id="rankup" class="owcard" aria-live="polite"><div class="ru-stack"><div class="ru-em"></div><div class="ru-sub def-sub"></div><div class="ru-row"><div class="def-band"></div><div class="ru-name"></div></div></div></div>
 <div id="victory" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="vic-shine"></div><div class="def-word">Victory</div><div class="def-sub">Perfect grid</div></div>
 
 <script>
