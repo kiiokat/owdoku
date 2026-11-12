@@ -1272,15 +1272,23 @@ let mode="daily", grid, state;
 // so back-to-back puzzles feel different. Grids are built in order from puzzle #1, so a date
 // always gives the same grid. Results are cached.
 const GRID_CACHE={};
+// Difficulty balance: at most 1 Pro square (3 or fewer answers), at most 3 Hard (4-5 answers),
+// and at least 5 Easy or Medium (6+). About two thirds of grids pass on the first try;
+// otherwise the seed is nudged and tried again, so every player still gets the same grid.
+function balanced(g){ let pro=0,hard=0,easyMed=0;
+  for(const r of g.rows) for(const c of g.cols){ const n=answersFor(r,c).length; if(n<=3) pro++; else if(n<=5) hard++; else easyMed++; }
+  return pro<=1 && hard<=3 && easyMed>=5; }
+function makeBalancedGrid(seed, avoid=[]){
+  let g; for(let a=0;a<40;a++){ g=makeGrid(a?seed+"#"+a:seed, avoid); if(balanced(g)) return g; } return g; }
 function dailyGrid(k){
   if (GRID_CACHE[k]) return GRID_CACHE[k];
   const first=keyOf(EPOCH);
-  if (k<first) return makeGrid("owdoku-"+k);
+  if (k<first) return makeBalancedGrid("owdoku-"+k);
   let d=first;
   while (GRID_CACHE[d]) { if(d===k) return GRID_CACHE[d]; d=addDays(d,1); }
   for (;; d=addDays(d,1)){
     const recent=[GRID_CACHE[addDays(d,-1)],GRID_CACHE[addDays(d,-2)]].filter(Boolean);
-    GRID_CACHE[d]=makeGrid("owdoku-"+d, recent.flatMap(x=>x.rows.concat(x.cols)));
+    GRID_CACHE[d]=makeBalancedGrid("owdoku-"+d, recent.flatMap(x=>x.rows.concat(x.cols)));
     if (d===k) return GRID_CACHE[d];
   }
 }
@@ -1293,7 +1301,7 @@ function load(){
     if (mode==="daily") dayKey=todayKey();
     // DEV-ONLY: a saved test seed overrides today's grid (see the "New random grid" button)
     const testSeed = mode==="daily" ? store.get("owdoku-testseed",null) : null;
-    grid = testSeed ? makeGrid(testSeed) : dailyGrid(dayKey);
+    grid = testSeed ? makeBalancedGrid(testSeed) : dailyGrid(dayKey);
     state = store.get("owdoku-day-"+dayKey, freshState());
     if (state.strikes==null) state.strikes=0;            // boards saved before strikes existed
     if (!state.rev) state.rev=Array(9).fill(null);
@@ -1307,7 +1315,7 @@ function load(){
     PICKS=null; if(mode==="daily") fetchPicks().then(()=>{ if(state.over&&!state.submitted) afterGame(); });   // retry a send that failed earlier
   } else {
     PICKS=null;
-    grid = makeGrid("practice-"+Math.random());
+    grid = makeBalancedGrid("practice-"+Math.random());
     state = freshState();
   }
   lastScore=null; lastStrikes=null; lastCombo=null; introNext=true; sqHover=-1; RANK_RESULT=null; applyDecay();
