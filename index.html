@@ -2820,6 +2820,10 @@ PIN_DEFS.push(
 const PIN_SECTIONS=[["Daily","🎮 Every grid"],["Sunday","☀️ Sundays"],["Habits","📚 Habits"]];
 const PIN_LEAGUES=[["APEX","⛰️ APEX"],["Contenders","🌱 Contenders"]];   // share one fold-out below the main sections
 // Each group is a fold-out; "Every grid" starts open. Open/closed state lasts until the page reloads.
+// When a league's achievements can next be earned: themed Sundays alternate, so it's this Sunday or the one after.
+function sundayNote(lg){ const t=new Date(); t.setHours(12,0,0,0);
+  for(let d=0;d<14;d++){ const k=keyOf(new Date(t.getTime()+d*864e5)); if(dayTheme(k)===lg) return d===0?"Earnable today":d<=6?"Earnable this Sunday":"Earnable next Sunday" }
+  return "Earnable on Sundays" }
 const PIN_FOLD={Daily:true,Sunday:false,Habits:false,Leagues:false};
 const PIN_COL={APEX:["#ff8a8f","#d33a44","#7a1420","#f4c95d"], Contenders:["#9ff0c3","#2fae6f","#11553a","#e6f7ee"]};
 let PIN_NEW=[];
@@ -2908,7 +2912,7 @@ function openPins(){
     return `<details class="ps-more" data-fold="${key}"${PIN_FOLD[key]||fresh?" open":""}><summary><span>${label}</span><em>${got} / ${defs.length}</em>${fresh?'<i class="ps-dot"></i>':""}</summary>${body}</details>` };
   box.innerHTML=PIN_SECTIONS.map(([sec,label])=>fold(sec,label,[sec],row(sec))).join("")
     + fold("Leagues","⛰️ APEX &amp; 🌱 Contenders",["APEX","Contenders"],
-        PIN_LEAGUES.map(([sec,label])=>`<h5>${label}<span class="ps-note">Playable on Sundays</span></h5>${row(sec)}`).join(""));
+        PIN_LEAGUES.map(([sec,label])=>`<h5>${label}<span class="ps-note">${sundayNote(sec)}</span></h5>${row(sec)}`).join(""));
   const wrap=document.getElementById("pinInfoWrap"), syncInfo=()=>{ const any=[...box.querySelectorAll(".ps-more")].some(x=>PIN_FOLD[x.dataset.fold]);
     if(!any) setPinInfo(idle); wrap.classList.toggle("off",!any) };
   // Open and close each group with a height animation instead of the browser's instant jump
