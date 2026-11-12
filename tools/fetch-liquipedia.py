@@ -37,6 +37,8 @@ DATASETS = {
     "placements": ("placement", "[[liquipediatier::1]] AND [[date::>2024-01-01]]", "date ASC", ""),
     # every team result at tier-2 events from 2018 to 2023 (Overwatch Contenders seasons, finals and The Gauntlet)
     "contenders": ("placement", "[[liquipediatier::2]] AND [[date::>2017-12-01]] AND [[date::<2024-01-01]]", "date ASC", ""),
+    # every team result at tier-2 events since OWCS began (the OWCS regional stages), used for OWCS regions
+    "regional": ("placement", "[[liquipediatier::2]] AND [[date::>2024-01-01]]", "date ASC", ""),
     "squadplayers": ("squadplayer", "", "link ASC",
         "pagename,link,id,name,nationality,position,role,type,status,joindate,leavedate,inactivedate,extradata"),
 }
