@@ -205,6 +205,28 @@
   .info-modal hr{border:0;border-top:1px solid var(--line);margin:18px 0 16px}
   .info-modal .mtitle+h3{margin-top:14px} .info-def{margin:0 0 10px} .info-def b{display:block;font-size:13.5px;margin-bottom:1px} .info-def span{display:block;font-size:13px;line-height:1.55;color:var(--muted)}
   .info-date{font-size:11.5px!important;color:var(--faint)!important}
+  #infoClose{margin-top:14px}
+  /* FAQ: questions fold out; answers are mostly visuals */
+  .faq-q{overflow:hidden;margin-top:10px} .ps-more.faq-q summary{text-transform:none;letter-spacing:-.01em;font-family:var(--display);font-size:15px;color:var(--text);padding:13px 4px}
+  .ps-more.faq-q summary::after{margin-left:auto;margin-right:4px} .faq-q[open]{padding-bottom:12px}
+  .modal.info-modal .faq-lead{margin:0 4px 12px;font-size:13px} .modal.info-modal .faq-note{margin:12px 4px 0;font-size:12px;color:var(--faint)}
+  .faq-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .lg-tile{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;background:var(--surface);box-shadow:var(--sh-1);min-width:0}
+  .lg-tile .badge,.lg-tile .cbadge{width:34px!important;height:34px!important;flex:none}
+  .lg-tile div{min-width:0} .lg-tile b{display:block;font-size:12.5px;line-height:1.25} .lg-tile span{display:block;font-size:11.5px;line-height:1.35;color:var(--muted)}
+  @media (max-width:420px){ .lg-tile{gap:8px;padding:7px 8px} .lg-tile .badge,.lg-tile .cbadge{width:28px!important;height:28px!important} .lg-tile b{font-size:12px} .lg-tile span{font-size:10.5px} }
+  .faq-tl{display:grid;gap:7px;padding:4px 4px 0}
+  .tl-row{display:grid;grid-template-columns:84px 1fr;align-items:center;gap:10px} .tl-row b{font-size:12px;text-align:right;color:var(--text)}
+  .tl-track{position:relative;height:14px;border-radius:999px;background:rgba(255,255,255,.04)}
+  .tl-bar{position:absolute;top:0;bottom:0;left:calc(var(--a)/11*100%);width:calc((var(--b) - var(--a))/11*100%);border-radius:999px}
+  .tl-bar.apex{background:linear-gradient(90deg,#d33a44,#ff8a8f)} .tl-bar.owl{background:linear-gradient(90deg,#ff8a1f,#ffbf6b)}
+  .tl-bar.cont{background:linear-gradient(90deg,#2fae6f,#9ff0c3)} .tl-bar.owcs{background:linear-gradient(90deg,#4c9eff,rgba(76,158,255,.15))}
+  .faq-q[open] .tl-bar{animation:tlGrow .7s var(--ease) both} .faq-q[open] .tl-row:nth-child(2) .tl-bar{animation-delay:.06s}
+  .faq-q[open] .tl-row:nth-child(3) .tl-bar{animation-delay:.12s} .faq-q[open] .tl-row:nth-child(4) .tl-bar{animation-delay:.18s}
+  @keyframes tlGrow{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  .tl-axis .tl-track{background:none;height:auto;display:flex;justify-content:space-between;font-size:10.5px;color:var(--faint);font-family:"Geist Mono",ui-monospace,monospace}
+  .tl-axis .tl-track span{width:0;display:flex;justify-content:center}
+  .tl-axis .tl-track span:first-child{justify-content:flex-start} .tl-axis .tl-track span:last-child{justify-content:flex-end}
   .next{text-align:center;color:var(--muted);font-size:13px;margin:4px 0 8px}
   .next b{color:var(--text);font-family:"Geist Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.02em}
   .mtitle{margin:2px 0 12px;font-family:var(--display);font-size:22px;letter-spacing:-.03em}
@@ -845,23 +867,22 @@
     <button class="mx" id="infoX" aria-label="Close" data-nosfx><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <section data-page="faq">
       <h2 class="mtitle">FAQ</h2>
-      <h3>How are answers determined?</h3>
-      <p>A player fits a square when they match both its row and its column. Here's what each kind of category checks.</p>
-      <div class="info-def"><b>Teams</b><span>Anyone who played for the team: in an OWL season, at a top-tier OWCS event or on an OWCS-era roster, on an OGN APEX roster, or at a Contenders event.</span></div>
-      <div class="info-def"><b>OWL year</b><span>On an OWL roster that season, for any team.</span></div>
-      <div class="info-def"><b>OWCS year</b><span>On an OWCS team, or played at an OWCS event, that year.</span></div>
-      <div class="info-def"><b>OWCS region</b><span>Played in that region's OWCS stages: Korea, NA, EMEA, China, Japan or Pacific.</span></div>
-      <div class="info-def"><b>OWCS World Finals</b><span>Played at an OWCS World Finals.</span></div>
-      <div class="info-def"><b>OWCS international champion</b><span>Won a Major, Esports World Cup 2024, Champions Clash, Midseason Championship or World Finals.</span></div>
-      <div class="info-def"><b>Role</b><span>Their main role, or a second role they also played.</span></div>
-      <div class="info-def"><b>Top hero</b><span>The hero they played most in the OWL. Players who never reached the OWL use their signature hero on Liquipedia.</span></div>
-      <div class="info-def"><b>Nationality</b><span>As listed on Liquipedia. Europe and North America take any country in the region.</span></div>
-      <div class="info-def"><b>OWL Champion</b><span>On a team that won an OWL season.</span></div>
-      <p>Players can be found by their current name or an old one.</p>
-      <hr>
-      <h3>How come a team or player is missing?</h3>
-      <p>The game covers the OWL, OGN APEX, Overwatch Contenders and the top-tier teams of OWCS. Teams from other leagues and third-party circuits aren't included.</p>
-      <p>A player needs a recorded roster spot or match with one of those teams, so coaches, staff and unused substitutes don't count. The game is also in early beta and relies on Liquipedia's records: if a roster there is incomplete, it will be here too.</p>
+      <details class="ps-more faq-q"><summary><span>How are answers determined?</span></summary>
+        <p class="faq-lead">A player fits a square when they match both its row and its column. Here's what each kind of header checks.</p>
+        <div class="faq-legend" id="faqLegend"></div>
+        <p class="faq-note">Players can be found by their current name or an old one.</p>
+      </details>
+      <details class="ps-more faq-q"><summary><span>How come a team or player is missing?</span></summary>
+        <p class="faq-lead">The game only covers these four leagues:</p>
+        <div class="faq-tl">
+          <div class="tl-row"><b>OGN APEX</b><div class="tl-track"><i class="tl-bar apex" style="--a:0;--b:3"></i></div></div>
+          <div class="tl-row"><b>OWL</b><div class="tl-track"><i class="tl-bar owl" style="--a:2;--b:8"></i></div></div>
+          <div class="tl-row"><b>Contenders</b><div class="tl-track"><i class="tl-bar cont" style="--a:2;--b:8"></i></div></div>
+          <div class="tl-row"><b>OWCS</b><div class="tl-track"><i class="tl-bar owcs" style="--a:8;--b:11"></i></div></div>
+          <div class="tl-row tl-axis"><b></b><div class="tl-track"><span>2016</span><span>2018</span><span>2020</span><span>2022</span><span>2024</span><span>2026</span></div></div>
+        </div>
+        <p class="faq-note">Teams from other leagues aren't in the game, and for OWCS only teams that reached top-tier events. A player needs a recorded roster spot or match with one of these teams. The game relies on Liquipedia, so a gap in a roster there shows up here too.</p>
+      </details>
     </section>
     <section data-page="credits">
       <h2 class="mtitle">Credits</h2>
@@ -3178,6 +3199,12 @@ function renderWeekCard(){
     <div class="week-foot"><span>Streak <b>${cur}</b></span><span>Best <b>${Math.max(s.best||0,cur)}</b></span></div>`)) return;
   el.querySelectorAll(".dot.miss").forEach(b=>b.onclick=()=>{ if(revealing) return; dayKey=b.dataset.k; mode="archive"; setTabs(); load(); });
 }
+// FAQ legend: the real header badges, each with a few words on what it checks
+function fillFaq(){ const el=document.getElementById("faqLegend"); if(!el||el._done) return; el._done=true;
+  const L=[["t:TL","Team","Played for that team"],["y:2020","OWL year","On an OWL roster that season"],["o:2025","OWCS year","On an OWCS team that year"],
+    ["g:Japan","OWCS region","Played that region's stages"],["x:OWF","World Finals","Played at an OWCS World Finals"],["x:OWW","OWCS champion","Won an OWCS international"],
+    ["x:CH","OWL Champion","Won an OWL season"],["r:Tank","Role","Main or second role"],["h:Ana","Top hero","Most-played OWL hero, or signature hero"],["c:KR","Nationality","As listed on Liquipedia"]];
+  el.innerHTML=L.map(([id,name,txt])=>{ const c=CATS.find(x=>x.id===id); return c?`<div class="lg-tile">${catIcon(c)}<div><b>${name}</b><span>${txt}</span></div></div>`:"" }).join("") }
 function fillHelp(){
   const row=CATS.find(c=>c.kind==="team"&&c.team==="LDN")||CATS.find(c=>c.kind==="team"), col=CATS.find(c=>c.kind==="champ")||CATS.find(c=>c.kind!=="team");
   const cells=[];
@@ -3537,7 +3564,17 @@ function init(){
   document.querySelectorAll("[data-info]").forEach(b=>b.onclick=()=>{ const pg=b.dataset.info;
     if(pg==="help"){ help.classList.add("open"); return }
     info.querySelectorAll("section").forEach(x=>x.classList.toggle("on",x.dataset.page===pg));
+    if(pg==="faq") fillFaq();
     info.querySelector(".info-modal").scrollTop=0; info.classList.add("open") });
+  // FAQ questions open and close with the same height animation as the achievement groups
+  info.querySelectorAll(".faq-q").forEach(d=>{ const sm=d.querySelector("summary");
+    sm.onclick=e=>{ e.preventDefault(); const from=d.getBoundingClientRect().height, opening=!d.open||d._closing; if(d._anim) d._anim.cancel();
+      d._closing=false; if(opening) d.open=true;
+      const to=opening ? (d.style.height="auto", d.getBoundingClientRect().height) : sm.getBoundingClientRect().height;
+      if(!opening) d._closing=true;
+      d._anim=d.animate([{height:from+"px"},{height:to+"px"}],{duration:300,easing:"cubic-bezier(.2,.8,.2,1)"});
+      d._anim.onfinish=()=>{ d._anim=null; if(d._closing){ d.open=false; d._closing=false } d.style.height="" };
+      d._anim.oncancel=()=>{ d.style.height="" }; } });
   document.getElementById("infoX").onclick=infoShut; document.getElementById("infoClose").onclick=infoShut;
   info.onclick=e=>{ if(e.target===info) infoShut() };
   document.getElementById("pinX").onclick=()=>{ document.getElementById("pinScrim").classList.remove("open"); SFX.tap() };
