@@ -29,15 +29,16 @@ PAUSE = 4.0          # seconds between requests
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "liquipedia_data")
 
 DATASETS = {
-    "players": ("player", "[[pagename::!]]", "pagename ASC",
+    "players": ("player", "", "pagename ASC",
         "pagename,id,alternateid,name,romanizedname,nationality,nationality2,nationality3,status,type,team,extradata"),
-    "squadplayers": ("squadplayer", "[[link::!]]", "link ASC",
+    "squadplayers": ("squadplayer", "", "link ASC",
         "pagename,link,id,name,nationality,position,role,type,status,joindate,leavedate,inactivedate,extradata"),
 }
 
 def get(key, endpoint, conditions, order, fields, offset):
-    q = urllib.parse.urlencode({"wiki": WIKI, "conditions": conditions, "query": fields,
-                                "order": order, "limit": PAGE, "offset": offset})
+    params = {"wiki": WIKI, "query": fields, "order": order, "limit": PAGE, "offset": offset}
+    if conditions: params["conditions"] = conditions
+    q = urllib.parse.urlencode(params)
     req = urllib.request.Request(f"{API}/{endpoint}?{q}", headers={
         "Authorization": f"Apikey {key}", "User-Agent": UA, "Accept-Encoding": "gzip"})
     for attempt in range(5):
@@ -52,7 +53,12 @@ def get(key, endpoint, conditions, order, fields, offset):
             if e.code in (429, 503):                      # too fast: back off and retry
                 wait = 30 * (attempt + 1); print(f"  rate limited, waiting {wait}s..."); time.sleep(wait); continue
             if e.code in (401, 403): sys.exit("The API key was refused (401/403). Check the key and try again.")
-            raise
+            body = e.read()
+            try: body = gzip.decompress(body)
+            except Exception: pass
+            body = body.decode("utf-8", "replace")[:500]
+            if e.code == 404 and offset > 0: return []   # past the last page
+            sys.exit(f"HTTP {e.code} from {endpoint} (offset {offset}). Server said:\n{body}")
     sys.exit("Gave up after repeated rate limits. Try again later.")
 
 def main():
