@@ -56,3 +56,23 @@ for p in P:
 print('owcs players without page:',miss, dict(stat))
 s=s[:blk]+'const PLAYERS = [\n'+'\n'.join('  '+json.dumps(p,ensure_ascii=False,separators=(',',':'))+',' for p in P)+'\n'+s[end:]
 open(H,'w').write(s)
+
+# ---- OWCS regions: which regional stages (main events only) each player played in ----
+s=open(H).read()
+rg_rows=json.load(open(D+'regional.json')); rg_rows=rg_rows.get('result',rg_rows) if isinstance(rg_rows,dict) else rg_rows
+REG=re.compile(r'Overwatch Champions Series 20\d\d - (Korea|NA|EMEA|China|Japan|Pacific) Stage \d$')
+reg=collections.defaultdict(set)
+for r in rg_rows:
+  mm=REG.match(r['tournament'])
+  if not mm or r['opponenttype']!='team': continue
+  for k,v in (r['opponentplayers'] or {}).items():
+    if re.fullmatch(r'p\d+',k) and v: reg[pg(v)].add(mm.group(1))
+blk=s.index('const PLAYERS = ['); end=s.index('];',blk)
+P=[json.loads(l.strip().rstrip(',')) for l in s[blk:end].split('\n')[1:] if l.strip().startswith('{')]
+cnt=collections.Counter()
+for p in P:
+  p.pop('rg',None); pgn=page_of(p['n'])
+  if pgn and reg.get(pgn): p['rg']=sorted(reg[pgn]); cnt.update(p['rg'])
+print('regions:',dict(cnt))
+s=s[:blk]+'const PLAYERS = [\n'+'\n'.join('  '+json.dumps(p,ensure_ascii=False,separators=(',',':'))+',' for p in P)+'\n'+s[end:]
+open(H,'w').write(s)
