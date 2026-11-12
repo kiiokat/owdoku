@@ -191,6 +191,20 @@
   .credits{color:var(--muted);font-size:11.5px;line-height:1.55;margin-top:24px;border-top:1px solid var(--line);padding-top:12px}
   .credits p{margin:6px 0} .credits b{color:var(--text);font-weight:600}
   .credits a{color:var(--muted)}
+  .ft-links{display:flex;flex-wrap:wrap;gap:4px 18px;margin-bottom:6px}
+  .ft-links button,.ft-links a{border:0;background:none;padding:2px 0;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;text-decoration:none}
+  @media (hover:hover){.ft-links button:hover,.ft-links a:hover{color:var(--text)}}
+  .ft-line{font-size:11px;color:var(--faint)} .ft-line a{color:var(--faint)}
+  .info-modal{max-height:min(86vh,720px);overflow:auto}
+  .info-modal section{display:none} .info-modal section.on{display:block}
+  .info-modal p,.info-modal li{font-size:13px;line-height:1.6;color:var(--muted);margin:0 0 10px}
+  .info-modal b{color:var(--text);font-weight:600} .info-modal a{color:var(--text)}
+  .modal.info-modal h3{margin:4px 0 8px;font-weight:700;font-family:var(--display);font-size:18px;letter-spacing:-.02em;color:var(--text)}
+  .info-modal p{font-size:13.5px;line-height:1.65}
+  .info-modal a{color:var(--accent-2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  .info-modal hr{border:0;border-top:1px solid var(--line);margin:18px 0 16px}
+  .info-modal .mtitle+h3{margin-top:14px} .info-def{margin:0 0 10px} .info-def b{display:block;font-size:13.5px;margin-bottom:1px} .info-def span{display:block;font-size:13px;line-height:1.55;color:var(--muted)}
+  .info-date{font-size:11.5px!important;color:var(--faint)!important}
   .next{text-align:center;color:var(--muted);font-size:13px;margin:4px 0 8px}
   .next b{color:var(--text);font-family:"Geist Mono",ui-monospace,monospace;font-weight:500;letter-spacing:.02em}
   .mtitle{margin:2px 0 12px;font-family:var(--display);font-size:22px;letter-spacing:-.03em}
@@ -758,7 +772,7 @@
 </div>
 <div class="app">
   <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><b>OW<span>doku</span></b></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="tabArchive" aria-label="Archive of past grids" title="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
-  <div class="intro"><span class="era">APEX · OWL · Contenders · OWCS, 2016–2026</span><p>Name a pro who fits both the row and the column.</p></div>
+  <div class="intro"><span class="era">&nbsp;</span><p>Name a pro who fits both the row and the column.</p></div>
   <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="board">
   <div class="tabs">
@@ -804,20 +818,9 @@
   </div>
   </div>
   <footer class="credits">
-    <p><b>Player data:</b> OWL hours and top heroes come from the official Overwatch League Stats Lab
-      match records, 2018 to 2023 (2023 through June). OWL teams, seasons and roles are checked against
-      Liquipedia rosters, and Liquipedia wins where the two disagree, which also fills in the rest of 2023.
-      OWCS teams (2024–2026) count players from top-tier OWCS events and OWCS-era rosters, APEX teams count
-      everyone on their roster during OGN APEX (2016–2018), and Contenders teams count everyone who played for them at a
-      Contenders event (2018–2023). OWCS, APEX and Contenders rosters, roles and signature heroes,
-      plus every player's nationality and old names, come from <a href="https://liquipedia.net/overwatch/">Liquipedia</a>,
-      licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
-    <p><b>Hero portraits:</b> <a href="https://overwatch.blizzard.com/en-us/heroes/">overwatch.blizzard.com</a>.
-      Overwatch and all related characters and artwork are © and ™ Blizzard Entertainment, Inc.</p>
-    <p><b>Flags:</b> <a href="https://github.com/lipis/flag-icons">flag-icons</a> (MIT). <b>Team icons:</b> <a href="https://github.com/microsoft/fluentui-emoji">Fluent Emoji</a> by Microsoft (MIT).</p>
-    <p><b>Fonts:</b> Bricolage Grotesque, Geist, Geist Mono and Saira Extra Condensed, via <a href="https://fonts.google.com/">Google Fonts</a> (SIL Open Font License).</p>
-    <p><span id="devTap">OWdoku</span> is a free, non-commercial fan project. It is not affiliated with or endorsed by
-      Blizzard Entertainment or the Overwatch League. Early beta: some answers may be missing.</p>
+    <nav class="ft-links"><button type="button" data-info="help">How to play</button><button type="button" data-info="faq">FAQ</button><button type="button" data-info="credits">Credits</button><button type="button" data-info="privacy">Privacy</button></nav>
+    <p class="ft-line">Player data from <a href="https://liquipedia.net/overwatch/">Liquipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>).
+      Overwatch and all related artwork © Blizzard Entertainment, Inc. <span id="devTap">OWdoku</span> is a free fan project, not affiliated with Blizzard or the Overwatch League.</p>
   </footer>
 </div>
 
@@ -828,6 +831,57 @@
     <form id="mForm"><input id="mInput" placeholder="Search player…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="go"></form>
     <div class="results" id="mResults"></div>
     <button class="btn ghost" id="mClose">Cancel</button>
+  </div>
+</div>
+<div class="scrim" id="infoScrim">
+  <div class="modal info-modal">
+    <button class="mx" id="infoX" aria-label="Close" data-nosfx><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <section data-page="faq">
+      <h2 class="mtitle">FAQ</h2>
+      <h3>How are answers determined?</h3>
+      <p>A player fits a square when they match both its row and its column. Here's what each kind of category checks.</p>
+      <div class="info-def"><b>Teams</b><span>Anyone who played for the team: in an OWL season, at a top-tier OWCS event or on an OWCS-era roster, on an OGN APEX roster, or at a Contenders event.</span></div>
+      <div class="info-def"><b>Played in a year</b><span>On an OWL roster that season, for any team.</span></div>
+      <div class="info-def"><b>Role</b><span>Their main role, or a second role they also played.</span></div>
+      <div class="info-def"><b>Top hero</b><span>The hero they played most in the OWL. Players who never reached the OWL use their signature hero on Liquipedia.</span></div>
+      <div class="info-def"><b>Nationality</b><span>As listed on Liquipedia. Europe and North America take any country in the region.</span></div>
+      <div class="info-def"><b>OWL Champion</b><span>On a team that won an OWL season.</span></div>
+      <p>Players can be found by their current name or an old one.</p>
+      <hr>
+      <h3>How come a team or player is missing?</h3>
+      <p>The game covers the OWL, OGN APEX, Overwatch Contenders and the top-tier teams of OWCS. Teams from other leagues and third-party circuits aren't included.</p>
+      <p>A player needs a recorded roster spot or match with one of those teams, so coaches, staff and unused substitutes don't count. The game is also in early beta and relies on Liquipedia's records: if a roster there is incomplete, it will be here too.</p>
+    </section>
+    <section data-page="credits">
+      <h2 class="mtitle">Credits</h2>
+      <h3>Player data</h3>
+      <p>OWL hours and top heroes come from the official Overwatch League Stats Lab match records, 2018 to 2023 (2023 through June). OWL teams, seasons and roles are checked against Liquipedia rosters, and Liquipedia wins where the two disagree, which also fills in the rest of 2023.</p>
+      <p>OWCS teams (2024–2026) count players from top-tier OWCS events and OWCS-era rosters, APEX teams count everyone on their roster during OGN APEX (2016–2018), and Contenders teams count everyone who played for them at a Contenders event (2018–2023). OWCS, APEX and Contenders rosters, roles and signature heroes, plus every player's nationality and old names, come from <a href="https://liquipedia.net/overwatch/">Liquipedia</a>, licensed <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.</p>
+      <hr>
+      <h3>Art and fonts</h3>
+      <p>Hero portraits are from <a href="https://overwatch.blizzard.com/en-us/heroes/">overwatch.blizzard.com</a>. Overwatch and all related characters and artwork are © and ™ Blizzard Entertainment, Inc.</p>
+      <p>Flags are from <a href="https://github.com/lipis/flag-icons">flag-icons</a> and team icons from Microsoft's <a href="https://github.com/microsoft/fluentui-emoji">Fluent Emoji</a>, both MIT licensed. Fonts are Bricolage Grotesque, Geist, Geist Mono and Saira Extra Condensed, via <a href="https://fonts.google.com/">Google Fonts</a> (SIL Open Font License).</p>
+      <hr>
+      <h3>About OWdoku</h3>
+      <p>A free, non-commercial fan project by kiiokat, not affiliated with or endorsed by Blizzard Entertainment or the Overwatch League. It's in early beta, so some answers may be missing.</p>
+    </section>
+    <section data-page="privacy">
+      <h2 class="mtitle">Privacy</h2>
+      <p class="info-date">Last updated November 12, 2026</p>
+      <p>OWdoku has no accounts, no ads and no tracking or analytics. Here is everything it stores and sends.</p>
+      <hr>
+      <h3>On your device</h3>
+      <p>Your boards, streak, rank, achievements and settings are kept in your browser's local storage. They never leave your device, and clearing this site's data resets them.</p>
+      <hr>
+      <h3>When you finish a daily</h3>
+      <p>The game sends the puzzle date, the nine answers on your board and a random ID that your browser made up. The ID only makes sure each browser counts once per day. It isn't linked to your name, email or anything else about you, and clearing site data gives you a new one.</p>
+      <p>These totals power the pick percentages and rarity scores. Practice and archive games send nothing.</p>
+      <hr>
+      <h3>Services the site uses</h3>
+      <p><a href="https://www.cloudflare.com/privacypolicy/">Cloudflare</a> hosts the site and the stats server that stores the daily totals. Like any web host, it handles your IP address to deliver pages and may keep standard request logs.</p>
+      <p><a href="https://policies.google.com/privacy">Google Fonts</a> serves the fonts, so your browser connects to Google when the page loads.</p>
+    </section>
+    <button class="btn ghost" id="infoClose">Close</button>
   </div>
 </div>
 <div class="scrim" id="helpScrim">
@@ -847,8 +901,7 @@
       <div class="hv-tile" style="--k:5"><div class="hv-vis hv-cal"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>00:00</span></div><p>New grid daily,<br>past ones in the <b>archive</b></p></div>
       <div class="hv-tile" style="--k:6"><div class="hv-vis" id="hvCard"></div><p>Cards show top hero,<br>flag and role</p></div>
     </div>
-    <p class="hv-fine">Teams come from four leagues: OGN APEX (2016–2018), the OWL and Contenders (2018–2023) and OWCS (2024–2026). Hover or tap a team's icon to see which.
-      Anyone who played for a team in that league counts. Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day: rank is paused and you earn achievements instead. Each player once per grid. Once enough people have played a daily, see how rare your picks were.</p>
+    <p class="hv-fine">Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day, with their own achievements to earn. Your rank is paused on those days. Each player once per grid. Once enough people have played a daily, see how rare your picks were.</p>
     <button class="btn primary" id="helpClose">Let's play</button>
   </div>
 </div>
@@ -2561,13 +2614,19 @@ function refreshPickNotes(){
   }
   renderStats();
 }
+// The leagues whose teams are in today's grid, e.g. "OWL · OWCS"
+const LEAGUE_SPAN={APEX:"OGN APEX (2016–2018)",OWL:"OWL (2018–2023)",Contenders:"Contenders (2018–2023)",OWCS:"OWCS (2024–Current)"};
+function gridLeagues(){ const set=new Set();
+  for(const c of [...grid.rows,...grid.cols]) if(c.kind==="team") set.add((TEAMS[c.team]||{}).lg||"OWL");
+  const order=["APEX","OWL","Contenders","OWCS"].filter(l=>set.has(l));
+  return (order.length?order:["OWL"]).map(l=>LEAGUE_SPAN[l]).join(" · ") }
 function render(){
   const th = mode==="practice" ? null : (activeTheme()||dayTheme(dayKey)), pn=document.getElementById("pnum");
   pn.textContent = mode==="practice" ? "Practice" : (th?THEMES[th].icon+" ":"")+"#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
   pn.title = th ? THEMES[th].name : "";
   const era=document.querySelector(".intro .era"), ip=document.querySelector(".intro p");
-  if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name : "APEX · OWL · Contenders · OWCS, 2016–2026"; era.classList.toggle("themed",!!th) }
-  if(ip) ip.textContent = th ? THEMES[th].blurb+". Rank is paused today; earn achievements instead." : "Name a pro who fits both the row and the column.";
+  if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name+" "+LEAGUE_SPAN[th].replace(/^.*?(\(.*\))$/,"$1") : gridLeagues(); era.classList.toggle("themed",!!th) }
+  if(ip) ip.textContent = th ? THEMES[th].blurb+". This grid has its own achievements, and rank is paused today." : "Name a pro who fits both the row and the column.";
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
   grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr col";d.innerHTML=headerHTML(c);g.appendChild(d)});
@@ -3415,6 +3474,14 @@ function init(){
   document.getElementById("helpBtn").onclick=()=>help.classList.add("open");
   document.getElementById("helpClose").onclick=()=>{help.classList.remove("open");store.set("owdoku-seen-help",true)};
   document.getElementById("helpX").onclick=()=>document.getElementById("helpClose").click();
+  // Footer: Credits and Privacy open one shared pop-up; How to play reuses the help pop-up
+  const info=document.getElementById("infoScrim"), infoShut=()=>info.classList.remove("open");
+  document.querySelectorAll("[data-info]").forEach(b=>b.onclick=()=>{ const pg=b.dataset.info;
+    if(pg==="help"){ help.classList.add("open"); return }
+    info.querySelectorAll("section").forEach(x=>x.classList.toggle("on",x.dataset.page===pg));
+    info.querySelector(".info-modal").scrollTop=0; info.classList.add("open") });
+  document.getElementById("infoX").onclick=infoShut; document.getElementById("infoClose").onclick=infoShut;
+  info.onclick=e=>{ if(e.target===info) infoShut() };
   document.getElementById("pinX").onclick=()=>{ document.getElementById("pinScrim").classList.remove("open"); SFX.tap() };
   help.onclick=e=>{if(e.target===help){help.classList.remove("open");store.set("owdoku-seen-help",true)}};
   if(!store.get("owdoku-seen-help",false)) help.classList.add("open");   // first visit
