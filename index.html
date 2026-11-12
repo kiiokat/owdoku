@@ -70,8 +70,10 @@
   @media (hover:hover){.hdr:hover .badge{transform:scale(1.08) rotate(-4deg)}}
   /* keep header icons on their own GPU layer from the start, so the first frame of the hover tilt
      doesn't re-draw them and smear edge pixels (the one-frame "stretch") */
-  .hdr .badge,.hdr .cbadge{will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
-  @media (hover:hover){.hdr:hover .badge,.hdr:hover .cbadge{transform:translateZ(0) scale(1.08) rotate(-4deg)}}
+  /* resting and hover transforms use the same list of steps, so the return eases smoothly instead of jumping */
+  /* the tilt keeps its bounce going in; coming back it eases out with no overshoot, so it settles instead of popping */
+  .hdr .badge,.hdr .cbadge{will-change:transform;backface-visibility:hidden;transform:translateZ(0) scale(1) rotate(0deg);transition:transform .32s var(--ease)}
+  @media (hover:hover){.hdr:hover .badge,.hdr:hover .cbadge{transform:translateZ(0) scale(1.08) rotate(-4deg);transition:transform .4s var(--bouncy)}}
   .badge.icon{border:3px solid;box-shadow:0 0 0 1px rgba(255,255,255,.18),inset 0 2px 4px rgba(255,255,255,.12),0 4px 10px rgba(0,0,0,.35)}
   .badge img{width:64%;height:64%;display:block;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.45))}
 
