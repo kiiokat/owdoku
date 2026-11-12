@@ -1818,6 +1818,18 @@ function cardNote(p,n,revealed,i){
   if (revealed) return pc===0 ? "Answer · 0%" : "Rarity pending";   // no pick data for this square yet
   return "1 of "+n;
 }
+// When pick stats arrive, update only the small text on each card and the stats box.
+// Rebuilding the whole board here made the portraits flash ("blink") right after the DEFEAT/VICTORY card.
+function refreshPickNotes(){
+  for(let i=0;i<9;i++){
+    const el=document.querySelector(`#cell${i} small`); if(!el) continue;
+    const v=state.cells[i], rv=!v&&state.rev[i], name=v||rv; if(!name) continue;
+    const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
+    const html=cardNote(PLAYERS.find(p=>p.n===name), answersFor(row,col).length, !!rv, i);
+    if(el.innerHTML!==html) el.innerHTML=html;
+  }
+  renderStats();
+}
 function render(){
   document.getElementById("pnum").textContent = mode==="practice" ? "Practice" : "#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
   const g=document.getElementById("grid"); g.innerHTML="";
@@ -2199,7 +2211,10 @@ function showCard(id,ms,sound,shake){
     const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
     d.classList.remove("show"); void d.offsetWidth; d.classList.add("show"); sound();
     if(shake&&!reduce){ app.classList.remove("quake"); setTimeout(()=>{void app.offsetWidth; app.classList.add("quake")},420); }
-    setTimeout(()=>{ d.classList.remove("show"); app.classList.remove("quake"); res(); }, reduce?1600:ms);
+    // finish when the card's own fade-out ends, so it never cuts off a frame early and flashes
+    let done=false; const end=()=>{ if(done) return; done=true; d.removeEventListener("animationend",onEnd); d.classList.remove("show"); app.classList.remove("quake"); res(); };
+    const onEnd=e=>{ if(e.target===d) end(); };
+    d.addEventListener("animationend",onEnd); setTimeout(end,(reduce?1600:ms)+400);
   });
 }
 const showDefeat=(sub="Out of strikes")=>{ document.getElementById("defSub").textContent=sub; return showCard("defeat",2700,()=>SFX.defeat(),true); };
@@ -2310,7 +2325,7 @@ async function fetchPicks(){
     const r=await fetch(`${API_BASE}/api/stats?day=${k}&sig=${encodeURIComponent(sig)}`,{signal:withTimeout(4000),cache:"no-store"});
     if(!r.ok) return null;
     const d=await r.json();
-    if(k===dayKey && sig===gridSig(grid) && mode==="daily"){ PICKS=d; if(!revealing) render(); }
+    if(k===dayKey && sig===gridSig(grid) && mode==="daily"){ PICKS=d; if(!revealing) refreshPickNotes(); }
     return d;
   }catch(e){ return null }
 }
