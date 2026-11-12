@@ -2595,7 +2595,7 @@ function renderStats(){
   document.getElementById("nextBox").style.display=mode==="daily"?"block":"none";
   const rs = state.over ? rarityScore() : null, rb=document.getElementById("rarityBox");
   rb.style.display = rs==null ? "none" : "block";
-  if(rs!=null) rb.innerHTML=`Rarity score <b>${rs}</b> · lower is rarer · ${PICKS.plays} player${PICKS.plays===1?"":"s"} today`;
+  if(rs!=null) rb.innerHTML=`Rarity score <b>${rs}</b> · lower is rarer${PICKS.plays>=50?` · ${PICKS.plays} players today`:""}`;
 }
 
 // ---- Sound effects: tiny synthesized blips made with Web Audio (no sound files) ----
