@@ -2891,7 +2891,7 @@ function renderRank(){
   const th=dayKey===todayKey()?activeTheme():null;
   const note = th ? `<div class="rk-theme">${THEMES[th].icon} ${THEMES[th].name}: rank paused, pins up for grabs</div>` : "";
   const full = html+note+pinsHTML(false);
-  if(card && card._html!==full){ card._html=full; card.innerHTML=`<h4>Rank</h4>${full}<div id="rankWeek"></div>`; card._week=null; }
+  if(card && card._html!==full){ card._html=full; card.innerHTML=`<h4>Rank</h4>${full}<div id="rankWeek"></div>`; card._week=null; renderWeekCard(); }   // rebuild the week/streak strip too
   if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>${RANK_PENDING?calc:"Finish today's daily to place"}</span>`
       : `${emblem(b.r.tier,true)}<b>${b.r.name}</b><div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div><span>${RANK_PENDING?calc:b.r.into+"/"+b.r.size}</span>`;
     const rh2 = rh + (th?`<em class="rk-th" title="${THEMES[th].name}: rank paused">${THEMES[th].icon}</em>`:"") + pinsHTML(true);
