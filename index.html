@@ -531,7 +531,7 @@
   #rankWeek .week-foot{margin-top:6px}
   .rk-pop{animation:rkPop .7s var(--bouncy)}
   @keyframes rkPop{0%{transform:scale(1)}35%{transform:scale(1.3) rotate(-6deg);filter:brightness(1.4)}100%{transform:none}}
-  .rank-row{display:none;width:100%;align-items:center;gap:9px;margin:-2px 0 7px;padding:5px 12px;border:0;border-radius:999px;cursor:pointer;
+  .rank-row{display:none;width:100%;align-items:center;gap:9px;margin:0 0 9px;padding:5px 12px;border:0;border-radius:999px;cursor:pointer;
     background:var(--surface);box-shadow:var(--sh-1);color:var(--text);font-family:inherit;text-align:left}
   .rank-row .emblem{width:22px;height:22px;flex:none}
   .rank-row b{font-family:var(--display);font-size:14px;white-space:nowrap}
@@ -584,6 +584,7 @@
 <div class="app">
   <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><b>OW<span>doku</span></b></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="tabArchive" aria-label="Archive of past grids" title="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
   <div class="intro"><span class="era">Overwatch League · 2018–2023</span><p>Name a pro who fits both the row and the column.</p></div>
+  <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="board">
   <div class="tabs">
     <button class="tab on" id="tabDaily">Daily</button>
@@ -598,7 +599,6 @@
     <div><b id="strikes" class="strikes"></b><span>Strikes</span></div>
     <div><b id="streak">0</b><span>Streak</span></div>
   </div>
-  <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="fire" id="fire" title="Correct answers in a row: 3 sets you On Fire, 6 is Blazing"><svg class="fire-ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c.6 3.4-1.6 5.3-3.2 7.2C7.3 11 6 12.8 6 15.2A6 6 0 0 0 12 21a6 6 0 0 0 6-5.8c0-2.4-1.1-4.2-2.3-5.6-.2 1.4-.9 2.5-2 3 .5-3.9-.6-7.7-1.7-10.6zm-.4 11.3c.3 1.5 2.4 2.3 2.4 4.2a2.1 2.1 0 0 1-4.1.7c-.4-1.6.8-3.1 1.7-4.9z"/></svg><span class="fire-label" id="fireLabel">On Fire</span><div class="fire-track"><div class="fire-fill" id="fireFill"></div></div><span class="fire-n" id="fireN">0×</span></div>
   <div id="endBox" style="display:none">
     <div class="rarity" id="rarityBox" style="display:none"></div>
