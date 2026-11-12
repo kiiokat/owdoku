@@ -429,6 +429,9 @@
   .cbadge.champ{background:radial-gradient(circle at 35% 30%,#8a6510,#3d2b05);color:#ffd84a;border:3px solid #e8b52c}
   .cbadge.season{background:radial-gradient(circle at 35% 30%,#5b3fb0,#2b1b5e);border:3px solid #a682f5}
   .cbadge.season svg{width:60%;height:60%}
+  .cbadge.owy{background:radial-gradient(circle at 35% 30%,#a8560f,#4a2205);border-color:#ffa24a}
+  .cbadge.champ.owc{background:radial-gradient(circle at 35% 30%,#7a2f0c,#341203);color:#ffb35c;border-color:#ff8a1f}
+  .cbadge.owwf{background:radial-gradient(circle at 35% 30%,#1e5f7a,#0a2533);border:3px solid #5fd0f0} .cbadge.owwf svg{width:62%;height:62%}
   .cbadge.hero{border:3px solid var(--accent);background:#222}
   .cbadge.nat{border:3px solid rgba(255,255,255,.85);background:#222}
   .cbadge.nat.globe{background:radial-gradient(circle at 35% 30%,#2b6f9c,#123b57)}
@@ -806,7 +809,8 @@
   <div id="devTools" class="dev-tools" style="display:none">
   <span class="dev-lbl">Dev</span>
   <button class="dev-btn" id="devToday" title="Back to today's real grid" aria-label="Back to today's real grid">📆</button>
-  <button class="dev-btn" id="devRandom" title="New random regular-day grid" aria-label="New random regular-day grid">🎲</button>
+  <button class="dev-btn" id="devRandom" title="Random OWCS-day grid" aria-label="Random OWCS-day grid">🎲</button>
+  <button class="dev-btn" id="devOWL" title="Random OWL-day grid" aria-label="Random OWL-day grid">🏛️</button>
   <button class="dev-btn" id="devApex" title="Force an APEX-day grid" aria-label="Force an APEX-day grid">⛰️</button>
   <button class="dev-btn" id="devCont" title="Force a Contenders-day grid" aria-label="Force a Contenders-day grid">🌱</button>
   <button class="dev-btn" id="devPin" title="Earn the next pin (reset with rank reset)" aria-label="Earn the next pin">📌</button>
@@ -844,7 +848,10 @@
       <h3>How are answers determined?</h3>
       <p>A player fits a square when they match both its row and its column. Here's what each kind of category checks.</p>
       <div class="info-def"><b>Teams</b><span>Anyone who played for the team: in an OWL season, at a top-tier OWCS event or on an OWCS-era roster, on an OGN APEX roster, or at a Contenders event.</span></div>
-      <div class="info-def"><b>Played in a year</b><span>On an OWL roster that season, for any team.</span></div>
+      <div class="info-def"><b>OWL year</b><span>On an OWL roster that season, for any team.</span></div>
+      <div class="info-def"><b>OWCS year</b><span>On an OWCS team, or played at an OWCS event, that year.</span></div>
+      <div class="info-def"><b>OWCS World Finals</b><span>Played at an OWCS World Finals.</span></div>
+      <div class="info-def"><b>OWCS international champion</b><span>Won a Major, Esports World Cup 2024, Champions Clash, Midseason Championship or World Finals.</span></div>
       <div class="info-def"><b>Role</b><span>Their main role, or a second role they also played.</span></div>
       <div class="info-def"><b>Top hero</b><span>The hero they played most in the OWL. Players who never reached the OWL use their signature hero on Liquipedia.</span></div>
       <div class="info-def"><b>Nationality</b><span>As listed on Liquipedia. Europe and North America take any country in the region.</span></div>
@@ -904,7 +911,7 @@
       <div class="hv-tile" style="--k:5"><div class="hv-vis hv-cal"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>00:00</span></div><p>New grid daily,<br>past ones in the <b>archive</b></p></div>
       <div class="hv-tile" style="--k:6"><div class="hv-vis" id="hvCard"></div><p>Cards show top hero,<br>flag and role</p></div>
     </div>
-    <p class="hv-fine">Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day, with their own achievements to earn. Your rank is paused on those days. Each player once per grid. Once enough people have played a daily, see how rare your picks were.</p>
+    <p class="hv-fine">Monday to Thursday quiz you on current OWCS players. Saturday is OWL Day. Friday is 🌱 Contenders Day and Sunday is ⛰️ APEX Day, each with its own achievements and no effect on your rank. Each player once per grid. Once enough people have played a daily, see how rare your picks were.</p>
     <button class="btn primary" id="helpClose">Let's play</button>
   </div>
 </div>
@@ -1077,19 +1084,19 @@ const PLAYERS = [
   {"n":"A10","t":["SWD","SMC"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"NL"},
   {"n":"A1IEN","t":["KDP","T1"],"r":"DPS","hr":0,"y":[],"h":"Sojourn","c":"KR"},
   {"n":"A1M","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
-  {"n":"Abbs","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"GB"},
+  {"n":"Abbs","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"GB","oy":[2025]},
   {"n":"abdala","t":["DMN"],"r":"Tank","hr":0,"y":[],"h":"D.Va"},
   {"n":"ABEL","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Abheek","t":["SMC","WSP"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"GB"},
   {"n":"ABY","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"AceOFSpades","t":["SKF"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"US"},
-  {"n":"Ackyyy","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"AU"},
+  {"n":"Ackyyy","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"AU","oy":[2024,2025,2026]},
   {"n":"adam","t":["AFB"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"Adam (AU)","t":["UPA","GZG","DMN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"AU"},
   {"n":"Adam (US)","t":["XL2"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"US"},
-  {"n":"Ade","t":["ALQ","AG"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"KR","ow":1},
+  {"n":"Ade","t":["ALQ","AG"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"KR","ow":1,"oy":[2025,2026]},
   {"n":"Adellin","t":["WGS"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"Admiral","t":["LDN","TM","SSG","NTM","GK","AGT","BRH","OBA"],"r":"Support","h":"Lúcio","hr":27.4,"y":[2022,2023],"c":"EE","ow":9},
+  {"n":"Admiral","t":["LDN","TM","SSG","NTM","GK","AGT","BRH","OBA"],"r":"Support","h":"Lúcio","hr":27.4,"y":[2022,2023],"c":"EE","ow":9,"oy":[2024,2025,2026],"wf":1},
   {"n":"Ado","t":["HZS","SHD","WAS","MVP","RNA","TLN"],"r":"DPS","h":"Tracer","hr":35.2,"y":[2018,2019,2020],"c":"KR"},
   {"n":"Adora","t":["HZS","NCF"],"r":"DPS","h":"Mei","hr":27,"y":[2019,2020],"c":"KR"},
   {"n":"Aeko","t":["NOB","OBA"],"r":"DPS","hr":0,"y":[],"h":"Echo","c":"US"},
@@ -1106,7 +1113,7 @@ const PLAYERS = [
   {"n":"Ak1te","t":["TOW","BLG"],"r":"DPS","hr":0,"y":[],"c":"CN"},
   {"n":"Akash","t":["GZG"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"US"},
   {"n":"Akawa","t":["XL2","SWD"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"CA"},
-  {"n":"akay","t":["TM"],"r":"DPS","h":"Torbjörn","hr":0,"y":[],"c":"SA","ow":1},
+  {"n":"akay","t":["TM"],"r":"DPS","h":"Torbjörn","hr":0,"y":[],"c":"SA","ow":1,"oy":[2024]},
   {"n":"akaydia","t":["SNT"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"CA"},
   {"n":"aKm","t":["DAL","RGE"],"r":"DPS","h":"Widowmaker","hr":35.6,"y":[2018,2019,2020],"c":"FR"},
   {"n":"Alarm","t":["PHI","LH","BKS","FUU"],"r":"Support","h":"Ana","hr":41.3,"y":[2020,2021],"c":"KR"},
@@ -1117,11 +1124,11 @@ const PLAYERS = [
   {"n":"Alined","t":["MAC"],"r":"Support","hr":0,"y":[],"h":"Orisa","c":"US"},
   {"n":"Alpha","t":["RNA","MTA"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"Alpha (KR)","t":["EMY"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"Alphari","t":["AG"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"CN","ow":3},
-  {"n":"AlphaYi","t":["HZS","WAS","ZETA","GK","BLG","TDM"],"r":"DPS","h":"Tracer","hr":34.8,"y":[2022,2023],"c":"KR","ow":3},
+  {"n":"Alphari","t":["AG"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"CN","ow":3,"oy":[2026],"wf":1},
+  {"n":"AlphaYi","t":["HZS","WAS","ZETA","GK","BLG","TDM"],"r":"DPS","h":"Tracer","hr":34.8,"y":[2022,2023],"c":"KR","ow":3,"oy":[2024,2025,2026]},
   {"n":"Altering","t":["SHD"],"r":"Support","h":"Mercy","hr":23,"y":[2018],"c":"CN"},
   {"n":"Although","t":["LDN","TOR","O2B","GEN"],"r":"DPS","h":"Genji","hr":19.5,"y":[2020,2022],"c":"KR"},
-  {"n":"alvicate","t":["TM"],"r":"DPS","hr":0,"y":[],"h":"Genji"},
+  {"n":"alvicate","t":["TM"],"r":"DPS","hr":0,"y":[],"h":"Genji","oy":[2026],"wf":1},
   {"n":"Ameng","t":["CDH"],"r":"Tank","h":"Wrecking Ball","hr":45,"y":[2019,2020,2021],"c":"CN"},
   {"n":"AMON","t":["AFB"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"AMY","t":["AFB","RNA","O2B"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
@@ -1129,17 +1136,17 @@ const PLAYERS = [
   {"n":"ANB","t":["UPAC"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CN"},
   {"n":"Andreyko","t":["RRC","TM"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"RU"},
   {"n":"Anghell1c","t":["YNB"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
-  {"n":"Aniyun","t":["NTM","WSP"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"US"},
+  {"n":"Aniyun","t":["NTM","WSP"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"US","oy":[2025,2026]},
   {"n":"ANJ","t":["RRC"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"NL"},
   {"n":"Another","t":["EMY"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"ANS","t":["GLA","SFS"],"r":"DPS","h":"Widowmaker","hr":27.6,"y":[2020,2021,2022],"ch":[2020],"c":"KR"},
   {"n":"ANSOONJAE","t":["NYXL","TOR","EMY","TLN"],"r":"Support","h":"Lúcio","hr":16.2,"y":[2021,2022],"c":"KR"},
   {"n":"anyhow","t":["YNB"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CA"},
-  {"n":"AOY","t":["ROC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"SA"},
+  {"n":"AOY","t":["ROC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"SA","oy":[2024]},
   {"n":"Ap3ach","t":["T1"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"KR"},
   {"n":"APDO","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Apply","t":["FLA","VAL","MAC","RVL"],"r":"Support","h":"Brigitte","hr":4.8,"y":[2019,2020],"rs":["DPS","Support"],"hb":{"DPS":"Echo","Support":"Brigitte"},"c":"US"},
-  {"n":"Apr1ta","t":["WBG","FLG","UPAC","TCH"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CN"},
+  {"n":"Apr1ta","t":["WBG","FLG","UPAC","TCH"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CN","oy":[2025,2026]},
   {"n":"april","t":["DMN"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
   {"n":"Aquila","t":["TLN"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"Arcane","t":["LWR"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
@@ -1161,10 +1168,10 @@ const PLAYERS = [
   {"n":"Aspire","t":["TOR","VAN","RVL","DMN","AMT"],"r":"DPS","h":"Tracer","hr":30,"y":[2021,2022,2023],"c":"US"},
   {"n":"Assassin","t":["WAS","RNA"],"r":"DPS","h":"Sombra","hr":25.2,"y":[2021,2022],"c":"KR"},
   {"n":"Assassin (CN)","t":["TOW"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"CN"},
-  {"n":"astdesign","t":["NTM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"US"},
+  {"n":"astdesign","t":["NTM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"US","oy":[2025,2026]},
   {"n":"ATing","t":["CDH"],"r":"Tank","h":"Winston","hr":4.4,"y":[2020],"c":"TW"},
   {"n":"Atlas","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"AU"},
-  {"n":"Attack","t":["NRG","TL","EMY","TLN","O2B"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"KR","ow":3},
+  {"n":"Attack","t":["NRG","TL","EMY","TLN","O2B"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"KR","ow":3,"oy":[2024,2025,2026],"wf":1},
   {"n":"ATTITUDE","t":["WGS","SKF"],"r":"DPS","hr":0,"y":[],"h":"Echo","c":"KR"},
   {"n":"Attune","t":["AFB","AFR"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"AutumnSouls","t":["YNB"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CA"},
@@ -1175,11 +1182,11 @@ const PLAYERS = [
   {"n":"aWeek","t":["O2B","TLN"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"AweWatch","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
   {"n":"axxiom","t":["BOS","NCF"],"r":"Tank","h":"Reinhardt","hr":4.9,"y":[2019,2020],"c":"KR"},
-  {"n":"azruf","t":["NTM"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US"},
+  {"n":"azruf","t":["NTM"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","oy":[2025,2026]},
   {"n":"Aztac","t":["TOR","VAN","WGS","O2B"],"r":"Support","h":"Brigitte","hr":12.4,"y":[2021,2022],"c":"KR"},
   {"n":"Babel","t":["GLA","LDN","O2B"],"r":"Support","h":"Ana","hr":17.5,"y":[2020,2023],"rs":["DPS","Support"],"hb":{"DPS":"Sombra","Support":"Ana"},"c":"KR"},
   {"n":"babybay","t":["ATL","SFS"],"r":"DPS","h":"Widowmaker","hr":49.6,"y":[2018,2019,2020],"c":"US"},
-  {"n":"Backbone","t":["LDN","SSG","EXO"],"r":"DPS","h":"Mei","hr":30.1,"y":[2022,2023],"c":"GB","ow":3},
+  {"n":"Backbone","t":["LDN","SSG","EXO"],"r":"DPS","h":"Mei","hr":30.1,"y":[2022,2023],"c":"GB","ow":3,"oy":[2024],"wf":1},
   {"n":"Baconjack","t":["CDH"],"r":"DPS","h":"Widowmaker","hr":10.9,"y":[2019,2020],"c":"TW"},
   {"n":"baebae","t":["UPAC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"CN"},
   {"n":"BAITO","t":["YNB"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"FI"},
@@ -1195,12 +1202,12 @@ const PLAYERS = [
   {"n":"Beasthalo","t":["FUU","AMT"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"US"},
   {"n":"BEBE","t":["HZS","SHD","WAS","X6"],"r":"Support","h":"Zenyatta","hr":68.7,"y":[2019,2020,2021,2022,2023],"c":"KR"},
   {"n":"Becky","t":["VAL","KDP","TDM"],"r":"DPS","h":"Genji","hr":14.1,"y":[2022],"c":"KR"},
-  {"n":"Belosrea","t":["PHI","SEO","ROC","KDP","T1"],"r":"Tank","h":"Winston","hr":17.9,"y":[2022,2023],"c":"KR","ow":2},
-  {"n":"BenBest","t":["PAR","WAS","PEP","YNB"],"r":"Tank","h":"Reinhardt","hr":32.8,"y":[2019,2020,2023],"c":"FR"},
+  {"n":"Belosrea","t":["PHI","SEO","ROC","KDP","T1"],"r":"Tank","h":"Winston","hr":17.9,"y":[2022,2023],"c":"KR","ow":2,"oy":[2025,2026]},
+  {"n":"BenBest","t":["PAR","WAS","PEP","YNB"],"r":"Tank","h":"Reinhardt","hr":32.8,"y":[2019,2020,2023],"c":"FR","oy":[2024]},
   {"n":"Beom","t":["LWR"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"KR"},
   {"n":"Bepis","t":["SKF"],"r":"DPS","hr":0,"y":[],"c":"FI"},
   {"n":"berd","t":["SWD","ATLA"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"US"},
-  {"n":"BERNAR","t":["HZS","LDN","ZETA","BKS","WGS","FUU"],"r":"Tank","h":"D.Va","hr":44.7,"y":[2020,2021,2022],"c":"KR","ow":5},
+  {"n":"BERNAR","t":["HZS","LDN","ZETA","BKS","WGS","FUU"],"r":"Tank","h":"D.Va","hr":44.7,"y":[2020,2021,2022],"c":"KR","ow":5,"oy":[2024,2025,2026],"ww":1},
   {"n":"Bertlog","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"AU"},
   {"n":"BiaNcA","t":["NYXL","MVP","XL2"],"r":"Tank","h":"D.Va","hr":13.3,"y":[2020,2021],"c":"KR"},
   {"n":"BigBox","t":["MTA"],"r":"DPS","hr":0,"y":[],"c":"KR"},
@@ -1214,7 +1221,7 @@ const PLAYERS = [
   {"n":"BLAD3R","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"KR"},
   {"n":"blasé","t":["BOS","HOU","LDN","GLL"],"r":"DPS","h":"Doomfist","hr":44.8,"y":[2019,2020,2021],"c":"US","rs":["DPS","Support"],"hb":{"DPS":"Doomfist","Support":"Brigitte"}},
   {"n":"Bling","t":["KDP","TLN"],"r":"Support","hr":0,"y":[],"h":"Reaper","c":"KR"},
-  {"n":"Bliss","t":["DAL","TM","SSG","ZETA","T1","O2B","GEN"],"r":"Support","h":"Lúcio","hr":6.8,"y":[2023],"c":"KR","ow":7},
+  {"n":"Bliss","t":["DAL","TM","SSG","ZETA","T1","O2B","GEN"],"r":"Support","h":"Lúcio","hr":6.8,"y":[2023],"c":"KR","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"Bloodhail","t":["SNT"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"BlueX","t":["YNB","AGT"],"r":"Support","hr":0,"y":[],"h":"Ana"},
   {"n":"Bnji","t":["GZG"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"AU"},
@@ -1247,51 +1254,51 @@ const PLAYERS = [
   {"n":"Cabimas","t":["DMN"],"r":"Support","hr":0,"y":[],"h":"Lúcio"},
   {"n":"Caden","t":["SWD"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"US"},
   {"n":"Caffeine","t":["O2B"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
-  {"n":"cal","t":["NRG","SNT"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"CA","ow":1},
+  {"n":"cal","t":["NRG","SNT"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"CA","ow":1,"oy":[2024]},
   {"n":"Cameron","t":["SNT"],"r":"Tank","hr":0,"y":[],"h":"Winston"},
   {"n":"Cane","t":["WGS","TLN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"Carcar","t":["VAN","FUU","SKF","ATLA"],"r":"Support","h":"Brigitte","hr":14.8,"y":[2020],"c":"US"},
   {"n":"Carpe","t":["PHI","BKS"],"r":"DPS","h":"Tracer","hr":113,"y":[2018,2019,2020,2021,2022],"c":"KR"},
-  {"n":"cartifan22","t":["SSG"],"r":"Tank","h":"Doomfist","hr":0,"y":[],"c":"US"},
+  {"n":"cartifan22","t":["SSG"],"r":"Tank","h":"Doomfist","hr":0,"y":[],"c":"US","oy":[2025]},
   {"n":"CARU","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"CCJ","t":["O2B","MBL"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Cenny","t":["RRC","OBA"],"r":"Tank","hr":0,"y":[],"h":"Sigma","c":"NL"},
   {"n":"Ceno","t":["GEN","TDM"],"r":"DPS","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Century","t":["TCC","TOW","BLG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"CN"},
   {"n":"Ch0an","t":["WGS"],"r":"Support","hr":0,"y":[]},
-  {"n":"CH0R0NG","t":["FLA","TOR","CR","TLN"],"r":"Support","h":"Lúcio","hr":45.4,"y":[2022,2023],"ch":[2023],"c":"KR","ow":10},
+  {"n":"CH0R0NG","t":["FLA","TOR","CR","TLN"],"r":"Support","h":"Lúcio","hr":45.4,"y":[2022,2023],"ch":[2023],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Chamggae","t":["GEN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"ChangSik","t":["VAN","MTA","KDP","KDU","FUU"],"r":"Tank","h":"Winston","hr":5.8,"y":[2021],"c":"KR"},
   {"n":"Chara","t":["GZC","MBL"],"r":"Support","h":"Lúcio","hr":43.8,"y":[2019,2020],"c":"KR"},
-  {"n":"Chase","t":["ENC","ALQ","EXO","RRC"],"r":"Tank","h":"Wrecking Ball","hr":0,"y":[],"c":"UA"},
+  {"n":"Chase","t":["ENC","ALQ","EXO","RRC"],"r":"Tank","h":"Wrecking Ball","hr":0,"y":[],"c":"UA","oy":[2024,2025]},
   {"n":"Chayne","t":["MTR","SNT"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CA"},
-  {"n":"Checkmate","t":["FLA","FLC","ROC","ALQ"],"r":"DPS","h":"Tracer","hr":47.1,"y":[2021,2022,2023],"ch":[2023],"c":"KR","ow":7},
+  {"n":"Checkmate","t":["FLA","FLC","ROC","ALQ"],"r":"DPS","h":"Tracer","hr":47.1,"y":[2021,2022,2023],"ch":[2023],"c":"KR","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"CherryRing","t":["SKF"],"r":"Support","hr":0,"y":[]},
   {"n":"chime","t":["WSP","RBD"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"US"},
   {"n":"ChipSa","t":["PHI"],"r":"DPS","h":"Doomfist","hr":0.1,"y":[2020],"c":"GB"},
   {"n":"Chipshajen","t":["DAL","ENV"],"r":"Support","h":"Zenyatta","hr":16.7,"y":[2018],"c":"SE"},
-  {"n":"ChiYo","t":["ATL","DAL","FLC","RNA","O2B"],"r":"Support","h":"Lúcio","hr":39,"y":[2022,2023],"ch":[2022],"c":"KR","ow":10},
+  {"n":"ChiYo","t":["ATL","DAL","FLC","RNA","O2B"],"r":"Support","h":"Lúcio","hr":39,"y":[2022,2023],"ch":[2022],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"ChoiHyoBin","t":["SFS","X6"],"r":"Tank","h":"D.Va","hr":82.5,"y":[2018,2019,2020,2021],"ch":[2019,2020],"c":"KR"},
-  {"n":"ChoiSehwan","t":["GZC","ROC","KDP","EMY"],"r":"DPS","h":"Tracer","hr":38,"y":[2021,2022,2023],"c":"KR","ow":1},
-  {"n":"Chopper","t":["NTM","RVL","DMN","OBA","WSP"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US"},
+  {"n":"ChoiSehwan","t":["GZC","ROC","KDP","EMY"],"r":"DPS","h":"Tracer","hr":38,"y":[2021,2022,2023],"c":"KR","ow":1,"oy":[2025]},
+  {"n":"Chopper","t":["NTM","RVL","DMN","OBA","WSP"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","oy":[2025,2026]},
   {"n":"Chopt","t":["ODY"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
-  {"n":"Cjay","t":["VAL","SSG","NTM","DAL","ODY","WSP"],"r":"Support","h":"Baptiste","hr":6.7,"y":[2023],"c":"US","ow":7},
+  {"n":"Cjay","t":["VAL","SSG","NTM","DAL","ODY","WSP"],"r":"Support","h":"Baptiste","hr":6.7,"y":[2023],"c":"US","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"ckm","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"AU"},
   {"n":"claris","t":["LH","SKF"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
-  {"n":"CLEAR","t":["NTM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"US","ow":2},
+  {"n":"CLEAR","t":["NTM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"US","ow":2,"oy":[2024,2025,2026]},
   {"n":"Clestyn","t":["LDN","KDP","T1"],"r":"Tank","h":"D.Va","hr":5.2,"y":[2020],"c":"KR"},
   {"n":"climax","t":["O2B","MVP"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"Clockwork","t":["HOU"],"r":"DPS","h":"Tracer","hr":5,"y":[2018],"c":"US"},
   {"n":"Cloneman16","t":["XL2","SKF"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"US"},
   {"n":"Closer","t":["DAL","LDN","WAS","MVP","GCB"],"r":"Support","h":"Lúcio","hr":57.9,"y":[2018,2019,2020,2021],"ch":[2018],"c":"KR"},
-  {"n":"Clowd","t":["VP","EXO","RRC","OBA"],"r":"DPS","h":"Hanzo","hr":0,"y":[],"c":"FI"},
+  {"n":"Clowd","t":["VP","EXO","RRC","OBA"],"r":"DPS","h":"Hanzo","hr":0,"y":[],"c":"FI","oy":[2024,2025]},
   {"n":"cocco","t":["DAL","ENV"],"r":"Tank","h":"Orisa","hr":9.3,"y":[2018],"c":"SE"},
   {"n":"Coco","t":["DMN"],"r":"Tank","hr":0,"y":[],"h":"Zarya"},
   {"n":"ColdesT","t":["HZS","VAL","FLG","BLG"],"r":"Support","h":"Ana","hr":4.9,"y":[2020,2021,2022],"c":"CN"},
-  {"n":"ColourHex","t":["BOS"],"r":"DPS","h":"Tracer","hr":44.5,"y":[2019,2020,2021],"c":"NZ","ow":3},
-  {"n":"Coluge","t":["SFS","TOR","M80","TL","SWD","DMN","AMT","SOL"],"r":"Tank","h":"Winston","hr":38.4,"y":[2022,2023],"c":"US","ow":1},
+  {"n":"ColourHex","t":["BOS"],"r":"DPS","h":"Tracer","hr":44.5,"y":[2019,2020,2021],"c":"NZ","ow":3,"oy":[2024,2025,2026]},
+  {"n":"Coluge","t":["SFS","TOR","M80","TL","SWD","DMN","AMT","SOL"],"r":"Tank","h":"Winston","hr":38.4,"y":[2022,2023],"c":"US","ow":1,"oy":[2024,2026]},
   {"n":"CoMa","t":["SHD","KDP","FLX"],"r":"Support","h":"Mercy","hr":31.1,"y":[2019],"c":"KR"},
-  {"n":"Cookie084","t":["PEP","SMC","EXO"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"DE"},
+  {"n":"Cookie084","t":["PEP","SMC","EXO"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"DE","oy":[2025]},
   {"n":"coolmatt","t":["HOU"],"r":"Tank","h":"D.Va","hr":41.1,"y":[2018,2019],"c":"US"},
   {"n":"Corey","t":["WAS","GLL"],"r":"DPS","h":"Widowmaker","hr":32.9,"y":[2019,2020],"c":"US"},
   {"n":"COSTOS","t":["KDP"],"r":"Support","hr":0,"y":[]},
@@ -1302,16 +1309,16 @@ const PLAYERS = [
   {"n":"crakinlakin","t":["FUU","UPA","SNT"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"Creative","t":["HOU","NYXL","SEO","GEN"],"r":"Support","h":"Ana","hr":54.1,"y":[2020,2021,2022,2023],"c":"KR"},
   {"n":"Creed","t":["AFR"],"r":"DPS","hr":0,"y":[],"c":"KR"},
-  {"n":"Crimzo","t":["BOS","DAL","HOU","VAN","ENC","ENV"],"r":"Support","h":"Ana","hr":54.8,"y":[2020,2021,2022,2023],"c":"CA"},
-  {"n":"crispy","t":["TM","SMC","EXO"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"GB","ow":1},
+  {"n":"Crimzo","t":["BOS","DAL","HOU","VAN","ENC","ENV"],"r":"Support","h":"Ana","hr":54.8,"y":[2020,2021,2022,2023],"c":"CA","oy":[2024]},
+  {"n":"crispy","t":["TM","SMC","EXO"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"GB","ow":1,"oy":[2024,2026],"wf":1},
   {"n":"CrusaDe","t":["BRH","SKF"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"NL"},
-  {"n":"cuFFa","t":["NTM","GK","GZG"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"AU","ow":4},
+  {"n":"cuFFa","t":["NTM","GK","GZG"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"AU","ow":4,"oy":[2025,2026],"wf":1},
   {"n":"Curious","t":["KDP","C9K"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Custa","t":["DAL","VAL"],"r":"Support","h":"Mercy","hr":55.7,"y":[2018,2019],"c":"AU"},
   {"n":"CWoosH","t":["FLA"],"r":"Tank","h":"Winston","hr":21,"y":[2018],"c":"SE"},
   {"n":"Cyberpunk","t":["LGEH"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CN"},
-  {"n":"D0NGHAK","t":["ATL","T1","RNA","TLN"],"r":"Tank","h":"Winston","hr":5.2,"y":[2023],"c":"KR","ow":7},
-  {"n":"d7mi","t":["ROC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SA","ow":1},
+  {"n":"D0NGHAK","t":["ATL","T1","RNA","TLN"],"r":"Tank","h":"Winston","hr":5.2,"y":[2023],"c":"KR","ow":7,"oy":[2024,2025,2026],"wf":1},
+  {"n":"d7mi","t":["ROC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SA","ow":1,"oy":[2024,2025]},
   {"n":"Daan","t":["PAR","YNB","SKF","ATLA","RVL","EXO"],"r":"Tank","h":"Wrecking Ball","hr":18,"y":[2021,2022],"c":"NL"},
   {"n":"Daco","t":["ATL","EMY"],"r":"Tank","h":"D.Va","hr":14.4,"y":[2019],"c":"KR"},
   {"n":"DADA","t":["GZG","T1"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
@@ -1344,9 +1351,9 @@ const PLAYERS = [
   {"n":"diem","t":["SHD","LFZ"],"r":"DPS","h":"Widowmaker","hr":32.4,"y":[2019,2020,2021],"ch":[2021],"c":"KR"},
   {"n":"Ding","t":["YNB","SMC","RRC"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"DK"},
   {"n":"Dino","t":["UPA"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"US"},
-  {"n":"Dip","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"FR","ow":2},
+  {"n":"Dip","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"FR","ow":2,"oy":[2025,2026],"wf":1},
   {"n":"dissme","t":["MTA"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
-  {"n":"Diya","t":["SHD","VAL","ROC","TCC"],"r":"Support","h":"Tracer","hr":39.2,"y":[2018,2019,2020,2022],"c":"CN","ow":1,"rs":["Support","DPS"],"hb":{"DPS":"Tracer","Support":"Widowmaker"}},
+  {"n":"Diya","t":["SHD","VAL","ROC","TCC"],"r":"Support","h":"Tracer","hr":39.2,"y":[2018,2019,2020,2022],"c":"CN","ow":1,"rs":["Support","DPS"],"hb":{"DPS":"Tracer","Support":"Widowmaker"},"oy":[2024,2025]},
   {"n":"DNCE","t":["KDU","GEN"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Doge","t":["HOU","SMC","RVL","EXO","RRC","DMN","WSP"],"r":"Tank","h":"Junker Queen","hr":1.4,"y":[2022],"c":"DK"},
   {"n":"Doggo","t":["AGT","UPA","RVL"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"DK"},
@@ -1373,11 +1380,11 @@ const PLAYERS = [
   {"n":"Dynasty","t":["YNB","UPA","RVL","ODY","SOL"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"US"},
   {"n":"E1kiNo","t":["NCF","FLX"],"r":"DPS","hr":0,"y":[],"c":"KR"},
   {"n":"ecLipse","t":["PEP"],"r":"DPS","hr":0,"y":[],"h":"Ana","c":"AT"},
-  {"n":"Edison","t":["ATL","DAL"],"r":"DPS","h":"Sojourn","hr":57.8,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":1},
+  {"n":"Edison","t":["ATL","DAL"],"r":"DPS","h":"Sojourn","hr":57.8,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":1,"oy":[2025,2026]},
   {"n":"EFFECT","t":["DAL","MTA","ENV"],"r":"DPS","h":"Tracer","hr":23.2,"y":[2018,2019],"c":"KR"},
   {"n":"EFFO2T","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Eileen","t":["GZC","LGD"],"r":"DPS","h":"Sombra","hr":38.5,"y":[2019,2020,2021,2022],"c":"CN"},
-  {"n":"eisgnom","t":["VP","PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"DE","ow":4},
+  {"n":"eisgnom","t":["VP","PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"DE","ow":4,"oy":[2025,2026]},
   {"n":"Elk","t":["PHI","FUU"],"r":"Support","h":"Zenyatta","hr":2.4,"y":[2019],"c":"US"},
   {"n":"ELLIVOTE","t":["PAR","WAS","AGT","ENV"],"r":"Tank","h":"D.Va","hr":14.4,"y":[2019,2020,2021],"c":"SE"},
   {"n":"Elsa","t":["CDH","HZS"],"r":"Tank","h":"D.Va","hr":53.8,"y":[2019,2020,2021,2023],"c":"CN"},
@@ -1390,15 +1397,15 @@ const PLAYERS = [
   {"n":"Erki","t":["AGT","SMC"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"SE"},
   {"n":"Erster","t":["ATL","LFZ"],"r":"DPS","h":"Mei","hr":38.7,"y":[2019,2020],"c":"KR"},
   {"n":"EscA","t":["LH"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"KR"},
-  {"n":"Escanor","t":["TL"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"SA"},
+  {"n":"Escanor","t":["TL"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"SA","oy":[2026]},
   {"n":"Estrella","t":["UPAC"],"r":"DPS","hr":0,"y":[],"h":"Symmetra","c":"CN"},
   {"n":"EVERMORE","t":["KDP"],"r":"Tank","hr":0,"y":[],"h":"Roadhog","c":"KR"},
   {"n":"Exorath","t":["YNB","SMC"],"r":"Support","hr":0,"y":[],"h":"Zenyatta"},
   {"n":"Exy","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
-  {"n":"Ezhan","t":["VAL","AG","SEO","TCC","GEN"],"r":"DPS","h":"Sojourn","hr":13.7,"y":[2022,2023],"c":"KR","ow":3},
+  {"n":"Ezhan","t":["VAL","AG","SEO","TCC","GEN"],"r":"DPS","h":"Sojourn","hr":13.7,"y":[2022,2023],"c":"KR","ow":3,"oy":[2026],"wf":1},
   {"n":"Ezire","t":["NRGE","SWD"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"CA"},
   {"n":"F4zE","t":["WGS","RNA","O2B","SKF"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
-  {"n":"Facator","t":["ALQ"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SA","ow":1},
+  {"n":"Facator","t":["ALQ"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SA","ow":1,"oy":[2024,2025]},
   {"n":"Faded","t":["ODY"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"CA"},
   {"n":"FahL","t":["AGT"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DK"},
   {"n":"Fahzix","t":["WAS","NRGE"],"r":"Support","h":"Lúcio","hr":6.2,"y":[2019],"c":"US"},
@@ -1406,21 +1413,21 @@ const PLAYERS = [
   {"n":"False","t":["VAN","UPA","SNT","AMT"],"r":"Tank","h":"Zarya","hr":7.9,"y":[2022],"c":"CA"},
   {"n":"Far","t":["GLL"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"US"},
   {"n":"farinfir","t":["NOB","DMN","OBA"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CA"},
-  {"n":"FARMER","t":["ZETA"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"KR"},
-  {"n":"Farway1987","t":["CDH","GZC","TCC","LGD"],"r":"Support","h":"Ana","hr":28.4,"y":[2021,2022,2023],"c":"CN","ow":3},
+  {"n":"FARMER","t":["ZETA"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"KR","oy":[2025]},
+  {"n":"Farway1987","t":["CDH","GZC","TCC","LGD"],"r":"Support","h":"Ana","hr":28.4,"y":[2021,2022,2023],"c":"CN","ow":3,"oy":[2024,2025],"wf":1},
   {"n":"Fatal","t":["KDU"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"Fate","t":["FLA","SHD","VAL"],"r":"Tank","h":"Winston","hr":121.4,"y":[2018,2019,2020,2021,2022,2023],"ch":[2021],"c":"KR"},
   {"n":"FCTFCTN","t":["HOU","VAL","MAC","RVL"],"r":"Tank","h":"Orisa","hr":16.6,"y":[2018,2019],"c":"US"},
-  {"n":"FDGod","t":["PAR","SFS","WAS","PEP","YNB"],"r":"Support","h":"Lúcio","hr":43.9,"y":[2020,2021,2023],"c":"FR","ow":4},
+  {"n":"FDGod","t":["PAR","SFS","WAS","PEP","YNB"],"r":"Support","h":"Lúcio","hr":43.9,"y":[2020,2021,2023],"c":"FR","ow":4,"oy":[2024,2025,2026],"wf":1},
   {"n":"Fearful","t":["GZG"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"Fearless","t":["DAL","HOU","SHD","ZETA","TCC"],"r":"Tank","h":"Winston","hr":85.5,"y":[2018,2019,2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":1},
+  {"n":"Fearless","t":["DAL","HOU","SHD","ZETA","TCC"],"r":"Tank","h":"Winston","hr":85.5,"y":[2018,2019,2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":1,"oy":[2024]},
   {"n":"FEATH5R","t":["NYXL","TLN"],"r":"DPS","h":"Echo","hr":8,"y":[2021],"c":"KR"},
   {"n":"Feez","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Sombra","c":"GB"},
-  {"n":"Fielder","t":["ATL","DAL","PAR","FLC"],"r":"Support","h":"Ana","hr":83.2,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":10},
+  {"n":"Fielder","t":["ATL","DAL","PAR","FLC"],"r":"Support","h":"Ana","hr":83.2,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Fiesta","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
   {"n":"fin","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"NZ"},
   {"n":"Finale","t":["TOR","VEG","UPA","NOB"],"r":"DPS","h":"Tracer","hr":17.1,"y":[2022,2023],"c":"KR"},
-  {"n":"FiNN","t":["SFS","ZETA","GK","O2B"],"r":"Support","h":"Ana","hr":47,"y":[2022,2023],"c":"KR","ow":3},
+  {"n":"FiNN","t":["SFS","ZETA","GK","O2B"],"r":"Support","h":"Ana","hr":47,"y":[2022,2023],"c":"KR","ow":3,"oy":[2024,2025,2026]},
   {"n":"Finnsi","t":["PAR","VAL","BRH","ENV","RRC"],"r":"Tank","h":"D.Va","hr":22.7,"y":[2018,2019],"c":"IS"},
   {"n":"Fire","t":["ATL","VAN","ENV"],"r":"Support","h":"Lúcio","hr":10.4,"y":[2020,2021],"c":"US"},
   {"n":"fischer","t":["ENV"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"DK"},
@@ -1429,11 +1436,11 @@ const PLAYERS = [
   {"n":"Fits","t":["NYXL","SEO"],"r":"DPS","h":"Sombra","hr":93.6,"y":[2019,2020,2021,2022,2023],"c":"KR"},
   {"n":"Fiveking","t":["SHD","TCC"],"r":"Support","h":"Mercy","hr":13,"y":[2018],"c":"CN"},
   {"n":"Fix","t":["RVL","WSP","RBD"],"r":"Support","hr":0,"y":[],"h":"Baptiste","c":"US"},
-  {"n":"FIXA","t":["INF","PHI","VP","WGS","UPA","T1"],"r":"Support","h":"Lúcio","hr":38.5,"y":[2022,2023],"c":"KR","ow":5},
+  {"n":"FIXA","t":["INF","PHI","VP","WGS","UPA","T1"],"r":"Support","h":"Lúcio","hr":38.5,"y":[2022,2023],"c":"KR","ow":5,"oy":[2025,2026]},
   {"n":"Fixme","t":["EMY"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Fl0w3R","t":["NYXL","LWR","LWB","XL2","RNA"],"r":"DPS","h":"Hanzo","hr":3.2,"y":[2019],"c":"KR"},
   {"n":"Fleta","t":["SEO","SHD","FLX"],"r":"DPS","h":"Tracer","hr":117.8,"y":[2018,2019,2020,2021,2022,2023],"ch":[2021],"c":"KR"},
-  {"n":"Flora","t":["NYXL","WAS","ROC","ZETA","O2B","TDM"],"r":"DPS","h":"Sojourn","hr":42.8,"y":[2021,2022,2023],"c":"KR","ow":2},
+  {"n":"Flora","t":["NYXL","WAS","ROC","ZETA","O2B","TDM"],"r":"DPS","h":"Sojourn","hr":42.8,"y":[2021,2022,2023],"c":"KR","ow":2,"oy":[2024,2025]},
   {"n":"Flubby","t":["SWD"],"r":"Support","hr":0,"y":[],"c":"US"},
   {"n":"FR3E","t":["LWR","KDU"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"fragi","t":["GZC","PHI"],"r":"Tank","h":"Winston","hr":30.5,"y":[2018,2019],"c":"FI"},
@@ -1443,19 +1450,19 @@ const PLAYERS = [
   {"n":"freed0m","t":["DMN"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"US"},
   {"n":"Freefeel","t":["SHD"],"r":"Support","h":"Zenyatta","hr":25,"y":[2018],"c":"CN"},
   {"n":"Friday","t":["NYXL"],"r":"Support","h":"Brigitte","hr":15.2,"y":[2021],"c":"KR"},
-  {"n":"Froakie","t":["ROC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"BR","ow":1},
+  {"n":"Froakie","t":["ROC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"BR","ow":1,"oy":[2024]},
   {"n":"FRONG","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Frostedd","t":["UPA"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"Fuki","t":["EXO"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"SA"},
-  {"n":"FunnyAstro","t":["ATL","GLA","PHI","TM","SSG","BRH","ATLA"],"r":"Support","h":"Lúcio","hr":53.4,"y":[2019,2020,2021,2022,2023],"c":"GB","ow":9},
+  {"n":"FunnyAstro","t":["ATL","GLA","PHI","TM","SSG","BRH","ATLA"],"r":"Support","h":"Lúcio","hr":53.4,"y":[2019,2020,2021,2022,2023],"c":"GB","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Fury","t":["LDN","PHI","WAS"],"r":"Tank","h":"D.Va","hr":109.8,"y":[2018,2019,2020,2021,2022],"ch":[2018],"c":"KR"},
   {"n":"Fusions","t":["BOS","BRH","UPA"],"r":"Tank","h":"Reinhardt","hr":43.7,"y":[2019,2020,2021],"c":"GB"},
   {"n":"Future","t":["UPAC"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"TW"},
   {"n":"Fuze","t":["LDN","MVP","FUU","GEN"],"r":"Support","h":"Mercy","hr":2.9,"y":[2020],"c":"KR"},
-  {"n":"ga9A","t":["CDH","TCC","AG","GZC","LGD"],"r":"Tank","h":"Winston","hr":30.5,"y":[2021,2022,2023],"c":"CN","ow":3},
-  {"n":"GaaRa","t":["ROC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"SA"},
+  {"n":"ga9A","t":["CDH","TCC","AG","GZC","LGD"],"r":"Tank","h":"Winston","hr":30.5,"y":[2021,2022,2023],"c":"CN","ow":3,"oy":[2024,2025,2026],"wf":1},
+  {"n":"GaaRa","t":["ROC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"SA","oy":[2024,2025]},
   {"n":"GaeBullSsi","t":["BOS","WGS"],"r":"Tank","h":"D.Va","hr":3.3,"y":[2021],"c":"KR"},
-  {"n":"Galaa","t":["SSG","VP","ALQ"],"r":"Support","h":"Illari","hr":0,"y":[],"c":"ES","ow":4},
+  {"n":"Galaa","t":["SSG","VP","ALQ"],"r":"Support","h":"Illari","hr":0,"y":[],"c":"ES","ow":4,"oy":[2024,2025,2026],"wf":1},
   {"n":"Gambler","t":["SEO","LWR","LWB"],"r":"Support","h":"Mercy","hr":10.6,"y":[2018],"c":"KR"},
   {"n":"Gamsu","t":["BOS","DAL","SHD","CBX"],"r":"Tank","h":"Winston","hr":89.9,"y":[2018,2019,2020],"c":"KR"},
   {"n":"GangNamJin","t":["FLA","NYXL","SHD","RNA"],"r":"Support","h":"Baptiste","hr":61.7,"y":[2020,2021,2022,2023],"c":"KR"},
@@ -1465,17 +1472,17 @@ const PLAYERS = [
   {"n":"Gator","t":["ATL","ATLA"],"r":"Tank","h":"Orisa","hr":41.8,"y":[2019,2020,2021,2022],"c":"US"},
   {"n":"Geguri","t":["SHD"],"r":"Tank","h":"D.Va","hr":21,"y":[2018,2019,2020],"c":"KR"},
   {"n":"Gesture","t":["LDN","SEO","GCB"],"r":"Tank","h":"Winston","hr":106.9,"y":[2018,2019,2020,2021],"ch":[2018],"c":"KR"},
-  {"n":"ghost91","t":["ENC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"FI","ow":1},
+  {"n":"ghost91","t":["ENC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"FI","ow":1,"oy":[2024]},
   {"n":"Gido","t":["SEO","WAS","LH"],"r":"Support","h":"Zenyatta","hr":24.5,"y":[2018,2019],"c":"KR"},
   {"n":"GiG","t":["VAL","XL2","UPA","RVL","NOB","DMN","SOL","RBD"],"r":"Tank","h":"Reinhardt","hr":3.1,"y":[2020],"c":"US"},
   {"n":"Ginger","t":["SWD"],"r":"Support","hr":0,"y":[]},
   {"n":"Glister","t":["LDN","PAR","SFS","X6","GEN"],"r":"DPS","h":"Tracer","hr":27.7,"y":[2020,2021,2022],"c":"KR"},
   {"n":"Gods","t":["TOR","GLL","MTR"],"r":"Tank","h":"D.Va","hr":11.8,"y":[2019],"c":"US"},
   {"n":"GodsB","t":["HZS","X6"],"r":"DPS","h":"Sombra","hr":50.6,"y":[2019,2020,2021],"c":"KR"},
-  {"n":"GOGO","t":["PEP","SMC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"FR"},
+  {"n":"GOGO","t":["PEP","SMC"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"FR","oy":[2024,2025]},
   {"n":"Gogora","t":["TLN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"gokon","t":["AFR"],"r":"Tank","hr":0,"y":[],"c":"KR"},
-  {"n":"Goku","t":["ALQ"],"r":"DPS","h":"Pharah","hr":0,"y":[],"c":"SA"},
+  {"n":"Goku","t":["ALQ"],"r":"DPS","h":"Pharah","hr":0,"y":[],"c":"SA","oy":[2024]},
   {"n":"Goliath","t":["XL2","MTR"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"US"},
   {"n":"Graceful","t":["YNB"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"SE"},
   {"n":"Greyy","t":["PAR"],"r":"Support","h":"Ana","hr":23.4,"y":[2019,2020],"c":"PT"},
@@ -1486,7 +1493,7 @@ const PLAYERS = [
   {"n":"Guru","t":["SKF","SNT"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"Gus","t":["GZG"],"r":"DPS","hr":0,"y":[],"c":"US"},
   {"n":"Gustav","t":["YNB","SMC","RRC"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"SE"},
-  {"n":"Guxue","t":["HZS","WBG","LGD"],"r":"Tank","h":"Winston","hr":80,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":7},
+  {"n":"Guxue","t":["HZS","WBG","LGD"],"r":"Tank","h":"Winston","hr":80,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"Gwangboong","t":["NYXL"],"r":"DPS","h":"Ashe","hr":5,"y":[2021],"c":"KR"},
   {"n":"Günther","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
   {"n":"H1ddeN","t":["LWR","LWB"],"r":"DPS","hr":0,"y":[],"c":"KR"},
@@ -1494,7 +1501,7 @@ const PLAYERS = [
   {"n":"H3Lai","t":["TOW"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"CN"},
   {"n":"h9mpe","t":["SKF"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"SE"},
   {"n":"Hades","t":["SMC"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"BE"},
-  {"n":"Hadi","t":["LDN","TM","SSG","BRH"],"r":"Tank","h":"Reinhardt","hr":42.8,"y":[2021,2022,2023],"c":"DE","ow":3},
+  {"n":"Hadi","t":["LDN","TM","SSG","BRH"],"r":"Tank","h":"Reinhardt","hr":42.8,"y":[2021,2022,2023],"c":"DE","ow":3,"oy":[2024,2025],"wf":1},
   {"n":"Haeim","t":["GEN"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"KR"},
   {"n":"Hafficool","t":["YNB","BRH","ENV"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"IS"},
   {"n":"HaGoPeun","t":["FLA","LDN","GCB","MAC"],"r":"Support","h":"Zenyatta","hr":28.6,"y":[2018,2019],"ch":[2018],"c":"KR"},
@@ -1506,17 +1513,17 @@ const PLAYERS = [
   {"n":"HALF","t":["TCC","TDM"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Halo","t":["BOS","NYXL","NRGE","SWD","SNT","SOL"],"r":"Support","h":"Brigitte","hr":17.9,"y":[2020,2023],"c":"US"},
   {"n":"Hamtol","t":["FLX"],"r":"DPS","hr":0,"y":[],"c":"KR"},
-  {"n":"Hanbin","t":["DAL","PAR","FLC","EMY"],"r":"Tank","h":"D.Va","hr":78.2,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":9},
-  {"n":"Happy","t":["GLA","GZC","HOU","WAS","M80","FLC","MBL"],"r":"DPS","h":"Widowmaker","hr":87.9,"y":[2019,2020,2021,2022,2023],"c":"KR","ow":2},
+  {"n":"Hanbin","t":["DAL","PAR","FLC","EMY"],"r":"Tank","h":"D.Va","hr":78.2,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
+  {"n":"Happy","t":["GLA","GZC","HOU","WAS","M80","FLC","MBL"],"r":"DPS","h":"Widowmaker","hr":87.9,"y":[2019,2020,2021,2022,2023],"c":"KR","ow":2,"oy":[2024],"ww":1,"wf":1},
   {"n":"HarryHook","t":["DAL","ENV"],"r":"Support","h":"Mercy","hr":35.8,"y":[2018,2019,2020],"c":"ES"},
   {"n":"HarryKo","t":["GZG","SOL"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Haru","t":["TLN"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
-  {"n":"Hawk","t":["ATL","M80","SSG","ATLA"],"r":"Tank","h":"D.Va","hr":67.1,"y":[2020,2021,2022,2023],"c":"US","ow":5},
+  {"n":"Hawk","t":["ATL","M80","SSG","ATLA"],"r":"Tank","h":"D.Va","hr":67.1,"y":[2020,2021,2022,2023],"c":"US","ow":5,"oy":[2024,2025,2026],"wf":1},
   {"n":"Hazard (American player)","t":["SNT"],"r":"DPS","hr":0,"y":[]},
   {"n":"Hcpeful","t":["NOB"],"r":"DPS","hr":0,"y":[],"h":"Doomfist","c":"US"},
-  {"n":"Heesang","t":["SFS","CR","VAN","EMY","TLN","O2B"],"r":"DPS","h":"Sombra","hr":11.6,"y":[2023],"c":"KR","ow":10},
+  {"n":"Heesang","t":["SFS","CR","VAN","EMY","TLN","O2B"],"r":"DPS","h":"Sombra","hr":11.6,"y":[2023],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Heesu","t":["PHI","SHD","TOR","EMY","RNA"],"r":"DPS","h":"Sombra","hr":55.5,"y":[2020,2021,2022,2023],"c":"KR"},
-  {"n":"HEESUNG","t":["ZETA"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"KR","ow":1},
+  {"n":"HEESUNG","t":["ZETA"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"KR","ow":1,"oy":[2024,2026]},
   {"n":"Helv","t":["BRH","EXO","RRC","OBA"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"ES"},
   {"n":"Henningsen","t":["AGT","SMC","RRC"],"r":"Tank","hr":0,"y":[],"h":"Orisa","c":"DK"},
   {"n":"HetLot","t":["TOW"],"r":"Tank","hr":0,"y":[],"h":"Wrecking Ball","c":"CN"},
@@ -1536,9 +1543,9 @@ const PLAYERS = [
   {"n":"Hqrdest","t":["RVL"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"FR"},
   {"n":"HuK (player)","t":["DMN"],"r":"DPS","hr":0,"y":[]},
   {"n":"Hunni","t":["YNB"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"DK"},
-  {"n":"Hybrid","t":["LDN","PEP","BRH"],"r":"DPS","h":"Cassidy","hr":4.6,"y":[2021],"c":"GB"},
+  {"n":"Hybrid","t":["LDN","PEP","BRH"],"r":"DPS","h":"Cassidy","hr":4.6,"y":[2021],"c":"GB","oy":[2024]},
   {"n":"Hydration","t":["GLA","HOU"],"r":"DPS","h":"Pharah","hr":59.3,"y":[2018,2019,2020,2021],"rs":["DPS","Tank"],"hb":{"DPS":"Pharah","Tank":"Orisa"},"c":"US"},
-  {"n":"Hydron","t":["FLA","TOR","M80","AMT","RBD"],"r":"DPS","h":"Sojourn","hr":31.6,"y":[2022,2023],"c":"US","ow":1},
+  {"n":"Hydron","t":["FLA","TOR","M80","AMT","RBD"],"r":"DPS","h":"Sojourn","hr":31.6,"y":[2022,2023],"c":"US","ow":1,"oy":[2024,2026]},
   {"n":"Hyeok","t":["NCF","FLX"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"Hyeonu","t":["WAS","MTA","AFR","WGS"],"r":"Support","h":"Lúcio","hr":0.6,"y":[2019],"c":"KR"},
   {"n":"HyP","t":["PAR"],"r":"Support","h":"Zenyatta","hr":9.8,"y":[2019,2020],"c":"FR"},
@@ -1553,36 +1560,36 @@ const PLAYERS = [
   {"n":"ieatuup","t":["TCC"],"r":"DPS","hr":0,"y":[],"h":"Soldier: 76","c":"AU"},
   {"n":"ILLICIT","t":["SEO","TDM"],"r":"DPS","h":"Mei","hr":9.9,"y":[2019,2020],"c":"KR"},
   {"n":"im37","t":["BOS","TOR","WGS","UPA"],"r":"DPS","h":"Cassidy","hr":20.9,"y":[2019,2021],"c":"KR"},
-  {"n":"iMOH97","t":["ALQ"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SA"},
+  {"n":"iMOH97","t":["ALQ"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SA","oy":[2024]},
   {"n":"imsorry","t":["MVP"],"r":"DPS","hr":0,"y":[],"c":"KR"},
-  {"n":"Infekted","t":["NRG","SSG","NTM","TL","DMN","SOL"],"r":"Tank","h":"Reinhardt","hr":0,"y":[],"c":"US","ow":7},
+  {"n":"Infekted","t":["NRG","SSG","NTM","TL","DMN","SOL"],"r":"Tank","h":"Reinhardt","hr":0,"y":[],"c":"US","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"INHYEOK","t":["TDM"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"inin77","t":["TLN"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"TW"},
   {"n":"INNOVATION","t":["VAL","MTA","TCC"],"r":"DPS","h":"Tracer","hr":3,"y":[2022],"c":"KR"},
-  {"n":"Insane","t":["TCC","AG"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"CN","ow":3},
+  {"n":"Insane","t":["TCC","AG"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"CN","ow":3,"oy":[2024,2025,2026]},
   {"n":"INTERNETHULK","t":["ENV"],"r":"Support","hr":0,"y":[],"h":"Winston","c":"DE"},
   {"n":"InYounng","t":["AFB","AFR"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"ION","t":["T1","UPAC"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"iPN","t":["AGT"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"NO"},
-  {"n":"ir1s","t":["ATL","HOU","SEO","SHD","ALQ","KDP"],"r":"Support","h":"Ana","hr":47,"y":[2020,2021,2022,2023],"c":"KR"},
+  {"n":"ir1s","t":["ATL","HOU","SEO","SHD","ALQ","KDP"],"r":"Support","h":"Ana","hr":47,"y":[2020,2021,2022,2023],"c":"KR","oy":[2024]},
   {"n":"iRemiix","t":["GLA","SKF"],"r":"Tank","h":"Winston","hr":11.8,"y":[2018],"c":"PR"},
   {"n":"Iron","t":["DMN","SOL","RBD"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
-  {"n":"irony","t":["HZS","TM","VEG","O2B","BLG"],"r":"Support","h":"Ana","hr":20.7,"y":[2022,2023],"c":"KR"},
+  {"n":"irony","t":["HZS","TM","VEG","O2B","BLG"],"r":"Support","h":"Ana","hr":20.7,"y":[2022,2023],"c":"KR","oy":[2025]},
   {"n":"Isack","t":["TM"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"NO"},
   {"n":"iShiny","t":["ENV"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"US"},
   {"n":"ITSAL","t":["BOS","GEN","UPA"],"r":"Tank","h":"Winston","hr":1.4,"y":[2022],"c":"KR"},
   {"n":"ivy","t":["NYXL","PHI","TOR","O2B"],"r":"DPS","h":"Mei","hr":36.8,"y":[2019,2020,2021],"c":"KR"},
-  {"n":"Izayaki","t":["BOS","SHD","VAL","ROC","NCF"],"r":"Support","h":"Ana","hr":92,"y":[2018,2019,2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":1},
+  {"n":"Izayaki","t":["BOS","SHD","VAL","ROC","NCF"],"r":"Support","h":"Ana","hr":92,"y":[2018,2019,2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":1,"oy":[2024]},
   {"n":"Izumi","t":["LGEH"],"r":"Tank","hr":0,"y":[]},
   {"n":"Izzy","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"FR"},
   {"n":"J1N","t":["AFB"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"KR"},
   {"n":"JaeTwo","t":["MTA"],"r":"Tank","hr":0,"y":[],"c":"KR"},
-  {"n":"JaeWoo","t":["TM","VP","TDM"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":5},
+  {"n":"JaeWoo","t":["TM","VP","TDM"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":5,"oy":[2025,2026],"wf":1},
   {"n":"Jake","t":["HOU"],"r":"DPS","h":"Junkrat","hr":51.9,"y":[2018,2019,2021],"c":"US"},
   {"n":"Janitor","t":["SWD"],"r":"Tank","hr":0,"y":[]},
   {"n":"Janus","t":["NYXL","WAS","LWB"],"r":"Tank","h":"Winston","hr":41.9,"y":[2018,2019],"c":"KR"},
   {"n":"Jaru","t":["GLA","SKF","ENV"],"r":"DPS","h":"Mei","hr":1.8,"y":[2020],"c":"US"},
-  {"n":"Jasm1ne","t":["AG","T1","TDM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"KR","ow":5},
+  {"n":"Jasm1ne","t":["AG","T1","TDM"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"KR","ow":5,"oy":[2025,2026],"wf":1},
   {"n":"Jasp3r","t":["TOW","TDM"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"Jayhun","t":["EMY"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"KR"},
   {"n":"JazZy","t":["LGD"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"HK"},
@@ -1591,7 +1598,7 @@ const PLAYERS = [
   {"n":"Jerry","t":["BOS","WAS"],"r":"DPS","h":"Ashe","hr":22.5,"y":[2020,2021],"c":"KR"},
   {"n":"Jihun","t":["GZC","LDN","UPAC"],"r":"Tank","h":"Wrecking Ball","hr":3.1,"y":[2020,2021],"c":"KR"},
   {"n":"Jimmy","t":["CDH","GZC","UPAC"],"r":"DPS","h":"Sojourn","hr":24.2,"y":[2021,2022,2023],"c":"CN"},
-  {"n":"JinMu","t":["CDH","ROC","GZC"],"r":"DPS","h":"Genji","hr":77.5,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":1},
+  {"n":"JinMu","t":["CDH","ROC","GZC"],"r":"DPS","h":"Genji","hr":77.5,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":1,"oy":[2025]},
   {"n":"JINN","t":["WGS"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
   {"n":"JIQIREN","t":["CDH","TCC"],"r":"Tank","h":"Reinhardt","hr":1.3,"y":[2019],"c":"CN"},
   {"n":"jishua","t":["WSP"],"r":"Tank","hr":0,"y":[],"h":"Sigma","c":"US"},
@@ -1606,7 +1613,7 @@ const PLAYERS = [
   {"n":"Jona","t":["YNB"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"NL"},
   {"n":"Joobi","t":["HOU","SWD","SNT","DMN","WSP"],"r":"Support","h":"Lúcio","hr":8.7,"y":[2021],"c":"US"},
   {"n":"Joy","t":["O2B"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
-  {"n":"Junbin","t":["SFS","CR","O2B"],"r":"Tank","h":"Winston","hr":8.1,"y":[2023],"c":"KR","ow":10},
+  {"n":"Junbin","t":["SFS","CR","O2B"],"r":"Tank","h":"Winston","hr":8.1,"y":[2023],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Jungle","t":["GZG"],"r":"Support","hr":0,"y":[],"c":"NZ"},
   {"n":"Just","t":["EMY"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"JuYoung","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
@@ -1616,54 +1623,54 @@ const PLAYERS = [
   {"n":"Kaan","t":["LDN","PAR","YNB","SMC","OBA"],"r":"Support","h":"Ana","hr":25.9,"y":[2021,2022],"c":"DE"},
   {"n":"Kadalis","t":["LGD","T1"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"Kage","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"SE"},
-  {"n":"Kai","t":["ATL","GLA","VAL"],"r":"DPS","h":"Sojourn","hr":50.3,"y":[2020,2021,2022,2023],"c":"GB","ow":3},
+  {"n":"Kai","t":["ATL","GLA","VAL"],"r":"DPS","h":"Sojourn","hr":50.3,"y":[2020,2021,2022,2023],"c":"GB","ow":3,"oy":[2024,2025],"wf":1},
   {"n":"Kaiser","t":["RNA","LWB","O2B"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
-  {"n":"Kalios","t":["BOS","NYXL","WAS","AFB","WGS","O2B","SKF"],"r":"Tank","h":"D.Va","hr":32.5,"y":[2018,2021,2022,2023],"c":"KR"},
+  {"n":"Kalios","t":["BOS","NYXL","WAS","AFB","WGS","O2B","SKF"],"r":"Tank","h":"D.Va","hr":32.5,"y":[2018,2021,2022,2023],"c":"KR","oy":[2025]},
   {"n":"KaMi","t":["LGEH","TCC"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"CN"},
-  {"n":"Kaneki","t":["CDH","TCC","LGD","UPAC","TCH"],"r":"DPS","h":"Reaper","hr":1.7,"y":[2021],"c":"CN","ow":4},
-  {"n":"Kani","t":["ROC"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"BR","ow":2},
+  {"n":"Kaneki","t":["CDH","TCC","LGD","UPAC","TCH"],"r":"DPS","h":"Reaper","hr":1.7,"y":[2021],"c":"CN","ow":4,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Kani","t":["ROC"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"BR","ow":2,"oy":[2024,2025]},
   {"n":"Karayan","t":["FLA","O2B"],"r":"Tank","h":"Reinhardt","hr":4.1,"y":[2019,2020],"c":"KR"},
   {"n":"KariV","t":["GZC","TOR","VAL"],"r":"Support","h":"Zenyatta","hr":93.1,"y":[2018,2019,2020,2021],"c":"KR"},
   {"n":"Karra","t":["EXO"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"NL"},
   {"n":"Karrotz","t":["RVL","DMN","ODY","WSP"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
   {"n":"Kassia","t":["UPAC"],"r":"Tank","hr":0,"y":[]},
   {"n":"Katekomi","t":["AGT"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"IT"},
-  {"n":"Kayeose","t":["ROC","ALQ"],"r":"Tank","h":"Junker Queen","hr":0,"y":[],"c":"SA","ow":1},
-  {"n":"Kellan","t":["NYXL","NRG","TM","SSG","DAL","EMY","TLN"],"r":"Tank","h":"Winston","hr":29,"y":[2022,2023],"c":"KR","ow":6},
-  {"n":"Kellex","t":["BOS","LDN","TOR","TM","ENC","ALQ","GK","BRH","EXO"],"r":"Support","h":"Mercy","hr":82.3,"y":[2018,2019,2020,2021],"c":"DK","ow":4},
-  {"n":"Ken","t":["PEP","RRC","TM"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"BE"},
-  {"n":"kevster","t":["GLA","ENC","VP","NRGE","AGT","ENV"],"r":"DPS","h":"Tracer","hr":65.8,"y":[2020,2021,2022,2023],"c":"SE","ow":6},
+  {"n":"Kayeose","t":["ROC","ALQ"],"r":"Tank","h":"Junker Queen","hr":0,"y":[],"c":"SA","ow":1,"oy":[2024,2025]},
+  {"n":"Kellan","t":["NYXL","NRG","TM","SSG","DAL","EMY","TLN"],"r":"Tank","h":"Winston","hr":29,"y":[2022,2023],"c":"KR","ow":6,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Kellex","t":["BOS","LDN","TOR","TM","ENC","ALQ","GK","BRH","EXO"],"r":"Support","h":"Mercy","hr":82.3,"y":[2018,2019,2020,2021],"c":"DK","ow":4,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Ken","t":["PEP","RRC","TM"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"BE","oy":[2025]},
+  {"n":"kevster","t":["GLA","ENC","VP","NRGE","AGT","ENV"],"r":"DPS","h":"Tracer","hr":65.8,"y":[2020,2021,2022,2023],"c":"SE","ow":6,"oy":[2024,2025,2026],"wf":1},
   {"n":"khd","t":["WGS","GZG"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"KHeart","t":["TCC"],"r":"DPS","hr":0,"y":[],"h":"Soldier: 76","c":"CN"},
-  {"n":"Khenail","t":["VP","EXO","PEP"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"ES","ow":2},
-  {"n":"Kilaa","t":["PEP","SMC"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"FR"},
-  {"n":"Kilo","t":["SFS","O2B"],"r":"DPS","h":"Sojourn","hr":18.7,"y":[2022],"c":"KR"},
+  {"n":"Khenail","t":["VP","EXO","PEP"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"ES","ow":2,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Kilaa","t":["PEP","SMC"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"FR","oy":[2024,2025]},
+  {"n":"Kilo","t":["SFS","O2B"],"r":"DPS","h":"Sojourn","hr":18.7,"y":[2022],"c":"KR","oy":[2025]},
   {"n":"KiNoMVP","t":["UPAC"],"r":"DPS","hr":0,"y":[]},
   {"n":"Kisu","t":["FLX"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
-  {"n":"KIVIS","t":["TL"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"KR","ow":3},
+  {"n":"KIVIS","t":["TL"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"KR","ow":3,"oy":[2026],"wf":1},
   {"n":"Klaus","t":["UPA"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"AR"},
   {"n":"Knasen","t":["AGT"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"SE"},
-  {"n":"KNIFE","t":["CR","ZETA","TL","TLN","O2B"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":5},
+  {"n":"KNIFE","t":["CR","ZETA","TL","TLN","O2B"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":5,"oy":[2024,2025,2026],"ww":1},
   {"n":"KnOxXx","t":["RGE"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"FR"},
   {"n":"Kodak","t":["ATL","ATLA"],"r":"Support","h":"Zenyatta","hr":5.5,"y":[2019,2020],"c":"DE"},
   {"n":"Kodomo","t":["FLG","BLG"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
   {"n":"Kolsti","t":["SMC"],"r":"Tank","hr":0,"y":[],"c":"FR"},
-  {"n":"KORZ","t":["ALQ"],"r":"DPS","h":"Symmetra","hr":0,"y":[],"c":"SA"},
+  {"n":"KORZ","t":["ALQ"],"r":"DPS","h":"Symmetra","hr":0,"y":[],"c":"SA","oy":[2024,2025,2026]},
   {"n":"KoX","t":["RNA"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"kraandop","t":["YNB","UPA","EXO","PEP","TM"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"NL"},
   {"n":"Kragie","t":["BRH"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DK"},
   {"n":"Krawi","t":["PAR","VAL","WSP"],"r":"Tank","h":"Ramattra","hr":12.8,"y":[2022,2023],"c":"US"},
   {"n":"Krillin","t":["LDN","SEO","WAS","T1"],"r":"Support","h":"Ana","hr":35.5,"y":[2019,2020,2022,2023],"c":"KR"},
   {"n":"Kris","t":["FLA","MTA"],"r":"Support","h":"Lúcio","hr":43,"y":[2019,2020],"c":"KR"},
-  {"n":"Kronik","t":["SSG","NTM","DAL"],"r":"DPS","h":"Freja","hr":0,"y":[],"c":"US","ow":6},
-  {"n":"Kronus","t":["PEP","SMC","EXO","RRC","OBA"],"r":"Support","h":"Lúcio","hr":0,"y":[]},
-  {"n":"KroxZ","t":["PEP","AGT","SMC"],"r":"Tank","h":"D.Mon","hr":0,"y":[],"c":"FR","ow":1},
+  {"n":"Kronik","t":["SSG","NTM","DAL"],"r":"DPS","h":"Freja","hr":0,"y":[],"c":"US","ow":6,"oy":[2025,2026],"wf":1},
+  {"n":"Kronus","t":["PEP","SMC","EXO","RRC","OBA"],"r":"Support","h":"Lúcio","hr":0,"y":[],"oy":[2024]},
+  {"n":"KroxZ","t":["PEP","AGT","SMC"],"r":"Tank","h":"D.Mon","hr":0,"y":[],"c":"FR","ow":1,"oy":[2024,2025,2026],"wf":1},
   {"n":"Kruise","t":["PAR","TOR","YNB","FUU"],"r":"Support","h":"Lúcio","hr":39.7,"y":[2019,2020],"c":"GB"},
   {"n":"Krystal","t":["HZS","VAL","GZC","TOW","FLG","UPAC"],"r":"DPS","h":"Ashe","hr":11.8,"y":[2019,2020,2021],"c":"CN"},
-  {"n":"KSAA","t":["VAN","TM","SSG","YNB","EXO","RRC"],"r":"Tank","h":"Sigma","hr":14.8,"y":[2020],"c":"SA","ow":2},
+  {"n":"KSAA","t":["VAN","TM","SSG","YNB","EXO","RRC"],"r":"Tank","h":"Sigma","hr":14.8,"y":[2020],"c":"SA","ow":2,"oy":[2024,2025,2026],"wf":1},
   {"n":"KSF","t":["HOU","VAL"],"r":"DPS","h":"Mei","hr":34.5,"y":[2018,2019,2020,2021],"c":"US"},
-  {"n":"KSG","t":["VAR"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"JP","ow":5},
-  {"n":"KSP","t":["VAL","ENC","ATL","GLA","XL2","YNB"],"r":"DPS","h":"Ashe","hr":13.7,"y":[2020,2021,2022,2023],"c":"GB","ow":3},
+  {"n":"KSG","t":["VAR"],"r":"Tank","h":"Winston","hr":0,"y":[],"c":"JP","ow":5,"oy":[2024,2025,2026],"ww":1,"wf":1},
+  {"n":"KSP","t":["VAL","ENC","ATL","GLA","XL2","YNB"],"r":"DPS","h":"Ashe","hr":13.7,"y":[2020,2021,2022,2023],"c":"GB","ow":3,"oy":[2024,2025],"wf":1},
   {"n":"Kspoa","t":["WGS"],"r":"DPS","hr":0,"y":[]},
   {"n":"KuKi","t":["SEO","VAL","MVP"],"r":"Tank","h":"Winston","hr":16.5,"y":[2018,2019],"c":"KR"},
   {"n":"Kyb","t":["GZC","PHI","BRH"],"r":"DPS","h":"Brigitte","hr":6.3,"y":[2019],"c":"GB","rs":["DPS","Support"],"hb":{"Support":"Brigitte","DPS":"Genji"}},
@@ -1672,53 +1679,53 @@ const PLAYERS = [
   {"n":"LagerMan","t":["AFR"],"r":"Tank","hr":0,"y":[],"c":"KR"},
   {"n":"Lament","t":["TCC","UPAC"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"CN"},
   {"n":"Lanboss","t":["FLG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"CN"},
-  {"n":"Landon","t":["LDN","SSG","VP","ROC","ALQ","YNB","DMN","SOL"],"r":"Support","h":"Baptiste","hr":33.7,"y":[2022,2023],"c":"US","ow":9},
+  {"n":"Landon","t":["LDN","SSG","VP","ROC","ALQ","YNB","DMN","SOL"],"r":"Support","h":"Baptiste","hr":33.7,"y":[2022,2023],"c":"US","ow":9,"oy":[2024,2025,2026],"wf":1},
   {"n":"Lapin","t":["VAR"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"JP"},
   {"n":"Larry33","t":["TOW"],"r":"Support","hr":0,"y":[]},
   {"n":"Larus","t":["MVP"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"Lastro","t":["GLA","HOU","TOR","VAL","WGS","SKF"],"r":"Support","h":"Zenyatta","hr":73.2,"y":[2020,2021,2022,2023],"c":"KR"},
   {"n":"lateyoung","t":["CDH","TCC","TCH"],"r":"Tank","h":"Zarya","hr":17.5,"y":[2019,2020,2021],"c":"CN"},
-  {"n":"LBBD7","t":["TM","ALQ","GK"],"r":"DPS","h":"Pharah","hr":0,"y":[],"c":"SA","ow":5},
+  {"n":"LBBD7","t":["TM","ALQ","GK"],"r":"DPS","h":"Pharah","hr":0,"y":[],"c":"SA","ow":5,"oy":[2024,2025,2026],"wf":1},
   {"n":"Leaf","t":["MTR"],"r":"DPS","hr":0,"y":[],"h":"Doomfist","c":"FR"},
-  {"n":"Leave","t":["CDH","HZS","WBG"],"r":"DPS","h":"Tracer","hr":67.3,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":8},
-  {"n":"LeeJaeGon","t":["BOS","SHD","RNA"],"r":"Support","h":"Brigitte","hr":80.8,"y":[2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":1},
-  {"n":"LeeSooMin","t":["SEO","AG","WBG","GEN"],"r":"Support","h":"Ana","hr":6.2,"y":[2023],"c":"KR","ow":5},
+  {"n":"Leave","t":["CDH","HZS","WBG"],"r":"DPS","h":"Tracer","hr":67.3,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":8,"oy":[2024,2025,2026],"wf":1},
+  {"n":"LeeJaeGon","t":["BOS","SHD","RNA"],"r":"Support","h":"Brigitte","hr":80.8,"y":[2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":1,"oy":[2024]},
+  {"n":"LeeSooMin","t":["SEO","AG","WBG","GEN"],"r":"Support","h":"Ana","hr":6.2,"y":[2023],"c":"KR","ow":5,"oy":[2025,2026],"wf":1},
   {"n":"LEETAEJUN","t":["LH"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"LeGo","t":["EMY","KDP","TDM"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
-  {"n":"Lengsa","t":["CDH","HZS","VAL","ROC","AG","LGEH","TCH"],"r":"Support","h":"Brigitte","hr":33.7,"y":[2020,2022,2023],"c":"CN","ow":6},
-  {"n":"Lep","t":["HOU","NYXL","M80","SSG","NTM","RVL","NOB"],"r":"Support","h":"Lúcio","hr":13.5,"y":[2022,2023],"c":"US","ow":3},
-  {"n":"Lethal","t":["LDN","SSG","NTM","GK","SMC","UPA","EXO","RRC","OBA","RBD"],"r":"DPS","h":"Tracer","hr":3.5,"y":[2023],"c":"TR","ow":6},
-  {"n":"LhCloudy","t":["GLA","PAR","ENC","RVL","NOB"],"r":"Tank","h":"Orisa","hr":15.4,"y":[2019,2020],"c":"FI"},
+  {"n":"Lengsa","t":["CDH","HZS","VAL","ROC","AG","LGEH","TCH"],"r":"Support","h":"Brigitte","hr":33.7,"y":[2020,2022,2023],"c":"CN","ow":6,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Lep","t":["HOU","NYXL","M80","SSG","NTM","RVL","NOB"],"r":"Support","h":"Lúcio","hr":13.5,"y":[2022,2023],"c":"US","ow":3,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Lethal","t":["LDN","SSG","NTM","GK","SMC","UPA","EXO","RRC","OBA","RBD"],"r":"DPS","h":"Tracer","hr":3.5,"y":[2023],"c":"TR","ow":6,"oy":[2024,2025,2026],"wf":1},
+  {"n":"LhCloudy","t":["GLA","PAR","ENC","RVL","NOB"],"r":"Tank","h":"Orisa","hr":15.4,"y":[2019,2020],"c":"FI","oy":[2024]},
   {"n":"Libero","t":["NYXL","MTA"],"r":"DPS","h":"Junkrat","hr":76.8,"y":[2018,2019,2020],"c":"KR"},
   {"n":"Lie","t":["TOW","FLG"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
   {"n":"LifQ","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
-  {"n":"LIGE","t":["HZS","TCC","AG","WBG","BLG"],"r":"Tank","h":"Sigma","hr":0.2,"y":[2021,2022],"c":"CN","ow":5},
-  {"n":"Lightt","t":["WSP"],"r":"DPS","hr":0,"y":[],"h":"Doomfist","c":"TW"},
-  {"n":"Lilko","t":["ROC"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CN"},
+  {"n":"LIGE","t":["HZS","TCC","AG","WBG","BLG"],"r":"Tank","h":"Sigma","hr":0.2,"y":[2021,2022],"c":"CN","ow":5,"oy":[2024,2025,2026]},
+  {"n":"Lightt","t":["WSP"],"r":"DPS","hr":0,"y":[],"h":"Doomfist","c":"TW","oy":[2025,2026]},
+  {"n":"Lilko","t":["ROC"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CN","oy":[2025]},
   {"n":"LiNkzr","t":["HOU","VAN"],"r":"DPS","h":"Widowmaker","hr":65.3,"y":[2018,2019,2020,2021],"c":"FI"},
   {"n":"Linnou","t":["EXO"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"SE"},
-  {"n":"LIP","t":["ATL","SHD","CR"],"r":"DPS","h":"Sombra","hr":80.4,"y":[2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":9},
+  {"n":"LIP","t":["ATL","SHD","CR"],"r":"DPS","h":"Sombra","hr":80.4,"y":[2020,2021,2022,2023],"ch":[2021],"c":"KR","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Liz","t":["CBX"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Liz (JP)","t":["VAR"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"JP"},
   {"n":"Locus","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Hanzo","c":"AU"},
   {"n":"Logix","t":["FLA","TOR","XL2","MTR","PEP"],"r":"DPS","h":"Tracer","hr":49.4,"y":[2018,2019,2020,2021],"c":"BE"},
-  {"n":"Love","t":["AGT","SMC","PEP"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"SE"},
+  {"n":"Love","t":["AGT","SMC","PEP"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"SE","oy":[2025]},
   {"n":"Luca","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"AU"},
-  {"n":"Lucas42g","t":["ROC"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"BR","ow":1},
+  {"n":"Lucas42g","t":["ROC"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"BR","ow":1,"oy":[2024]},
   {"n":"Lucht","t":["YNB"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"NL"},
   {"n":"Lucid","t":["AFB","KDU","LFZ"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Luddee","t":["GLL","AGT"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"SE"},
   {"n":"Luffy","t":["SHD","KDP","KDU"],"r":"Support","h":"Ana","hr":32.5,"y":[2019,2020],"c":"KR"},
   {"n":"Lui","t":["ENV"],"r":"DPS","hr":0,"y":[],"h":"Soldier: 76","c":"US"},
   {"n":"LUKE","t":["GEN"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
-  {"n":"Lukemino","t":["PAR","VEG","NTM","DAL","SFS","DMN","ODY","RBD"],"r":"Support","h":"Baptiste","hr":13.2,"y":[2022,2023],"c":"US","ow":5},
+  {"n":"Lukemino","t":["PAR","VEG","NTM","DAL","SFS","DMN","ODY","RBD"],"r":"Support","h":"Baptiste","hr":13.2,"y":[2022,2023],"c":"US","ow":5,"oy":[2025,2026],"wf":1},
   {"n":"LullSiSH","t":["YNB","AGT"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"SE"},
   {"n":"Luna","t":["LWB"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Luna (KR)","t":["SKF"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Lux","t":["LGD"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CN"},
-  {"n":"Lv1Crook","t":["PEP","SMC"],"r":"Support","h":"Brigitte","hr":0,"y":[],"ow":1},
+  {"n":"Lv1Crook","t":["PEP","SMC"],"r":"Support","h":"Brigitte","hr":0,"y":[],"ow":1,"oy":[2024]},
   {"n":"LVLZ","t":["GEN"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"KR"},
-  {"n":"Lyar","t":["VAL","M80","RVL","WSP","RBD"],"r":"Support","h":"Lúcio","hr":6.3,"y":[2023],"c":"US","ow":2},
+  {"n":"Lyar","t":["VAL","M80","RVL","WSP","RBD"],"r":"Support","h":"Lúcio","hr":6.3,"y":[2023],"c":"US","ow":2,"oy":[2024]},
   {"n":"Lyte","t":["SNT"],"r":"Tank","hr":0,"y":[],"h":"Doomfist","c":"US"},
   {"n":"M1ka","t":["HZS","FLG","BLG","UPAC"],"r":"Support","h":"Brigitte","hr":7.1,"y":[2020,2021],"c":"CN"},
   {"n":"M1nut2","t":["TDM"],"r":"DPS","hr":0,"y":[],"h":"Ashe","c":"KR"},
@@ -1726,11 +1733,11 @@ const PLAYERS = [
   {"n":"Mac (AT)","t":["NOB","DMN"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"AT"},
   {"n":"Madara1161","t":["TM"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"SA"},
   {"n":"Madero","t":["YNB"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"US"},
-  {"n":"MAG","t":["BOS","INF","WAS","ZETA","AG","RNA"],"r":"Tank","h":"Winston","hr":33.2,"y":[2021,2022,2023],"c":"KR","ow":2},
+  {"n":"MAG","t":["BOS","INF","WAS","ZETA","AG","RNA"],"r":"Tank","h":"Winston","hr":33.2,"y":[2021,2022,2023],"c":"KR","ow":2,"oy":[2025,2026],"wf":1},
   {"n":"MAGI","t":["UPAC"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"MagicM8Ball","t":["WSP"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"CA"},
-  {"n":"MAKA","t":["AG","WBG"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"KR","ow":5},
-  {"n":"MAKA (KR)","t":["TDM"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
+  {"n":"MAKA","t":["AG","WBG"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"KR","ow":5,"oy":[2025,2026],"wf":1},
+  {"n":"MAKA (KR)","t":["TDM"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR","oy":[2025,2026],"wf":1},
   {"n":"MaltheL","t":["PAR","VEG","NOB","DMN","ODY","WSP"],"r":"DPS","h":"Genji","hr":12.1,"y":[2022,2023],"c":"US"},
   {"n":"Mandu","t":["GZC","NYXL","O2B"],"r":"Support","h":"Brigitte","hr":12,"y":[2020,2021],"c":"KR"},
   {"n":"Mangachu","t":["TOR","XL2","MAC","MTR"],"r":"DPS","h":"Mei","hr":8.1,"y":[2019,2020],"c":"CA"},
@@ -1740,45 +1747,45 @@ const PLAYERS = [
   {"n":"Marblue","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"CN"},
   {"n":"Marked","t":["TM"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"FI"},
   {"n":"Marve1","t":["BOS","SEO","VAL","GLA","O2B","LFZ"],"r":"Tank","h":"Sigma","hr":55,"y":[2019,2020,2021,2022,2023],"c":"KR"},
-  {"n":"Masaa","t":["ATL","VAN","ENC"],"r":"Support","h":"Lúcio","hr":82.2,"y":[2019,2020,2021,2022],"c":"FI","ow":1},
+  {"n":"Masaa","t":["ATL","VAN","ENC"],"r":"Support","h":"Lúcio","hr":82.2,"y":[2019,2020,2021,2022],"c":"FI","ow":1,"oy":[2024]},
   {"n":"mAsk","t":["FLG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"CN"},
   {"n":"MattMerc","t":["DMN","OBA"],"r":"Tank","hr":0,"y":[],"h":"Wrecking Ball","c":"US"},
   {"n":"Mauz","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DK"},
-  {"n":"Max","t":["SFS","CR","O2B"],"r":"Tank","h":"Ramattra","hr":3.4,"y":[2023],"c":"KR","ow":10},
+  {"n":"Max","t":["SFS","CR","O2B"],"r":"Tank","h":"Ramattra","hr":3.4,"y":[2023],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Maximus","t":["DMN","SOL"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"Maxwell","t":["SKF"],"r":"DPS","hr":0,"y":[],"h":"Echo","c":"US"},
-  {"n":"MCD","t":["BOS","DAL","HZS","TM","EMY","TLN"],"r":"Support","h":"Ana","hr":30.5,"y":[2021,2022,2023],"c":"KR","ow":1},
+  {"n":"MCD","t":["BOS","DAL","HZS","TM","EMY","TLN"],"r":"Support","h":"Ana","hr":30.5,"y":[2021,2022,2023],"c":"KR","ow":1,"oy":[2024],"wf":1},
   {"n":"Mcgravy","t":["FLA","VAL","ENV","RVL"],"r":"Tank","h":"D.Va","hr":24.6,"y":[2019,2020],"c":"US"},
-  {"n":"Mealgaru","t":["ZETA","AG"],"r":"Tank","h":"Wrecking Ball","hr":0,"y":[],"c":"KR","ow":3},
+  {"n":"Mealgaru","t":["ZETA","AG"],"r":"Tank","h":"Wrecking Ball","hr":0,"y":[],"c":"KR","ow":3,"oy":[2025,2026]},
   {"n":"MedalOfHonor","t":["LH","CBX"],"r":"Tank","hr":0,"y":[],"h":"Genji","c":"KR"},
   {"n":"MekO","t":["HOU","NYXL","LWB"],"r":"Tank","h":"D.Va","hr":91.3,"y":[2018,2019,2020],"c":"KR"},
   {"n":"Melon","t":["LGD"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"MelonZ","t":["FLG"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CN"},
-  {"n":"MER1T","t":["FLA","HOU","TOR","FLC","KDP","RNA","LGEH","O2B"],"r":"DPS","h":"Sojourn","hr":46.4,"y":[2022,2023],"ch":[2023],"c":"KR","ow":9},
+  {"n":"MER1T","t":["FLA","HOU","TOR","FLC","KDP","RNA","LGEH","O2B"],"r":"DPS","h":"Sojourn","hr":46.4,"y":[2022,2023],"ch":[2023],"c":"KR","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Mesic","t":["EXO"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"PL"},
   {"n":"MG","t":["SHD","FLG"],"r":"Tank","h":"D.Va","hr":11.9,"y":[2018],"c":"CN"},
   {"n":"Michelle","t":["SEO","TOR","LFZ"],"r":"Tank","h":"D.Va","hr":43.2,"y":[2019,2020,2021],"c":"KR"},
   {"n":"Mickie","t":["DAL","ENV"],"r":"Tank","h":"D.Va","hr":36.6,"y":[2018,2019],"c":"TH"},
   {"n":"Midnight","t":["XL2"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"MightyLord","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"CN"},
-  {"n":"Mihawk","t":["VAR"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"JP"},
+  {"n":"Mihawk","t":["VAR"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"JP","oy":[2024,2025]},
   {"n":"MikeyA","t":["MAC","BRH"],"r":"DPS","hr":0,"y":[],"h":"Pharah"},
   {"n":"mikeyy","t":["BOS","SFS","SKF","NOB","SNT","DMN","SOL"],"r":"Tank","h":"Winston","hr":7.8,"y":[2020,2022],"c":"US"},
   {"n":"Milkyman","t":["YNB","NOB"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"FI"},
-  {"n":"Mimoza","t":["VAR"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"JP"},
+  {"n":"Mimoza","t":["VAR"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"JP","oy":[2025],"ww":1},
   {"n":"Minny","t":["GZG"],"r":"Tank","hr":0,"y":[],"c":"AU"},
   {"n":"Mint","t":["VAR"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"JP"},
   {"n":"Mint (JP)","t":["VAR"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"JP"},
   {"n":"Miro","t":["SEO","LH"],"r":"Tank","h":"Winston","hr":22.3,"y":[2018],"c":"KR"},
-  {"n":"MirroR","t":["GLA","VAN","WAS","ENC","NRGE","SWD","UPA"],"r":"DPS","h":"Doomfist","hr":37.4,"y":[2020,2021,2022,2023],"rs":["DPS","Tank"],"hb":{"DPS":"Doomfist","Tank":"Junker Queen"},"c":"VN","ow":1},
+  {"n":"MirroR","t":["GLA","VAN","WAS","ENC","NRGE","SWD","UPA"],"r":"DPS","h":"Doomfist","hr":37.4,"y":[2020,2021,2022,2023],"rs":["DPS","Tank"],"hb":{"DPS":"Doomfist","Tank":"Junker Queen"},"c":"VN","ow":1,"oy":[2024]},
   {"n":"Mistakes","t":["BOS","MTR"],"r":"Support","h":"Widowmaker","hr":21.6,"y":[2018],"c":"RU","rs":["Support","DPS"],"hb":{"DPS":"Widowmaker","Support":"Tracer"}},
   {"n":"MIZUKI","t":["TCC"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"CN"},
-  {"n":"Mmonk","t":["CDH","HZS","WBG","FLG"],"r":"Support","h":"Ana","hr":45.7,"y":[2021,2022,2023],"c":"CN","ow":5},
+  {"n":"Mmonk","t":["CDH","HZS","WBG","FLG"],"r":"Support","h":"Ana","hr":45.7,"y":[2021,2022,2023],"c":"CN","ow":5,"oy":[2024,2025,2026],"wf":1},
   {"n":"MN3","t":["INF","PHI","EMY","T1"],"r":"DPS","h":"Sojourn","hr":32.2,"y":[2022,2023],"c":"KR"},
   {"n":"Mohr","t":["MAC"],"r":"Support","hr":0,"y":[],"c":"US"},
   {"n":"MoLanran","t":["VAL","TOW","FLG"],"r":"DPS","h":"Echo","hr":7.9,"y":[2021],"c":"CN"},
   {"n":"Molf1g","t":["LDN","BRH","SMC","PEP"],"r":"Tank","h":"D.Va","hr":10.4,"y":[2021],"c":"DK"},
-  {"n":"Molly","t":["CDH","SHD","VAL","ROC","LGEH"],"r":"Support","h":"Ana","hr":27.4,"y":[2020,2021,2022],"ch":[2021],"c":"CN","ow":1},
+  {"n":"Molly","t":["CDH","SHD","VAL","ROC","LGEH"],"r":"Support","h":"Ana","hr":27.4,"y":[2020,2021,2022],"ch":[2021],"c":"CN","ow":1,"oy":[2025]},
   {"n":"Momentum","t":["YNB","ODY","SOL"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"US"},
   {"n":"Moopey","t":["XL2","MAC","SWD","RVL","NOB"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"US"},
   {"n":"moth","t":["GLA","SFS"],"r":"Support","h":"Lúcio","hr":86.2,"y":[2018,2019,2020,2021],"ch":[2019,2020],"c":"US"},
@@ -1798,25 +1805,25 @@ const PLAYERS = [
   {"n":"Na1st","t":["TOR","KDP","MBL","FUU","T1"],"r":"DPS","h":"Echo","hr":7.9,"y":[2021],"c":"KR"},
   {"n":"naahmie","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"AU"},
   {"n":"NaeSok","t":["MTA","TLN","O2B"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"Naga","t":["PAR","PEP","AGT","SMC","MTR","EXO","OBA"],"r":"DPS","h":"Echo","hr":13.1,"y":[2021,2022],"c":"DK","ow":1},
+  {"n":"Naga","t":["PAR","PEP","AGT","SMC","MTR","EXO","OBA"],"r":"DPS","h":"Echo","hr":13.1,"y":[2021,2022],"c":"DK","ow":1,"oy":[2024]},
   {"n":"Nanda","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Echo","c":"AU"},
   {"n":"Naru","t":["YNB","SMC","EXO"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"DE"},
   {"n":"Natlocks","t":["RRC"],"r":"Support","hr":0,"y":[],"h":"Baptiste","c":"FR"},
   {"n":"Navi","t":["AFR"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"Neb","t":["WSP","RBD"],"r":"Support","hr":0,"y":[],"h":"Baptiste","c":"US"},
-  {"n":"neil","t":["ROC"],"r":"Tank","h":"Reinhardt","hr":0,"y":[],"c":"BR"},
+  {"n":"neil","t":["ROC"],"r":"Tank","h":"Reinhardt","hr":0,"y":[],"c":"BR","oy":[2024]},
   {"n":"Neko","t":["BOS","HZS","TOR","NCF","O2B"],"r":"Support","h":"Zenyatta","hr":60.4,"y":[2018,2019,2022],"c":"KR"},
   {"n":"Nenne","t":["NYXL","LWR","LH","XL2"],"r":"DPS","h":"Ashe","hr":36,"y":[2019,2020],"c":"KR"},
-  {"n":"NenWhy","t":["NTM"],"r":"Support","h":"Mercy","hr":0,"y":[],"c":"US"},
+  {"n":"NenWhy","t":["NTM"],"r":"Support","h":"Mercy","hr":0,"y":[],"c":"US","oy":[2025]},
   {"n":"neptuNo","t":["GZC","PAR","PHI"],"r":"Support","h":"Mercy","hr":81.3,"y":[2018,2019,2020,2021],"c":"ES"},
-  {"n":"nero","t":["ATL","GZC","SFS","M80"],"r":"DPS","h":"Mei","hr":46.8,"y":[2019,2020,2021,2022],"c":"US"},
+  {"n":"nero","t":["ATL","GZC","SFS","M80"],"r":"DPS","h":"Mei","hr":46.8,"y":[2019,2020,2021,2022],"c":"US","oy":[2024]},
   {"n":"Nesh","t":["BRH"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DE"},
   {"n":"Networkz","t":["YNB"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"ES"},
   {"n":"Nevix","t":["SFS","TOR"],"r":"Tank","h":"D.Va","hr":53.4,"y":[2018,2019,2020],"ch":[2019],"c":"SE"},
-  {"n":"Nico","t":["VAR"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"JP","ow":5},
+  {"n":"Nico","t":["VAR"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"JP","ow":5,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"NiCOgdh","t":["PAR","RGE","YNB","SMC"],"r":"DPS","h":"Mei","hr":28.9,"y":[2019,2020],"c":"FR"},
   {"n":"Nisha","t":["CDH","TOW","BLG"],"r":"Support","h":"Lúcio","hr":31.2,"y":[2021,2022,2023],"c":"CN"},
-  {"n":"Nitro","t":["ROC"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"BR","ow":1},
+  {"n":"Nitro","t":["ROC"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"BR","ow":1,"oy":[2024]},
   {"n":"NLaaeR","t":["ATL"],"r":"DPS","h":"Mei","hr":5.6,"y":[2019],"c":"RU"},
   {"n":"Noah","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Nomy","t":["SFS"],"r":"Tank","h":"Winston","hr":19.6,"y":[2018],"c":"MX"},
@@ -1826,7 +1833,7 @@ const PLAYERS = [
   {"n":"Numlocked","t":["TOR","VAL","YNB","BRH","ENV","MTR"],"r":"Tank","h":"Orisa","hr":9,"y":[2018,2020],"c":"GB"},
   {"n":"NUS","t":["LDN","MTA"],"r":"Support","h":"Mercy","hr":48.5,"y":[2018,2019],"ch":[2018],"c":"KR"},
   {"n":"NvM","t":["LGEH"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CN"},
-  {"n":"Nyang","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
+  {"n":"Nyang","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR","oy":[2025,2026]},
   {"n":"Oberon","t":["MVP","BKS","FLX","WGS","GEN"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"Obling","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DK"},
   {"n":"October02","t":["BLG"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"CN"},
@@ -1840,33 +1847,33 @@ const PLAYERS = [
   {"n":"Onigod","t":["DAL","PAR","AGT","ENV"],"r":"DPS","h":"Ashe","hr":21.5,"y":[2020,2021],"c":"NO"},
   {"n":"Onlywish","t":["GZC","LGD"],"r":"Support","h":"Mercy","hr":0.6,"y":[2019],"c":"CN"},
   {"n":"Oparochi","t":["NCF","CBX","WGS"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
-  {"n":"OPENER","t":["WAS","T1","TOR","O2B","GEN","GZG"],"r":"Support","h":"Lúcio","hr":21,"y":[2022,2023],"c":"KR","ow":1},
+  {"n":"OPENER","t":["WAS","T1","TOR","O2B","GEN","GZG"],"r":"Support","h":"Lúcio","hr":21,"y":[2022,2023],"c":"KR","ow":1,"oy":[2024,2025]},
   {"n":"oPuTo","t":["TLN"],"r":"DPS","hr":0,"y":[],"h":"Sombra","c":"TH"},
   {"n":"Order","t":["WGS","X6"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"KR"},
   {"n":"over","t":["FLG","BLG"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"CN"},
   {"n":"P3t9L","t":["SKF","NOB","DMN","OBA"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"US"},
-  {"n":"Painkiller","t":["NTM"],"r":"Tank","h":"Ramattra","hr":0,"y":[],"c":"US","ow":1},
+  {"n":"Painkiller","t":["NTM"],"r":"Tank","h":"Ramattra","hr":0,"y":[],"c":"US","ow":1,"oy":[2025,2026]},
   {"n":"Paintbrush","t":["DAL","GLA","VAL","MAC","RVL","SOL"],"r":"Support","h":"Brigitte","hr":11.8,"y":[2020,2023],"c":"US"},
-  {"n":"Pak","t":["PEP","SMC"],"r":"Support","h":"Genji","hr":0,"y":[],"c":"FR"},
+  {"n":"Pak","t":["PEP","SMC"],"r":"Support","h":"Genji","hr":0,"y":[],"c":"FR","oy":[2024,2025]},
   {"n":"panic","t":["SNT","SOL"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"US"},
   {"n":"Panker","t":["KDU","GLL","NOB"],"r":"Tank","hr":0,"y":[],"h":"Wrecking Ball","c":"KR"},
   {"n":"Papadog","t":["GEN"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Patiphan","t":["GLA","WGS","TLN"],"r":"DPS","h":"Sojourn","hr":11.4,"y":[2022],"c":"TH"},
-  {"n":"peace","t":["NTM"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"US"},
-  {"n":"PELICAN","t":["ATL","HOU","M80","ZETA","O2B"],"r":"DPS","h":"Tracer","hr":61.4,"y":[2021,2022,2023],"c":"KR","ow":2},
+  {"n":"peace","t":["NTM"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"US","oy":[2026]},
+  {"n":"PELICAN","t":["ATL","HOU","M80","ZETA","O2B"],"r":"DPS","h":"Tracer","hr":61.4,"y":[2021,2022,2023],"c":"KR","ow":2,"oy":[2024,2025,2026]},
   {"n":"PERFACT","t":["ATLA","T1"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"KR"},
   {"n":"Perr","t":["WGS","GZG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"Persia","t":["BOS","TLN"],"r":"Support","h":"Ana","hr":8.6,"y":[2019],"c":"KR"},
-  {"n":"PGE","t":["NRG"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","ow":2},
+  {"n":"PGE","t":["NRG"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","ow":2,"oy":[2024,2026]},
   {"n":"Phatt","t":["AGT","UPA"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"PT"},
   {"n":"phi","t":["EXO","SOL"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"DE"},
   {"n":"Physics","t":["WGS","TOW","T1"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Piggy","t":["GZC","HOU","TLN","LGEH"],"r":"Tank","h":"D.Va","hr":31.6,"y":[2021,2022,2023],"c":"KR"},
   {"n":"Pika","t":["ATLA"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"US"},
   {"n":"Pine","t":["NYXL","LWR","LWB","DAL"],"r":"DPS","h":"Widowmaker","hr":14.2,"y":[2018,2019,2021],"c":"KR"},
-  {"n":"Pineapple","t":["HZS","TCC","TOW","BLG"],"r":"DPS","h":"Tracer","hr":3.8,"y":[2022,2023],"c":"CN","ow":4},
+  {"n":"Pineapple","t":["HZS","TCC","TOW","BLG"],"r":"DPS","h":"Tracer","hr":3.8,"y":[2022,2023],"c":"CN","ow":4,"oy":[2024,2025,2026],"wf":1},
   {"n":"Pizzademon","t":["UPA","NOB"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"US"},
-  {"n":"Plankton","t":["VAR"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"JP"},
+  {"n":"Plankton","t":["VAR"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"JP","oy":[2024]},
   {"n":"Poise","t":["KDU","NRGE"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Poko","t":["LDN","PHI","INF","FUU"],"r":"Tank","h":"D.Va","hr":71.1,"y":[2018,2019,2020,2021,2022,2023],"c":"FR"},
   {"n":"Pokpo","t":["ATL","EMY"],"r":"Tank","h":"Reinhardt","hr":36.6,"y":[2019,2020],"c":"KR"},
@@ -1875,57 +1882,57 @@ const PLAYERS = [
   {"n":"PP","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"CN"},
   {"n":"Pride","t":["UPAC"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"CN"},
   {"n":"Priest","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
-  {"n":"Probe","t":["ZETA","O2B"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"KR"},
+  {"n":"Probe","t":["ZETA","O2B"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"KR","oy":[2025]},
   {"n":"Profit","t":["LDN","SEO","GCB"],"r":"DPS","h":"Tracer","hr":144.2,"y":[2018,2019,2020,2021,2022,2023],"ch":[2018],"c":"KR"},
   {"n":"Promis3d","t":["FLG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"CN"},
-  {"n":"Proper","t":["SFS","FLC","ZETA","O2B"],"r":"DPS","h":"Tracer","hr":47,"y":[2022,2023],"c":"KR","ow":10},
+  {"n":"Proper","t":["SFS","FLC","ZETA","O2B"],"r":"DPS","h":"Tracer","hr":47,"y":[2022,2023],"c":"KR","ow":10,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Prophet","t":["SEO","O2B"],"r":"DPS","h":"Sombra","hr":5.5,"y":[2023],"c":"KR"},
   {"n":"prot3ct","t":["KDP"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"Protoast","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"CN"},
-  {"n":"Proud","t":["T1","O2B"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"KR","ow":6},
+  {"n":"Proud","t":["T1","O2B"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"KR","ow":6,"oy":[2025,2026],"wf":1},
   {"n":"Prove","t":["BKS"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"provide","t":["SMC","SNT","DMN"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"GB"},
-  {"n":"Psych0","t":["ALQ","SMC","EXO"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"NO"},
+  {"n":"Psych0","t":["ALQ","SMC","EXO"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"NO","oy":[2024,2025]},
   {"n":"Pummy","t":["YNB"],"r":"DPS","hr":0,"y":[],"h":"Ashe","c":"US"},
   {"n":"Pumple","t":["NCF","FLX"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"punk","t":["BOS","VAN","UPA"],"r":"Tank","h":"D.Va","hr":45,"y":[2020,2021,2022,2023],"c":"AU","ow":3},
+  {"n":"punk","t":["BOS","VAN","UPA"],"r":"Tank","h":"D.Va","hr":45,"y":[2020,2021,2022,2023],"c":"AU","ow":3,"oy":[2024,2025,2026]},
   {"n":"PureIrish","t":["AGT"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"IE"},
   {"n":"Qdiy","t":["UPAC"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
   {"n":"QIN","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Ashe","c":"AU"},
-  {"n":"qki","t":["VAR"],"r":"DPS","h":"Sombra","hr":0,"y":[],"c":"JP","ow":1},
-  {"n":"Qlm","t":["ALQ"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"SA"},
-  {"n":"Qloud","t":["VAR"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"JP","ow":5},
+  {"n":"qki","t":["VAR"],"r":"DPS","h":"Sombra","hr":0,"y":[],"c":"JP","ow":1,"oy":[2024,2025,2026]},
+  {"n":"Qlm","t":["ALQ"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"SA","oy":[2024,2025]},
+  {"n":"Qloud","t":["VAR"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"JP","ow":5,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"QoQ","t":["HZS","MVP","RNA","UPA","T1"],"r":"Tank","h":"Sigma","hr":7.6,"y":[2020],"c":"KR"},
-  {"n":"Quartz","t":["TM"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"SA","ow":8},
+  {"n":"Quartz","t":["TM"],"r":"DPS","h":"Widowmaker","hr":0,"y":[],"c":"SA","ow":8,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"QuaterMain","t":["LDN","AFR","KDU"],"r":"Support","h":"Lúcio","hr":10.7,"y":[2019],"c":"KR"},
-  {"n":"Raajaro","t":["VP"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"FI","ow":1},
+  {"n":"Raajaro","t":["VP"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"FI","ow":1,"oy":[2024,2025]},
   {"n":"Radio","t":["KDP"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"Raikker","t":["SOL","WSP"],"r":"Tank","hr":0,"y":[],"h":"Wrecking Ball","c":"US"},
   {"n":"RaiN","t":["FLA","VAL","O2B"],"r":"Support","h":"Lúcio","hr":24.7,"y":[2019,2020],"c":"KR"},
   {"n":"Raindrop","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"KR"},
   {"n":"RAINEE","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
-  {"n":"Rakattack","t":["PAR","VEG","NRG","ENC","ODY"],"r":"Support","h":"Brigitte","hr":13.2,"y":[2022,2023],"c":"US","ow":4},
+  {"n":"Rakattack","t":["PAR","VEG","NRG","ENC","ODY"],"r":"Support","h":"Brigitte","hr":13.2,"y":[2022,2023],"c":"US","ow":4,"oy":[2024,2025],"wf":1},
   {"n":"Rapel","t":["DAL","HOU","VAN","EMY"],"r":"Support","h":"Baptiste","hr":24,"y":[2019,2020,2021],"c":"KR"},
   {"n":"Raphael","t":["TLN"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"Rascal","t":["DAL","LDN","PHI","SFS","KDP","C9K","NRGE"],"r":"DPS","h":"Mei","hr":59.5,"y":[2018,2019,2020,2021],"ch":[2018,2019,2020],"c":"KR"},
-  {"n":"Rav","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"DK","ow":1},
+  {"n":"Rav","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"DK","ow":1,"oy":[2026],"wf":1},
   {"n":"Rawkus","t":["HOU"],"r":"Support","h":"Zenyatta","hr":69.9,"y":[2018,2019,2020],"c":"US"},
   {"n":"rCk","t":["BOS","DAL"],"r":"Tank","h":"D.Va","hr":20.8,"y":[2019],"rs":["DPS","Tank"],"hb":{"DPS":"Sombra","Tank":"D.Va"},"c":"FI"},
   {"n":"React","t":["RBD"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"US"},
   {"n":"rebirth","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Reborn","t":["FLG"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CN"},
-  {"n":"Recall","t":["AG","UPAC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"CN","ow":3},
+  {"n":"Recall","t":["AG","UPAC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"CN","ow":3,"oy":[2026],"wf":1},
   {"n":"Recry","t":["AFB","MTA","AFR"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"KR"},
   {"n":"Reiner","t":["GLA","SWD","AMT","RBD"],"r":"Tank","h":"Winston","hr":25.9,"y":[2022],"rs":["DPS","Tank"],"hb":{"DPS":"Doomfist","Tank":"Winston"},"c":"US"},
   {"n":"Reinforce","t":["RGE"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"SE"},
   {"n":"Rem","t":["FLG"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
   {"n":"Rene","t":["EXO"],"r":"Tank","hr":0,"y":[],"h":"Sigma","c":"GB"},
-  {"n":"Renko","t":["M80","SKF","NOB","DMN","ODY","RBD"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"US"},
+  {"n":"Renko","t":["M80","SKF","NOB","DMN","ODY","RBD"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"US","oy":[2024]},
   {"n":"Reqlxss","t":["EXO"],"r":"Support","hr":0,"y":[],"h":"Baptiste","c":"GB"},
   {"n":"Revenge","t":["HZS","CBX","RNA"],"r":"Support","h":"Zenyatta","hr":2,"y":[2019],"c":"KR"},
   {"n":"reviewz","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Illari","c":"FR"},
   {"n":"Reyzr","t":["RVL","NOB"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"CA"},
-  {"n":"RhynO","t":["NTM","UPA","ODY"],"r":"Tank","h":"Orisa","hr":0,"y":[],"c":"US"},
+  {"n":"RhynO","t":["NTM","UPA","ODY"],"r":"Tank","h":"Orisa","hr":0,"y":[],"c":"US","oy":[2025,2026]},
   {"n":"Ria","t":["HZS","NCF","X6"],"r":"Tank","h":"D.Va","hr":35.8,"y":[2019,2020],"c":"KR"},
   {"n":"RinaVX","t":["XL2","SWD"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"US"},
   {"n":"Rio","t":["GZC","MTA","AFR","MBL"],"r":"Tank","h":"Orisa","hr":62,"y":[2019,2020,2021,2022],"c":"KR"},
@@ -1934,21 +1941,21 @@ const PLAYERS = [
   {"n":"Ro0per","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"rOar","t":["GLA","WAS","LWR","KDP"],"r":"Tank","h":"Reinhardt","hr":47.9,"y":[2019,2020],"c":"KR"},
   {"n":"robdab","t":["NRGE"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"US"},
-  {"n":"roho","t":["ROC"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"SA"},
-  {"n":"Rokit","t":["NTM","WSP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"US","ow":2},
+  {"n":"roho","t":["ROC"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"SA","oy":[2024,2025]},
+  {"n":"Rokit","t":["NTM","WSP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"US","ow":2,"oy":[2025,2026]},
   {"n":"RoKy","t":["TOR","NCF","X6","MTR"],"r":"Support","h":"Lúcio","hr":14.5,"y":[2019,2020],"c":"KR"},
   {"n":"Rook1e","t":["LGD"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"CN"},
   {"n":"Roolf","t":["VAN","GLL","SWD"],"r":"Support","h":"Baptiste","hr":24,"y":[2020,2021],"c":"CA"},
   {"n":"Roshan","t":["SHD"],"r":"Tank","h":"Winston","hr":13.5,"y":[2018],"c":"CN"},
   {"n":"ROXANNE","t":["GZG"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"KR"},
-  {"n":"Roxy","t":["EMY"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
+  {"n":"Roxy","t":["EMY"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR","oy":[2026]},
   {"n":"RpEN","t":["WGS","KDP","T1"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"RuiMin","t":["FLG"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"TW"},
   {"n":"RULER","t":["GZG"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"KR"},
   {"n":"Runner","t":["RNA"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
-  {"n":"Rupal","t":["FLA","TOR","TL","RVL","NOB","WSP"],"r":"Support","h":"Ana","hr":34.4,"y":[2022,2023],"ch":[2023],"c":"US","ow":6},
+  {"n":"Rupal","t":["FLA","TOR","TL","RVL","NOB","WSP"],"r":"Support","h":"Ana","hr":34.4,"y":[2022,2023],"ch":[2023],"c":"US","ow":6,"oy":[2024,2025,2026],"wf":1},
   {"n":"ryujehong","t":["SEO","VAN","LH"],"r":"Support","h":"Zenyatta","hr":61.9,"y":[2018,2019,2020],"c":"KR"},
-  {"n":"s9mm","t":["SFS","TOR","M80","SNT","DMN","AMT","SOL","RBD"],"r":"DPS","h":"Hanzo","hr":11.8,"y":[2022,2023],"c":"US"},
+  {"n":"s9mm","t":["SFS","TOR","M80","SNT","DMN","AMT","SOL","RBD"],"r":"DPS","h":"Hanzo","hr":11.8,"y":[2022,2023],"c":"US","oy":[2024]},
   {"n":"Saadist","t":["RBD"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"US"},
   {"n":"sab","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"NL"},
   {"n":"SADO","t":["PHI","TOR"],"r":"Tank","h":"Winston","hr":81.1,"y":[2018,2019,2020,2021],"c":"KR"},
@@ -1960,24 +1967,24 @@ const PLAYERS = [
   {"n":"Sansam","t":["WAS","MTA","AFR"],"r":"Tank","h":"D.Va","hr":23,"y":[2019],"c":"KR"},
   {"n":"SASIN","t":["HZS","VAL","NCF"],"r":"Tank","h":"Zarya","hr":20.5,"y":[2019,2020,2022],"c":"KR"},
   {"n":"Saucy","t":["ATL","ATLA"],"r":"DPS","h":"Sombra","hr":4.4,"y":[2020],"c":"US"},
-  {"n":"Sauna","t":["FLA","VP","LDN","YNB","SMC","EXO"],"r":"DPS","h":"Reaper","hr":0.6,"y":[2023],"ch":[2023],"c":"FI","ow":1},
+  {"n":"Sauna","t":["FLA","VP","LDN","YNB","SMC","EXO"],"r":"DPS","h":"Reaper","hr":0.6,"y":[2023],"ch":[2023],"c":"FI","ow":1,"oy":[2024,2025]},
   {"n":"Sayaplayer","t":["FLA","MTA"],"r":"DPS","h":"Widowmaker","hr":29.8,"y":[2018,2019,2020],"c":"KR"},
   {"n":"Scaler","t":["UPA"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"DK"},
-  {"n":"Scarione","t":["ROC"],"r":"Support","h":"Mercy","hr":0,"y":[],"c":"BR","ow":1},
+  {"n":"Scarione","t":["ROC"],"r":"Support","h":"Mercy","hr":0,"y":[],"c":"BR","ow":1,"oy":[2024]},
   {"n":"Schwi","t":["LDN","WGS","RNA"],"r":"Support","h":"Mei","hr":7,"y":[2020],"c":"KR","rs":["Support","DPS"],"hb":{"DPS":"Mei","Support":"Kiriko"}},
-  {"n":"scissors","t":["NRG"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"US","ow":2},
-  {"n":"Scyle","t":["ROC","ALQ","RRC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SE","ow":1},
+  {"n":"scissors","t":["NRG"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"US","ow":2,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Scyle","t":["ROC","ALQ","RRC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"SE","ow":1,"oy":[2024,2025,2026]},
   {"n":"Seagull","t":["DAL","ENV"],"r":"DPS","h":"Junkrat","hr":21.7,"y":[2018],"rs":["DPS","Tank"],"hb":{"DPS":"Junkrat","Tank":"D.Va"},"c":"US"},
   {"n":"search","t":["TLN","GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
   {"n":"SeaWave","t":["FLG","UPAC"],"r":"DPS","hr":0,"y":[],"h":"Ashe","c":"CN"},
   {"n":"secret","t":["LGD","BLG"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CN"},
-  {"n":"Seeker","t":["BOS","VAL","M80","SSG","NTM","RVL","NOB","DMN"],"r":"DPS","h":"Sojourn","hr":10.7,"y":[2022,2023],"c":"CA","ow":3},
+  {"n":"Seeker","t":["BOS","VAL","M80","SSG","NTM","RVL","NOB","DMN"],"r":"DPS","h":"Sojourn","hr":10.7,"y":[2022,2023],"c":"CA","ow":3,"oy":[2024,2025],"wf":1},
   {"n":"SeeYA","t":["TCC"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
-  {"n":"Seicoe","t":["NYXL","VAN","TM","SSG","VP","ROC","SMC","EXO"],"r":"DPS","h":"Tracer","hr":11.5,"y":[2022,2023],"c":"AT","ow":7},
+  {"n":"Seicoe","t":["NYXL","VAN","TM","SSG","VP","ROC","SMC","EXO"],"r":"DPS","h":"Tracer","hr":11.5,"y":[2022,2023],"c":"AT","ow":7,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Selly","t":["KDP"],"r":"DPS","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"SeoKichan","t":["GZG","UPAC"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"SeoMinSoo","t":["HZS","VAN","NCF","RNA"],"r":"DPS","h":"Reaper","hr":33.6,"y":[2019,2020,2021],"c":"KR"},
-  {"n":"Seonjun","t":["SEO","AG","DAL","TLN","TDM","WSP"],"r":"DPS","h":"Tracer","hr":2.1,"y":[2023],"c":"KR","ow":5},
+  {"n":"Seonjun","t":["SEO","AG","DAL","TLN","TDM","WSP"],"r":"DPS","h":"Tracer","hr":2.1,"y":[2023],"c":"KR","ow":5,"oy":[2025,2026],"wf":1},
   {"n":"SeungAn","t":["KDP"],"r":"Tank","hr":0,"y":[],"h":"Sigma","c":"KR"},
   {"n":"shadder2k","t":["YNB"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"RO"},
   {"n":"ShaDowBurn","t":["PAR","PHI"],"r":"DPS","h":"Genji","hr":26.8,"y":[2018,2019],"c":"RU"},
@@ -1989,77 +1996,77 @@ const PLAYERS = [
   {"n":"Shaz","t":["GLA"],"r":"Support","h":"Zenyatta","hr":92.9,"y":[2018,2019,2020],"c":"FI"},
   {"n":"Shine","t":["KDP"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"Shock","t":["SMC"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt"},
-  {"n":"sHockWave","t":["NYXL","PHI","VAN","VP","FUU","MTR","EXO","RRC"],"r":"DPS","h":"Ashe","hr":23.2,"y":[2020,2021,2022,2023],"c":"DK","ow":3},
+  {"n":"sHockWave","t":["NYXL","PHI","VAN","VP","FUU","MTR","EXO","RRC"],"r":"DPS","h":"Ashe","hr":23.2,"y":[2020,2021,2022,2023],"c":"DK","ow":3,"oy":[2024,2025]},
   {"n":"ShowCheng","t":["VAL","LGD","FLG"],"r":"DPS","h":"D.Va","hr":7.9,"y":[2021],"c":"CN","rs":["DPS","Tank"],"hb":{"Tank":"D.Va","DPS":"Genji"}},
   {"n":"ShRedLock","t":["VAN","SWD"],"r":"Tank","h":"Orisa","hr":18.2,"y":[2020,2021],"c":"CA"},
-  {"n":"Shu","t":["GLA","GZC","HOU","CR","ZETA","MTA","FLX"],"r":"Support","h":"Ana","hr":101.1,"y":[2019,2020,2021,2022,2023],"c":"KR","ow":9},
+  {"n":"Shu","t":["GLA","GZC","HOU","CR","ZETA","MTA","FLX"],"r":"Support","h":"Ana","hr":101.1,"y":[2019,2020,2021,2022,2023],"c":"KR","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"shubil","t":["KDP","GEN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"Shuh","t":["YNB","MTR"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"FR"},
   {"n":"Shun","t":["O2B"],"r":"Tank","hr":0,"y":[],"c":"KR"},
-  {"n":"shy","t":["HZS","WBG","LGD","BLG"],"r":"DPS","h":"Sojourn","hr":48.7,"y":[2021,2022,2023],"c":"CN","ow":8},
+  {"n":"shy","t":["HZS","WBG","LGD","BLG"],"r":"DPS","h":"Sojourn","hr":48.7,"y":[2021,2022,2023],"c":"CN","ow":8,"oy":[2024,2025,2026],"wf":1},
   {"n":"Shyraa","t":["SMC"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"BE"},
   {"n":"Signed","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Cassidy","c":"NZ"},
   {"n":"silkthread","t":["GLA","VAL"],"r":"DPS","h":"Genji","hr":7.2,"y":[2018],"c":"US"},
   {"n":"Silver3","t":["VAL","TOW"],"r":"Tank","h":"Wrecking Ball","hr":7.9,"y":[2021],"c":"CN"},
   {"n":"SilverCoin","t":["TDM"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
-  {"n":"Simple","t":["TM","WGS","RNA","UPA"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"KR","ow":6},
+  {"n":"Simple","t":["TM","WGS","RNA","UPA"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"KR","ow":6,"oy":[2025,2026],"ww":1,"wf":1},
   {"n":"sinatraa","t":["SFS"],"r":"DPS","h":"Tracer","hr":48.6,"y":[2018,2019,2020],"ch":[2019,2020],"c":"US"},
-  {"n":"SirMajed","t":["FLA","TOR","FLC","ALQ","AGT","RRC"],"r":"Support","h":"Zenyatta","hr":25.4,"y":[2022,2023],"c":"SA","ow":2},
+  {"n":"SirMajed","t":["FLA","TOR","FLC","ALQ","AGT","RRC"],"r":"Support","h":"Zenyatta","hr":25.4,"y":[2022,2023],"c":"SA","ow":2,"oy":[2024,2025,2026]},
   {"n":"SixFeet","t":["UPA","T1","UPAC"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"CA"},
-  {"n":"Skairipa","t":["LDN","VAN","TM","ENC","YNB","BRH","EXO","RRC","OBA"],"r":"Support","h":"Ana","hr":13.8,"y":[2022,2023],"c":"RO","ow":3},
-  {"n":"skewed","t":["GLA","INF","T1"],"r":"Support","h":"Brigitte","hr":31.4,"y":[2021,2022,2023],"c":"KR","ow":6},
+  {"n":"Skairipa","t":["LDN","VAN","TM","ENC","YNB","BRH","EXO","RRC","OBA"],"r":"Support","h":"Ana","hr":13.8,"y":[2022,2023],"c":"RO","ow":3,"oy":[2024,2025],"wf":1},
+  {"n":"skewed","t":["GLA","INF","T1"],"r":"Support","h":"Brigitte","hr":31.4,"y":[2021,2022,2023],"c":"KR","ow":6,"oy":[2025,2026],"wf":1},
   {"n":"skipjack","t":["RGE"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"DE"},
   {"n":"Sky","t":["SHD"],"r":"Support","h":"Zenyatta","hr":3.4,"y":[2018],"c":"CN"},
-  {"n":"Slay","t":["TM","SMC","EXO"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"DK","ow":1},
+  {"n":"Slay","t":["TM","SMC","EXO"],"r":"Support","h":"Zenyatta","hr":0,"y":[],"c":"DK","ow":1,"oy":[2024]},
   {"n":"Sleep","t":["TOW","BLG"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"CN"},
   {"n":"sleepy","t":["SFS","WAS"],"r":"Support","h":"Zenyatta","hr":45.8,"y":[2018,2019],"ch":[2019],"c":"US"},
   {"n":"SleepyBear","t":["CBX"],"r":"DPS","hr":0,"y":[],"h":"D.Va","c":"KR"},
-  {"n":"Sley","t":["VAR","KDP","TLN","GZG"],"r":"Support","h":"Wuyang","hr":0,"y":[],"c":"KR","ow":5},
+  {"n":"Sley","t":["VAR","KDP","TLN","GZG"],"r":"Support","h":"Wuyang","hr":0,"y":[],"c":"KR","ow":5,"oy":[2025,2026],"ww":1,"wf":1},
   {"n":"SLIME","t":["FLA","SEO","VAN","RNA"],"r":"Support","h":"Lúcio","hr":56.9,"y":[2019,2020,2021],"c":"KR"},
-  {"n":"Sloth","t":["ROC"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"US","ow":1},
-  {"n":"slowdive","t":["ALQ"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"SA","ow":1},
+  {"n":"Sloth","t":["ROC"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"US","ow":1,"oy":[2024]},
+  {"n":"slowdive","t":["ALQ"],"r":"DPS","h":"Ashe","hr":0,"y":[],"c":"SA","ow":1,"oy":[2024,2025]},
   {"n":"Slugo","t":["DMN","WSP"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"US"},
   {"n":"Smex","t":["NRGE","SMC","MTR","EXO"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"GB"},
   {"n":"Smiley","t":["UPAC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
-  {"n":"Smurf","t":["BOS","SEO","SFS","FLC"],"r":"Tank","h":"Winston","hr":74.9,"y":[2019,2020,2021,2022,2023],"ch":[2019,2020],"c":"KR","ow":3},
+  {"n":"Smurf","t":["BOS","SEO","SFS","FLC"],"r":"Tank","h":"Winston","hr":74.9,"y":[2019,2020,2021,2022,2023],"ch":[2019,2020],"c":"KR","ow":3,"oy":[2024],"ww":1,"wf":1},
   {"n":"snillo","t":["PHI","FUU"],"r":"DPS","h":"Tracer","hr":8.8,"y":[2018,2019],"c":"SE"},
   {"n":"Snow","t":["BOS","SKF"],"r":"Support","h":"Mercy","hr":0.2,"y":[2018],"c":"ET"},
   {"n":"SNOW (KR)","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"KR"},
   {"n":"SNT","t":["FLA","LWR","MTA"],"r":"Tank","h":"Winston","hr":14.4,"y":[2018],"c":"KR"},
   {"n":"Sobek","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"GB"},
   {"n":"Soko","t":["NOB","DMN","WSP"],"r":"Tank","hr":0,"y":[],"h":"Zarya","c":"US"},
-  {"n":"Someone","t":["FLA","TOR","FLC","TCC","GEN"],"r":"Tank","h":"Winston","hr":46,"y":[2022,2023],"ch":[2023],"c":"KR","ow":9},
+  {"n":"Someone","t":["FLA","TOR","FLC","TCC","GEN"],"r":"Tank","h":"Winston","hr":46,"y":[2022,2023],"ch":[2023],"c":"KR","ow":9,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"SonGBoos","t":["MTA","TCC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
-  {"n":"SoOn","t":["PAR","VAL","PEP","RGE"],"r":"DPS","h":"Tracer","hr":69.7,"y":[2018,2019,2020],"c":"FR"},
-  {"n":"Soulsay","t":["NTM"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CA"},
+  {"n":"SoOn","t":["PAR","VAL","PEP","RGE"],"r":"DPS","h":"Tracer","hr":69.7,"y":[2018,2019,2020],"c":"FR","oy":[2025,2026]},
+  {"n":"Soulsay","t":["NTM"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"CA","oy":[2025,2026]},
   {"n":"sowhat","t":["LH","LFZ"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"SP1NT","t":["FLC","CR"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"KR","ow":2},
+  {"n":"SP1NT","t":["FLC","CR"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"KR","ow":2,"oy":[2025,2026],"ww":1,"wf":1},
   {"n":"SP9RK1E","t":["DAL","PAR","EMY"],"r":"DPS","h":"Tracer","hr":71.6,"y":[2020,2021,2022,2023],"ch":[2022],"c":"KR"},
   {"n":"SPACE","t":["GLA","VAL"],"r":"Tank","h":"D.Va","hr":81.7,"y":[2018,2019,2020,2021,2022],"c":"US"},
-  {"n":"SparkR","t":["LDN","SSG","BRH"],"r":"DPS","h":"Sojourn","hr":34.5,"y":[2021,2022,2023],"c":"SE","ow":2},
+  {"n":"SparkR","t":["LDN","SSG","BRH"],"r":"DPS","h":"Sojourn","hr":34.5,"y":[2021,2022,2023],"c":"SE","ow":2,"oy":[2024]},
   {"n":"Spear","t":["SKF"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
-  {"n":"Spectra","t":["M80","ROC","ALQ","KDP","TCC"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"KR","ow":1},
+  {"n":"Spectra","t":["M80","ROC","ALQ","KDP","TCC"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"KR","ow":1,"oy":[2024,2025]},
   {"n":"Spee","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Ashe","c":"SE"},
   {"n":"Speedily","t":["ATL","TOR","XL2","SWD","SKF","AMT"],"r":"DPS","h":"Tracer","hr":15.8,"y":[2022,2023],"c":"US"},
   {"n":"Spera","t":["WGS","NOB"],"r":"DPS","hr":0,"y":[],"h":"Sombra","c":"KR"},
   {"n":"Spree","t":["HOU"],"r":"Tank","h":"Zarya","hr":16.2,"y":[2018,2019,2020],"c":"BE"},
-  {"n":"squid","t":["SSG","NTM","SNT","WSP"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"US"},
+  {"n":"squid","t":["SSG","NTM","SNT","WSP"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"US","oy":[2025]},
   {"n":"ssaadd","t":["TDM"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"KR"},
   {"n":"sstarb0i","t":["AGT"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"FR"},
-  {"n":"Stalk3r","t":["ATL","SEO","FLC","CR","GEN"],"r":"DPS","h":"Tracer","hr":21.4,"y":[2022,2023],"c":"KR","ow":7},
+  {"n":"Stalk3r","t":["ATL","SEO","FLC","CR","GEN"],"r":"DPS","h":"Tracer","hr":21.4,"y":[2022,2023],"c":"KR","ow":7,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Stand1","t":["BOS","SHD","NCF","CBX","NRGE","GLL","ENV"],"r":"Tank","h":"Orisa","hr":22.3,"y":[2020,2021],"c":"KR"},
   {"n":"starky","t":["LWR"],"r":"Tank","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Stellar","t":["BOS","TOR","O2B","TLN","UPA"],"r":"Support","h":"Brigitte","hr":11.8,"y":[2019],"rs":["DPS","Support"],"hb":{"DPS":"Mei","Support":"Brigitte"},"c":"KR"},
-  {"n":"Stellios","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"FR"},
+  {"n":"Stellios","t":["PEP"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"FR","oy":[2024,2025]},
   {"n":"Stitch","t":["VAN","WAS","RNA"],"r":"DPS","h":"Ashe","hr":22.7,"y":[2019,2020],"c":"KR"},
   {"n":"Stratus","t":["WAS","NRGE"],"r":"DPS","h":"Mei","hr":15.1,"y":[2019,2020],"c":"US"},
   {"n":"Striker","t":["BOS","SFS"],"r":"DPS","h":"Tracer","hr":82.9,"y":[2018,2019,2020,2021,2022,2023],"ch":[2019,2020],"c":"KR"},
   {"n":"Stryder","t":["YNB"],"r":"Tank","hr":0,"y":[],"h":"Wrecking Ball","c":"US"},
-  {"n":"Sugarfree","t":["VAN","TOR","SSG","FUU","SWD","ATLA","AMT"],"r":"DPS","h":"Tracer","hr":8.6,"y":[2023],"c":"US","ow":8},
+  {"n":"Sugarfree","t":["VAN","TOR","SSG","FUU","SWD","ATLA","AMT"],"r":"DPS","h":"Tracer","hr":8.6,"y":[2023],"c":"US","ow":8,"oy":[2024,2025,2026],"wf":1},
   {"n":"SuhPoze","t":["SWD","SNT"],"r":"Support","hr":0,"y":[],"h":"Mercy","c":"US"},
-  {"n":"Sunzo","t":["ROC","TCC","WBG"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"CN","ow":6},
+  {"n":"Sunzo","t":["ROC","TCC","WBG"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"CN","ow":6,"oy":[2025,2026],"wf":1},
   {"n":"super","t":["SFS"],"r":"Tank","h":"Reinhardt","hr":61.3,"y":[2018,2019,2020,2021],"ch":[2019,2020],"c":"US"},
-  {"n":"Superich","t":["HZS","TCC","LGD"],"r":"Support","h":"Lúcio","hr":24.3,"y":[2022],"c":"CN","ow":2},
+  {"n":"Superich","t":["HZS","TCC","LGD"],"r":"Support","h":"Lúcio","hr":24.3,"y":[2022],"c":"CN","ow":2,"oy":[2024,2025,2026],"wf":1},
   {"n":"SuperPlouk","t":["AGT"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"FR"},
   {"n":"Supreme","t":["SKF","DMN"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"JP"},
   {"n":"Surefour","t":["GLA","TOR"],"r":"DPS","h":"Widowmaker","hr":62.9,"y":[2018,2019,2020],"c":"CA"},
@@ -2074,7 +2081,7 @@ const PLAYERS = [
   {"n":"syrus","t":["SNT","ODY"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"US"},
   {"n":"SZNS","t":["SOL"],"r":"Tank","hr":0,"y":[],"h":"Orisa","c":"US"},
   {"n":"ta1yo","t":["SFS"],"r":"DPS","h":"Genji","hr":1.1,"y":[2020,2021],"ch":[2020],"c":"JP"},
-  {"n":"Taejong","t":["ROC","ALQ"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":1},
+  {"n":"Taejong","t":["ROC","ALQ"],"r":"DPS","h":"Tracer","hr":0,"y":[],"c":"KR","ow":1,"oy":[2025,2026]},
   {"n":"Taimou","t":["DAL","ENV"],"r":"DPS","h":"Widowmaker","hr":23.2,"y":[2018,2019],"rs":["DPS","Tank"],"hb":{"DPS":"Widowmaker","Tank":"Winston"},"c":"FI"},
   {"n":"takethis","t":["AFR"],"r":"DPS","hr":0,"y":[],"c":"KR"},
   {"n":"Takoyaki","t":["HZS","EMY","TDM"],"r":"Tank","h":"Winston","hr":0.4,"y":[2021],"c":"KR"},
@@ -2099,12 +2106,12 @@ const PLAYERS = [
   {"n":"TiZi","t":["VAN","RNA","LDN","XL2"],"r":"Tank","h":"Orisa","hr":4.7,"y":[2018,2019],"c":"KR"},
   {"n":"tobi","t":["PHI","SEO","LH"],"r":"Support","h":"Mercy","hr":74.6,"y":[2018,2019,2020,2021],"c":"KR"},
   {"n":"Tonic","t":["YNB"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"RU"},
-  {"n":"TOPDRAGON","t":["VAR","TLN","O2B"],"r":"DPS","h":"Echo","hr":0,"y":[],"c":"KR","ow":6},
+  {"n":"TOPDRAGON","t":["VAR","TLN","O2B"],"r":"DPS","h":"Echo","hr":0,"y":[],"c":"KR","ow":6,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Tougen","t":["TLN"],"r":"DPS","hr":0,"y":[],"h":"Sojourn","c":"KR"},
   {"n":"ToYou","t":["SEO","VEG","GEN"],"r":"Tank","h":"D.Va","hr":17.3,"y":[2020,2021,2023],"c":"KR"},
-  {"n":"TR33","t":["NRG","M80","TL","RVL","SNT","DMN","ODY","SOL"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","ow":7},
+  {"n":"TR33","t":["NRG","M80","TL","RVL","SNT","DMN","ODY","SOL"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"US","ow":7,"oy":[2024,2025,2026],"wf":1},
   {"n":"TracK","t":["YNB","RVL"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"NO"},
-  {"n":"Tred","t":["ALQ","PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"GB","ow":3},
+  {"n":"Tred","t":["ALQ","PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"GB","ow":3,"oy":[2024,2025,2026]},
   {"n":"Trill","t":["DAL","ENV"],"r":"Tank","h":"Orisa","hr":5.5,"y":[2019,2020],"c":"AU"},
   {"n":"Trispear","t":["YNB","SMC"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"NL"},
   {"n":"TRUE","t":["KDP"],"r":"Tank","hr":0,"y":[]},
@@ -2115,7 +2122,7 @@ const PLAYERS = [
   {"n":"Ttuba","t":["WAS","O2B"],"r":"DPS","h":"Genji","hr":21,"y":[2020,2021],"c":"KR"},
   {"n":"Turtle","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"TviQ","t":["FLA","RGE","RVL"],"r":"DPS","h":"Tracer","hr":37.8,"y":[2018,2019],"c":"SE"},
-  {"n":"TVNT","t":["TM","ROC"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"SA","ow":7},
+  {"n":"TVNT","t":["TM","ROC"],"r":"Tank","h":"Sigma","hr":0,"y":[],"c":"SA","ow":7,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Twelve","t":["FLG"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"CN"},
   {"n":"Twenty","t":["HZS","CDH","LGEH"],"r":"Tank","h":"D.Va","hr":0.7,"y":[2019,2020,2021,2023],"c":"CN"},
   {"n":"Twilight","t":["BOS","SFS","TOR","VAN","RNA","BKS","CBX"],"r":"Support","h":"Ana","hr":88.8,"y":[2019,2020,2021,2022,2023],"ch":[2020],"c":"KR"},
@@ -2126,31 +2133,31 @@ const PLAYERS = [
   {"n":"Tydolla","t":["AFB","MVP"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
   {"n":"TYG","t":["TLN"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"KR"},
   {"n":"ultimawep","t":["YNB","NOB"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"US"},
-  {"n":"UltraViolet","t":["ATL","TOR","NRG","M80","SSG","NTM","TL","GK","SWD","MTR","AMT","RBD"],"r":"Support","h":"Ana","hr":34.5,"y":[2022,2023],"c":"US","ow":9},
+  {"n":"UltraViolet","t":["ATL","TOR","NRG","M80","SSG","NTM","TL","GK","SWD","MTR","AMT","RBD"],"r":"Support","h":"Ana","hr":34.5,"y":[2022,2023],"c":"US","ow":9,"oy":[2024,2025,2026],"wf":1},
   {"n":"Umtae","t":["GEN"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"KR"},
   {"n":"Undead","t":["SHD","LGEH"],"r":"DPS","h":"Cassidy","hr":14,"y":[2018],"c":"CN"},
   {"n":"Undine","t":["MVP","EMY"],"r":"Support","hr":0,"y":[],"h":"Zenyatta","c":"KR"},
   {"n":"Unique","t":["GZC","EMY","T1","TDM"],"r":"Support","h":"Brigitte","hr":7.9,"y":[2022],"c":"KR"},
   {"n":"Unis","t":["FLX"],"r":"Support","hr":0,"y":[],"c":"KR"},
-  {"n":"Unkn0w","t":["TCC"],"r":"Support","h":"Brigitte","hr":0,"y":[],"c":"CN","ow":1},
+  {"n":"Unkn0w","t":["TCC"],"r":"Support","h":"Brigitte","hr":0,"y":[],"c":"CN","ow":1,"oy":[2025]},
   {"n":"uNKOE","t":["DAL","VAL","RGE"],"r":"Support","h":"Zenyatta","hr":54.5,"y":[2018,2019,2020],"c":"FR"},
   {"n":"unlimited","t":["SMC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"ES"},
   {"n":"Unter","t":["GZG"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"AU"},
   {"n":"valen","t":["SKF"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"AR"},
   {"n":"Valentine","t":["BOS","WGS"],"r":"DPS","h":"Genji","hr":28.8,"y":[2021,2022],"c":"KR"},
-  {"n":"Vega","t":["TOR","TL","SNT","ODY","WSP"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"US","ow":8},
+  {"n":"Vega","t":["TOR","TL","SNT","ODY","WSP"],"r":"Support","h":"Lúcio","hr":0,"y":[],"c":"US","ow":8,"oy":[2024,2025,2026],"wf":1},
   {"n":"Veil","t":["FLX"],"r":"DPS","hr":0,"y":[],"c":"KR"},
   {"n":"Venom","t":["ATL","ODY"],"r":"DPS","h":"Tracer","hr":14.5,"y":[2022],"c":"KR"},
   {"n":"Verbo","t":["VAL"],"r":"Support","h":"Lúcio","hr":10.6,"y":[2018],"c":"CA"},
-  {"n":"Vestola","t":["PAR","ENC","VP","ALQ","YNB","BRH","EXO"],"r":"Tank","h":"D.Va","hr":12.5,"y":[2021,2022],"c":"FI","ow":5},
+  {"n":"Vestola","t":["PAR","ENC","VP","ALQ","YNB","BRH","EXO"],"r":"Tank","h":"D.Va","hr":12.5,"y":[2021,2022],"c":"FI","ow":5,"oy":[2024,2025,2026],"wf":1},
   {"n":"Vettel","t":["TLN","O2B"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"Victoria","t":["BOS","UPA"],"r":"Support","h":"Sojourn","hr":16.9,"y":[2022],"c":"KR","rs":["Support","DPS"],"hb":{"DPS":"Sojourn","Support":"Ashe"}},
-  {"n":"vigilante","t":["ATL","WAS","TM","CR","T1","EMY","TLN"],"r":"Support","h":"Zenyatta","hr":13.5,"y":[2022,2023],"c":"KR","ow":7},
+  {"n":"vigilante","t":["ATL","WAS","TM","CR","T1","EMY","TLN"],"r":"Support","h":"Zenyatta","hr":13.5,"y":[2022,2023],"c":"KR","ow":7,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"Vindaim","t":["SEO","SFS","O2B"],"r":"Support","h":"Lúcio","hr":39.9,"y":[2022,2023],"c":"KR"},
-  {"n":"Viol2t","t":["HOU","SFS","ZETA","O2B"],"r":"Support","h":"Zenyatta","hr":123.4,"y":[2019,2020,2021,2022,2023],"ch":[2019,2020],"c":"KR","ow":5},
-  {"n":"Viper","t":["SHD","T1","O2B"],"r":"DPS","h":"Tracer","hr":4.9,"y":[2023],"c":"KR","ow":4},
-  {"n":"Vision","t":["NTM"],"r":"DPS","h":"Hanzo","hr":0,"y":[],"c":"US"},
-  {"n":"Vision (US)","t":["SNT","SOL","RBD"],"r":"DPS","hr":0,"y":[],"h":"Hanzo","c":"US"},
+  {"n":"Viol2t","t":["HOU","SFS","ZETA","O2B"],"r":"Support","h":"Zenyatta","hr":123.4,"y":[2019,2020,2021,2022,2023],"ch":[2019,2020],"c":"KR","ow":5,"oy":[2024,2025,2026],"ww":1},
+  {"n":"Viper","t":["SHD","T1","O2B"],"r":"DPS","h":"Tracer","hr":4.9,"y":[2023],"c":"KR","ow":4,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Vision","t":["NTM"],"r":"DPS","h":"Hanzo","hr":0,"y":[],"c":"US","oy":[2025]},
+  {"n":"Vision (US)","t":["SNT","SOL","RBD"],"r":"DPS","hr":0,"y":[],"h":"Hanzo","c":"US","oy":[2025]},
   {"n":"Vita","t":["EXO"],"r":"Tank","hr":0,"y":[],"h":"Reinhardt","c":"US"},
   {"n":"Vizility","t":["AGT","SMC","MTR"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"NL"},
   {"n":"vKei","t":["TCC"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
@@ -2171,11 +2178,11 @@ const PLAYERS = [
   {"n":"whitenoise","t":["AGT","EXO"],"r":"Tank","hr":0,"y":[],"h":"Orisa","c":"GB"},
   {"n":"Who","t":["LWR"],"r":"Support","hr":0,"y":[],"h":"Ana","c":"KR"},
   {"n":"WhoRu","t":["NYXL","SHD","LH","FUU","SKF"],"r":"DPS","h":"Genji","hr":18.4,"y":[2020,2021,2022],"ch":[2021],"c":"KR"},
-  {"n":"Willys07","t":["PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SE","ow":3},
+  {"n":"Willys07","t":["PEP"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SE","ow":3,"oy":[2025,2026],"wf":1},
   {"n":"Wily","t":["O2B"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"winz","t":["RGE"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"FR"},
   {"n":"Wiz","t":["EMY"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
-  {"n":"WMaimone","t":["NRG","ENC","GK","YNB","EXO"],"r":"DPS","h":"Tracer","hr":0,"y":[],"ow":3},
+  {"n":"WMaimone","t":["NRG","ENC","GK","YNB","EXO"],"r":"DPS","h":"Tracer","hr":0,"y":[],"ow":3,"oy":[2024,2025],"wf":1},
   {"n":"WON","t":["FLG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"TW"},
   {"n":"Wonsoomin","t":["GEN"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"KR"},
   {"n":"WooHyaL","t":["LDN","GCB","XL2","RNA","TCC","GEN"],"r":"Tank","h":"D.Va","hr":9.8,"y":[2018],"ch":[2018],"c":"KR"},
@@ -2185,8 +2192,8 @@ const PLAYERS = [
   {"n":"X1nyue","t":["LGEH"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"CN"},
   {"n":"XellOs","t":["WGS"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
   {"n":"xepheR","t":["FLA","SEO"],"r":"Tank","h":"D.Va","hr":23.8,"y":[2018,2019],"c":"KR"},
-  {"n":"Xeriongdh","t":["PEP","RRC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"FR","ow":3},
-  {"n":"Xerneas","t":["GZC","CDH"],"r":"Support","h":"Lúcio","hr":19,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":4},
+  {"n":"Xeriongdh","t":["PEP","RRC"],"r":"Support","h":"Kiriko","hr":0,"y":[],"c":"FR","ow":3,"oy":[2024,2025,2026],"wf":1},
+  {"n":"Xerneas","t":["GZC","CDH"],"r":"Support","h":"Lúcio","hr":19,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":4,"oy":[2025,2026],"wf":1},
   {"n":"XOON","t":["FLX"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"xQc","t":["DAL"],"r":"Tank","h":"Winston","hr":4.2,"y":[2018],"c":"CA"},
   {"n":"XRAY","t":["UPAC","TCH"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"CN"},
@@ -2195,7 +2202,7 @@ const PLAYERS = [
   {"n":"Xushu","t":["SHD"],"r":"Tank","h":"D.Va","hr":8.3,"y":[2018],"c":"CN"},
   {"n":"XyuN","t":["KDP"],"r":"Support","hr":0,"y":[],"c":"KR"},
   {"n":"Xzi","t":["FLA","PAR","EMY","SOL"],"r":"DPS","h":"Widowmaker","hr":18.5,"y":[2020,2022],"c":"KR"},
-  {"n":"xzodyal","t":["PEP"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"ES","ow":2},
+  {"n":"xzodyal","t":["PEP"],"r":"DPS","h":"Sojourn","hr":0,"y":[],"c":"ES","ow":2,"oy":[2024,2025,2026],"wf":1},
   {"n":"YaHo","t":["O2B","BLG"],"r":"Tank","hr":0,"y":[],"h":"Winston","c":"KR"},
   {"n":"Yaki","t":["FLA","GLA","NYXL","MVP","XL2","RNA"],"r":"DPS","h":"Tracer","hr":64.5,"y":[2020,2021,2022,2023],"c":"KR"},
   {"n":"Yakpung","t":["NYXL","TOR","O2B"],"r":"Tank","h":"Winston","hr":35.6,"y":[2019,2021],"c":"KR"},
@@ -2209,14 +2216,14 @@ const PLAYERS = [
   {"n":"Yesman","t":["AFB"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"KR"},
   {"n":"Yimitra","t":["WSP"],"r":"Support","hr":0,"y":[],"h":"Brigitte","c":"US"},
   {"n":"Yiqids","t":["YNB","BRH"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"NO"},
-  {"n":"yoham","t":["PEP","RRC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"DK"},
+  {"n":"yoham","t":["PEP","RRC"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"DK","oy":[2024]},
   {"n":"Yoko","t":["RRC"],"r":"DPS","hr":0,"y":[],"h":"Tracer","c":"EE"},
   {"n":"Yoppin","t":["UPA"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"KR"},
-  {"n":"Youbi","t":["TM"],"r":"DPS","h":"Symmetra","hr":0,"y":[],"c":"SA","ow":7},
+  {"n":"Youbi","t":["TM"],"r":"DPS","h":"Symmetra","hr":0,"y":[],"c":"SA","ow":7,"oy":[2024,2025,2026],"ww":1,"wf":1},
   {"n":"YouNai","t":["TCC"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
   {"n":"YOUNGJIN","t":["SHD","KDP"],"r":"Support","h":"Brigitte","hr":28.2,"y":[2019],"rs":["DPS","Support"],"hb":{"DPS":"Doomfist","Support":"Brigitte"},"c":"KR"},
   {"n":"Yungsavage","t":["YNB"],"r":"Support","hr":0,"y":[]},
-  {"n":"Yveltal","t":["CDH","WBG","GZC","LGEH","UPAC","TCH"],"r":"Support","h":"Mercy","hr":50.5,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":4},
+  {"n":"Yveltal","t":["CDH","WBG","GZC","LGEH","UPAC","TCH"],"r":"Support","h":"Mercy","hr":50.5,"y":[2019,2020,2021,2022,2023],"c":"CN","ow":4,"oy":[2025,2026],"wf":1},
   {"n":"ZachaREEE","t":["DAL","FUU"],"r":"Support","h":"Brigitte","hr":25.6,"y":[2019,2020],"rs":["DPS","Support"],"hb":{"DPS":"Mei","Support":"Brigitte"},"c":"US"},
   {"n":"zappis","t":["FLA"],"r":"Tank","h":"D.Va","hr":2.1,"y":[2018],"c":"FI"},
   {"n":"Zaxal","t":["SWD"],"r":"DPS","hr":0,"y":[]},
@@ -2225,22 +2232,22 @@ const PLAYERS = [
   {"n":"Zebbosai","t":["FLA"],"r":"Support","h":"Mercy","hr":35.4,"y":[2018],"c":"SE"},
   {"n":"Zeerocious","t":["T1"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker"},
   {"n":"ZerG","t":["FUU"],"r":"DPS","hr":0,"y":[],"h":"Widowmaker","c":"US"},
-  {"n":"zeruhh","t":["NTM","TL","ODY"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"US","ow":8},
-  {"n":"ZEST","t":["INF","PHI","T1"],"r":"DPS","h":"Tracer","hr":36.3,"y":[2022,2023],"c":"KR","ow":6},
+  {"n":"zeruhh","t":["NTM","TL","ODY"],"r":"DPS","h":"Genji","hr":0,"y":[],"c":"US","ow":8,"oy":[2024,2025,2026],"wf":1},
+  {"n":"ZEST","t":["INF","PHI","T1"],"r":"DPS","h":"Tracer","hr":36.3,"y":[2022,2023],"c":"KR","ow":6,"oy":[2025,2026],"wf":1},
   {"n":"Zhizhi","t":["UPAC"],"r":"Tank","hr":0,"y":[]},
   {"n":"Zihee","t":["TOW"],"r":"Support","hr":0,"y":[],"h":"Lúcio","c":"CN"},
   {"n":"ZiJin","t":["TCC","BLG"],"r":"Tank","hr":0,"y":[],"h":"D.Va","c":"CN"},
-  {"n":"ZIYAD","t":["TM","ALQ","GK"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SA","ow":4},
+  {"n":"ZIYAD","t":["TM","ALQ","GK"],"r":"Tank","h":"D.Va","hr":0,"y":[],"c":"SA","ow":4,"oy":[2024,2025,2026],"wf":1},
   {"n":"zombs","t":["SKF"],"r":"DPS","hr":0,"y":[],"h":"Soldier: 76","c":"US"},
-  {"n":"Zorrow","t":["PEP"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"SE","ow":3},
-  {"n":"zox","t":["ALQ"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"SA"},
+  {"n":"Zorrow","t":["PEP"],"r":"DPS","h":"Cassidy","hr":0,"y":[],"c":"SE","ow":3,"oy":[2025,2026],"wf":1},
+  {"n":"zox","t":["ALQ"],"r":"Support","h":"Ana","hr":0,"y":[],"c":"SA","oy":[2026]},
   {"n":"ZUNBA","t":["SEO","LH","CBX"],"r":"Tank","h":"D.Va","hr":33.8,"y":[2018,2019],"c":"KR"},
   {"n":"Zuper","t":["GZG"],"r":"DPS","hr":0,"y":[],"h":"Genji","c":"AU"},
   {"n":"Zuppeh","t":["FLA"],"r":"Support","h":"Zenyatta","hr":35.4,"y":[2018],"c":"FI"},
   {"n":"zYKK","t":["TOR"],"r":"DPS","h":"Mei","hr":5,"y":[2020],"c":"FR"},
   {"n":"Zytor","t":["SMC"],"r":"Support","hr":0,"y":[],"h":"Zenyatta"},
   {"n":"zza","t":["MAC"],"r":"DPS","hr":0,"y":[],"h":"Pharah","c":"CA"},
-  {"n":"zzz","t":["NTM"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"US","ow":1},
+  {"n":"zzz","t":["NTM"],"r":"Support","h":"Baptiste","hr":0,"y":[],"c":"US","ow":1,"oy":[2024]},
 ];
 const COUNTRY = {"KR":"South Korea","US":"USA","CN":"China","EU":"Europe","NA":"N. America"};
 const REGION = {EU:["GB","FR","FI","SE","DK","ES","DE","RU","NL","BE","EE","PL","IS","PT","NO","AT","LV","RO","UA","IE","IT","CH"], NA:["US","CA","MX","PR"]};
@@ -2254,6 +2261,10 @@ function buildCategories(){
   for (const k in REGION) cats.push({id:"c:"+k, kind:"nat", cc:k, label:"From "+COUNTRY[k], test:p=>REGION[k].includes(p.c)});
   cats.push({id:"x:CH", kind:"champ", label:"OWL Champion", test:p=>!!(p.ch&&p.ch.length)});
   for (const y of [2018,2019,2020,2021,2022,2023]) cats.push({id:"y:"+y, kind:"season", label:`Played in ${y} (any team)`, test:p=>p.y.includes(y)});
+  // OWCS-era categories, used on OWCS days
+  for (const y of [2024,2025,2026]) cats.push({id:"o:"+y, kind:"owyear", label:`OWCS ${y}`, test:p=>!!(p.oy&&p.oy.includes(y))});
+  cats.push({id:"x:OWW", kind:"owwin", label:"OWCS international champion", test:p=>!!p.ww});
+  cats.push({id:"x:OWF", kind:"owwf", label:"Played at an OWCS World Finals", test:p=>!!p.wf});
   const heroes=[...new Set(PLAYERS.map(p=>p.h).filter(Boolean))];
   for (const h of heroes) cats.push({id:"h:"+h, kind:"hero", hero:h, label:"Most-played: "+h, test:p=>p.h===h});
   return cats;
@@ -2271,7 +2282,9 @@ const NOTABLE_HOURS = 15;   // a "well-known" answer: 15+ recorded hours in OWL
 const NICHE=new Set(["APEX","Contenders"]);
 const isApex=c=>c.kind==="team"&&NICHE.has(TEAMS[c.team].lg);   // APEX and Contenders teams: niche by design
 // ow = top OWCS events played. APEX and Contenders squares count every answer.
-function notable(row,col){const a=answersFor(row,col); return (isApex(row)||isApex(col)) ? a.length : a.filter(p=>p.hr>=NOTABLE_HOURS||(p.ow||0)>=2).length}
+function notable(row,col){const a=answersFor(row,col); if(isApex(row)||isApex(col)) return a.length;
+  const owcs=(row.kind==="team"&&TEAMS[row.team].lg==="OWCS");
+  return a.filter(p=>p.hr>=NOTABLE_HOURS||(p.ow||0)>=(owcs?1:2)).length}
 // Build a grid: rows are teams, columns mix teams and attributes.
 // Every square must have several well-known answers, though any correct player is accepted.
 let FORCE_THEME=null;   // dev only: "apex" builds the grid the way an APEX day would
@@ -2280,44 +2293,78 @@ let FORCE_THEME=null;   // dev only: "apex" builds the grid the way an APEX day 
 const THEME_START="2026-11-15";
 const THEMES={APEX:{icon:"⛰️",name:"APEX Day",blurb:"Every row is an OGN APEX team"},
               Contenders:{icon:"🌱",name:"Contenders Day",blurb:"Every row is a Contenders team"}};
-function dayTheme(k){
-  if(!k||k<THEME_START||dateOfKey(k).getDay()!==0) return null;
-  return Math.round((dateOfKey(k)-dateOfKey(THEME_START))/(7*864e5))%2===0 ? "APEX" : "Contenders";
+// Weekly plan from THEME_START: Mon–Thu OWCS (current players), Fri Contenders, Sat OWL, Sun APEX.
+function dayLeague(k){
+  if(!k||k<THEME_START) return null;
+  return ["APEX","OWCS","OWCS","OWCS","OWCS","Contenders","OWL"][dateOfKey(k).getDay()];
 }
+// APEX and Contenders days are the "themed" ones: rank is paused and they have their own achievements
+function dayTheme(k){ const l=dayLeague(k); return l==="APEX"||l==="Contenders" ? l : null }
 function themeFor(seedStr){
   if (FORCE_THEME==="apex") return "APEX"; if (FORCE_THEME==="contenders") return "Contenders";
+  if (FORCE_THEME) return null;
   const dm=/^owdoku-(\d{4}-\d\d-\d\d)$/.exec(seedStr.split("#")[0]); return dm ? dayTheme(dm[1]) : null;
 }
+// OWL or OWCS era for a regular day (null = the older mixed grids)
+function eraFor(seedStr){
+  if (FORCE_THEME==="owl") return "OWL"; if (FORCE_THEME==="owcs") return "OWCS";
+  const dm=/^owdoku-(\d{4}-\d\d-\d\d)$/.exec(seedStr.split("#")[0]); const l=dm?dayLeague(dm[1]):null;
+  return l==="OWL"||l==="OWCS" ? l : null;
+}
+let OWCS_CROSS=false;   // allow OWL teams as columns on OWCS days
+const OWCS_KINDS=new Set(["owyear","owwin","owwf"]), OWL_KINDS=new Set(["season","champ"]);
 const SHARED={};   // how many players two teams have in common, worked out once per pair
 function sharedCount(a,b){ const k=a<b?a+"|"+b:b+"|"+a; if(SHARED[k]==null) SHARED[k]=PLAYERS.filter(p=>p.t.includes(a)&&p.t.includes(b)).length; return SHARED[k]; }
-function makeGrid(seedStr, avoid=[], themeLg=null){
+function makeGrid(seedStr, avoid=[], themeLg=null, era=null){
   const r = rng(hashStr(seedStr));
   const dm=/^owdoku-(\d{4}-\d\d-\d\d)/.exec(seedStr), natAllowed=!dm||dm[1]>=NAT_START;
-  const teams = CATS.filter(c=>c.kind==="team"), others = CATS.filter(c=>c.kind!=="team"&&(natAllowed||c.kind!=="nat"));
+  // OWCS days use only OWCS teams and OWCS-era categories; OWL days only OWL teams and OWL categories;
+  // themed and older mixed days keep the OWL categories and leave the OWCS ones out.
+  const lgOf=c=>TEAMS[c.team].lg||"OWL";
+  const teams = CATS.filter(c=>c.kind==="team"&&(!era||lgOf(c)===era||(era==="OWCS"&&OWCS_CROSS&&lgOf(c)==="OWL")));
+  const others = CATS.filter(c=>c.kind!=="team"&&(natAllowed||c.kind!=="nat")
+    &&(era==="OWCS" ? !OWL_KINDS.has(c.kind) : !OWCS_KINDS.has(c.kind)));
   const avoidIds=new Set(avoid.map(c=>c.id));
   // Ordinary days use OWL and OWCS teams only. On an APEX or Contenders day every row is a team from that
   // league, picked from the same region as a random lead team so they share columns (roles, heroes, countries, OWL teams).
   const league = themeLg ? teams.filter(c=>TEAMS[c.team].lg===themeLg) : [];
   for (let pass of [0,1]) for (let minAns of [3,2,1]) for (let tries=0; tries<4000; tries++){
     const ok=c=>pass===1||!avoidIds.has(c.id);               // pass 0 skips yesterday's categories
-    let rows;
+    let rows, hub=null;
     if (themeLg){
       const lead=league[Math.floor(r()*league.length)], home=teamCountry(lead.team);
       const near=league.filter(t=>t!==lead&&ok(t)&&teamCountry(t.team)===home);
       if (near.length<2) continue;
       rows=shuffle([lead,...shuffle(near,r).slice(0,2)],r);
+    } else if (era==="OWCS" && r()<0.6){
+      // "hub" grid: one column is a team that several OWCS teams share players with, and those teams are the rows
+      const hubs=teams.filter(h=>ok(h)), h=hubs[Math.floor(r()*hubs.length)];
+      const near=t=>answersFor(t,h).length, cand=teams.filter(t=>t!==h&&ok(t)&&lgOf(t)==="OWCS"&&near(t)>=2);
+      const p4=shuffle(cand.filter(t=>near(t)>=4),r), rest=shuffle(cand.filter(t=>near(t)<4),r);
+      if (p4.length<2 || cand.length<3) continue;           // at most one small team-vs-team square
+      rows=shuffle([...p4.slice(0,2),...shuffle([...p4.slice(2),...rest],r).slice(0,1)],r); hub=h;
+    } else if (era==="OWCS"){
+      // OWCS rows come from one region where possible, so they share players and columns
+      const own=teams.filter(t=>ok(t)&&lgOf(t)==="OWCS"), lead=own[Math.floor(r()*own.length)], home=teamCountry(lead.team);
+      const near=own.filter(t=>t!==lead&&teamCountry(t.team)===home), far=own.filter(t=>t!==lead&&!near.includes(t));
+      rows=shuffle([lead,...shuffle(near,r),...shuffle(far,r)].slice(0,3),r);
     } else rows = shuffle(teams.filter(t=>ok(t)&&!isApex(t)),r).slice(0,3);
     const pool = shuffle(others.concat(teams.filter(t=>!rows.includes(t)&&(themeLg||!isApex(t)))).filter(ok), r);
     // a country column on about 3 days in 10, picked evenly so South Korea doesn't crowd out the rest
-    const nats = others.filter(c=>c.kind==="nat"), natPick = natAllowed && r() < (themeLg?0.5:0.3) ? nats[Math.floor(r()*nats.length)] : null;
+    const nats = others.filter(c=>c.kind==="nat"), natPick = natAllowed && r() < (themeLg||era==="OWCS"?0.5:0.3) ? nats[Math.floor(r()*nats.length)] : null;
     // one candidate year per try, so six year columns don't crowd out heroes, roles and teams
-    const yrs = others.filter(c=>c.kind==="season"), yrPick = r() < 0.75 ? yrs[Math.floor(r()*yrs.length)] : null;
-    const cols = [];
+    const yrs = others.filter(c=>c.kind==="season"||c.kind==="owyear"), yrPick = r() < (era==="OWCS"?0.4:0.75) ? yrs[Math.floor(r()*yrs.length)] : null;
+    // OWCS days: the broad OWCS columns (World Finals, international champion) only sometimes, so teams, heroes and countries get a turn
+    const owxPick = era==="OWCS" && r() < 0.35 ? (r()<0.6?"owwf":"owwin") : null;
+    const cols = hub ? [hub] : [];
     for (const c of pool){
+      if (c===hub) continue;
       if (c.kind==="nat" && c!==natPick) continue;
-      if (c.kind==="season" && c!==yrPick) continue;
+      if ((c.kind==="season"||c.kind==="owyear") && c!==yrPick) continue;
+      if ((c.kind==="owwf"||c.kind==="owwin") && c.kind!==owxPick) continue;
       if (cols.length===3) break;
       if (cols.some(x=>x.kind===c.kind && c.kind!=="team")) continue; // max one role, one hero, one season...
+      if (hub && c.kind==="team") continue;                               // one team column is enough on a hub grid
       if (rows.every(row=>notable(row,c)>=minAns)) cols.push(c);
     }
     if (cols.length===3) return {rows, cols};
@@ -2362,9 +2409,9 @@ function balanced(g,themed){ if(!g) return false; let pro=0,hard=0,easyMed=0;
   for(const r of g.rows) for(const c of g.cols){ const n=answersFor(r,c).length; if(n<=3) pro++; else if(n<=5) hard++; else easyMed++; }
   return themed ? pro<=2 && hard<=4 && easyMed>=3 : pro<=1 && hard<=3 && easyMed>=5; }
 function makeBalancedGrid(seed, avoid=[]){
-  const th=themeFor(seed);
+  const th=themeFor(seed), era=th?null:eraFor(seed);
   let g, best=null;
-  for(let a=0;a<40;a++){ g=makeGrid(a?seed+"#"+a:seed, avoid, th); if(g&&!best) best=g; if(balanced(g,!!th)) return g; }
+  for(let a=0;a<40;a++){ g=makeGrid(a?seed+"#"+a:seed, avoid, th, era); if(g&&!best) best=g; if(balanced(g,!!th||era==="OWCS")) return g; }
   return best || makeGrid(seed, avoid, null);   // a themed day always stays themed if any themed grid exists
 }
 // Dailies already played keep the exact grid they launched with, even as new teams and players are added.
@@ -2438,6 +2485,9 @@ function catParts(c){
   if(c.kind==="role")   return {cls:"r-"+c.role.toLowerCase(), ico:ROLE_ICONS[c.role], kick:"Role", name:c.role, tip:c.role+" player"};
   if(c.kind==="champ")  return {cls:"champ", ico:TROPHY, kick:"OWL", name:"Champion", tip:"Won an OWL title"};
   if(c.kind==="season"){ const y=c.id.slice(2); return {cls:"season", ico:`<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3.2" fill="#f4efff"/><path d="M3 7.7A3.2 3.2 0 0 1 6.2 4.5h11.6A3.2 3.2 0 0 1 21 7.7V9H3z" fill="#8f6af0"/><rect x="7" y="2.5" width="2" height="4" rx="1" fill="#f4efff"/><rect x="15" y="2.5" width="2" height="4" rx="1" fill="#f4efff"/><text x="12" y="18.6" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-weight="800" font-size="8.4" fill="#3a2470">${y.slice(2)}</text></svg>`, kick:"Played in", name:y, tip:"Played in "+y+" for any team"}; }
+  if(c.kind==="owyear"){ const y=c.id.slice(2); return {cls:"season owy", ico:`<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16.5" rx="3.2" fill="#fff4e6"/><path d="M3 7.7A3.2 3.2 0 0 1 6.2 4.5h11.6A3.2 3.2 0 0 1 21 7.7V9H3z" fill="#ff8a1f"/><rect x="7" y="2.5" width="2" height="4" rx="1" fill="#fff4e6"/><rect x="15" y="2.5" width="2" height="4" rx="1" fill="#fff4e6"/><text x="12" y="18.6" text-anchor="middle" font-family="Geist,system-ui,sans-serif" font-weight="800" font-size="8.4" fill="#6b3300">${y.slice(2)}</text></svg>`, kick:"OWCS", name:y, tip:"Played OWCS in "+y}; }
+  if(c.kind==="owwin")  return {cls:"champ owc", ico:TROPHY, kick:"OWCS", name:"Int'l Champ", tip:"Won an OWCS international event"};
+  if(c.kind==="owwf")   return {cls:"owwf", ico:GLOBE, kick:"OWCS", name:"World Finals", tip:"Played at an OWCS World Finals"};
   if(c.kind==="nat")    return {cls:"nat"+(c.cc==="NA"?" globe":""), ico:c.cc==="NA"?GLOBE:flag(c.cc), kick:"From", name:COUNTRY[c.cc], tip:"Nationality: "+COUNTRY[c.cc]};
   if(c.kind==="hero")   return {cls:"hero", ico:`<img src="heroes/${heroSlug(c.hero)}.png" alt="">`, kick:"Top hero", name:c.hero, tip:"Most-played hero: "+c.hero};
   return {cls:"", ico:"", name:c.label};
@@ -2627,7 +2677,8 @@ function render(){
   pn.textContent = mode==="practice" ? "Practice" : (th?THEMES[th].icon+" ":"")+"#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
   pn.title = th ? THEMES[th].name : "";
   const era=document.querySelector(".intro .era"), ip=document.querySelector(".intro p");
-  if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name+" "+LEAGUE_SPAN[th].replace(/^.*?(\(.*\))$/,"$1") : gridLeagues(); era.classList.toggle("themed",!!th) }
+  const owlDay = !th && mode!=="practice" && ((store.get("owdoku-testseed",null)&&store.get("owdoku-testtheme",null)==="owl") || (!store.get("owdoku-testseed",null)&&dayLeague(dayKey)==="OWL"));
+  if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name+" "+LEAGUE_SPAN[th].replace(/^.*?(\(.*\))$/,"$1") : owlDay ? "🏛️ OWL Day (2018–2023)" : gridLeagues(); era.classList.toggle("themed",!!th||owlDay) }
   if(ip) ip.textContent = th ? THEMES[th].blurb+". This grid has its own achievements, and rank is paused today." : "Name a pro who fits both the row and the column.";
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
@@ -2858,10 +2909,10 @@ for(const lg of ["APEX","Contenders"]){ const a=lg==="APEX"?"an":"a", day=THEMES
   {id:lg+"-legend", sec:lg,icon:lg,chain:lg,tier:2,name:lg+" Legend",  how:`Perfect 9/9 on ${a} ${day}`},
   {id:lg+"-deepcut",sec:lg,icon:"gem",name:lg+" Deep Cut",how:`Named one of the least-known players who fit a square on ${a} ${day}`}); }
 PIN_DEFS.push(
-  {id:"sun-1",sec:"Sunday",icon:"sun",chain:"sun",tier:0,name:"Sunday Regular",how:"Played 4 themed Sundays on the day"},
-  {id:"sun-2",sec:"Sunday",icon:"sun",chain:"sun",tier:1,name:"Sunday Devotee",how:"Played 12 themed Sundays on the day"},
-  {id:"sun-3",sec:"Sunday",icon:"sun",chain:"sun",tier:2,name:"Sunday Legend", how:"Played 26 themed Sundays on the day"},
-  {id:"clean",sec:"Sunday",icon:"check",name:"Clean Sheet",how:"Finished a themed Sunday 9/9 without a wrong guess"},
+  {id:"sun-1",sec:"Sunday",icon:"sun",chain:"sun",tier:0,name:"Throwback Regular",how:"Played 4 APEX or Contenders days on the day"},
+  {id:"sun-2",sec:"Sunday",icon:"sun",chain:"sun",tier:1,name:"Throwback Devotee",how:"Played 12 APEX or Contenders days on the day"},
+  {id:"sun-3",sec:"Sunday",icon:"sun",chain:"sun",tier:2,name:"Throwback Legend", how:"Played 26 APEX or Contenders days on the day"},
+  {id:"clean",sec:"Sunday",icon:"check",name:"Clean Sheet",how:"Finished an APEX or Contenders day 9/9 without a wrong guess"},
   {id:"circle",sec:"Sunday",icon:"repeat",name:"Full Circle",how:"Holds both the APEX Legend and Contenders Legend pins"},
   {id:"pro-1",sec:"Daily",icon:"target",chain:"pro",tier:0,name:"Pro Clear",  how:"Solved a Pro square"},
   {id:"pro-2",sec:"Daily",icon:"target",chain:"pro",tier:1,name:"Pro Hunter", how:"Solved 10 Pro squares"},
@@ -2878,13 +2929,13 @@ PIN_DEFS.push(
   {id:"arch-2",sec:"Habits",icon:"books",chain:"arch",tier:1,name:"Historian",   how:"Finished 30 archive grids"},
   {id:"arch-3",sec:"Habits",icon:"books",chain:"arch",tier:2,name:"Loremaster",  how:"Finished 100 archive grids"},
   {id:"dedicated",sec:"Habits",icon:"cal",name:"Dedicated",how:"Reached a 30-day daily streak"});
-const PIN_SECTIONS=[["Daily","🎮 Every grid"],["Sunday","☀️ Sundays"],["Habits","📚 Habits"]];
+const PIN_SECTIONS=[["Daily","🎮 Every grid"],["Sunday","🕰️ Throwback days"],["Habits","📚 Habits"]];
 const PIN_LEAGUES=[["APEX","⛰️ APEX"],["Contenders","🌱 Contenders"]];   // share one fold-out below the main sections
 // Each group is a fold-out; "Every grid" starts open. Open/closed state lasts until the page reloads.
-// When a league's achievements can next be earned: themed Sundays alternate, so it's this Sunday or the one after.
+// When a league's achievements can next be earned: Contenders on Fridays, APEX on Sundays.
 function sundayNote(lg){ const t=new Date(); t.setHours(12,0,0,0);
-  for(let d=0;d<14;d++){ const k=keyOf(new Date(t.getTime()+d*864e5)); if(dayTheme(k)===lg) return d===0?"Earnable today":d<=6?"Earnable this Sunday":"Earnable next Sunday" }
-  return "Earnable on Sundays" }
+  for(let d=0;d<14;d++){ const dt=new Date(t.getTime()+d*864e5), k=keyOf(dt); if(dayTheme(k)===lg) return d===0?"Earnable today":"Earnable "+(d<=6?"this ":"next ")+dt.toLocaleDateString("en-US",{weekday:"long"}) }
+  return lg==="APEX"?"Earnable on Sundays":"Earnable on Fridays" }
 const PIN_FOLD={Daily:true,Sunday:false,Habits:false,Leagues:false};
 const PIN_COL={APEX:["#ff8a8f","#d33a44","#7a1420","#f4c95d"], Contenders:["#9ff0c3","#2fae6f","#11553a","#e6f7ee"]};
 let PIN_NEW=[];
@@ -3081,9 +3132,12 @@ const CAT_DESC = c =>
   c.kind==="champ"  ? "Won an OWL championship, with any team" :
   c.kind==="season" ? `Played in the ${c.id.slice(2)} OWL season, for any team` :
   c.kind==="hero"   ? `${c.hero} was their most-played OWL hero (Liquipedia signature hero for OWCS-only players)` :
+  c.kind==="owyear" ? `On an OWCS team or at an OWCS event in ${c.id.slice(2)}` :
+  c.kind==="owwin"  ? "Won an OWCS international: a Major, Esports World Cup 2024, Champions Clash, Midseason Championship or World Finals" :
+  c.kind==="owwf"   ? "Played at an OWCS World Finals" :
   c.kind==="nat"    ? (REGION[c.cc]?`From a ${c.cc==="EU"?"European":"North American"} country (per Liquipedia)`:`Nationality: ${COUNTRY[c.cc]} (per Liquipedia)`) : c.label;
 function catIcon(c){ const p=catParts(c); return c.kind==="team"?teamBadge(c):`<div class="cbadge ${p.cls}">${p.ico}</div>` }
-function catName(c){ return c.kind==="team"?TEAMS[c.team].n:(c.kind==="hero"?"Top hero: "+c.hero:(c.kind==="role"?c.role+" player":c.kind==="champ"?"OWL Champion":c.kind==="nat"?"From "+COUNTRY[c.cc]:"Played in "+c.id.slice(2))) }
+function catName(c){ return c.kind==="team"?TEAMS[c.team].n:(c.kind==="hero"?"Top hero: "+c.hero:(c.kind==="role"?c.role+" player":c.kind==="champ"?"OWL Champion":c.kind==="nat"?"From "+COUNTRY[c.cc]:c.kind==="owyear"?"OWCS "+c.id.slice(2):c.kind==="owwin"?"OWCS international champion":c.kind==="owwf"?"OWCS World Finals":"Played in "+c.id.slice(2))) }
 let sqHover=-1;
 const setCard=(el,html)=>{ if(el._html===html) return false; el._html=html; el.innerHTML=html; return true };
 function renderSqCard(){
@@ -3512,9 +3566,15 @@ function init(){
   // The seed is saved so the same test grid survives a reload.
   document.getElementById("devRandom").onclick=()=>{
     if (revealing) return;
-    store.set("owdoku-testseed","test-"+Math.random()); store.set("owdoku-testtheme",null);
+    store.set("owdoku-testseed","test-"+Math.random()); store.set("owdoku-testtheme","owcs");
     try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
-    mode="daily"; setTabs(); load(); renderSide(); toast("New random regular-day grid");
+    mode="daily"; setTabs(); load(); renderSide(); toast("Random OWCS-day grid");
+  };
+  document.getElementById("devOWL").onclick=()=>{
+    if (revealing) return;
+    store.set("owdoku-testseed","test-"+Math.random()); store.set("owdoku-testtheme","owl");
+    try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
+    mode="daily"; setTabs(); load(); renderSide(); toast("Random OWL-day grid");
   };
   // DEV-ONLY: a grid built the way an APEX day builds it (one APEX team plus the teams it shares the most players with)
   const forceTheme=(theme,lg,label)=>{
