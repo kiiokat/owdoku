@@ -832,7 +832,7 @@
       <div class="hv-tile" style="--k:6"><div class="hv-vis" id="hvCard"></div><p>Cards show top hero,<br>flag and role</p></div>
     </div>
     <p class="hv-fine">Teams come from four leagues: OGN APEX (2016–2018), the OWL and Contenders (2018–2023) and OWCS (2024–2026). Hover or tap a team's icon to see which.
-      Anyone who played for a team in that league counts. Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day: rank is paused and you earn achievements instead. Each player once per grid. After the daily, see how rare your picks were.</p>
+      Anyone who played for a team in that league counts. Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day: rank is paused and you earn achievements instead. Each player once per grid. Once enough people have played a daily, see how rare your picks were.</p>
     <button class="btn primary" id="helpClose">Let's play</button>
   </div>
 </div>
@@ -2595,7 +2595,7 @@ function renderStats(){
   document.getElementById("nextBox").style.display=mode==="daily"?"block":"none";
   const rs = state.over ? rarityScore() : null, rb=document.getElementById("rarityBox");
   rb.style.display = rs==null ? "none" : "block";
-  if(rs!=null) rb.innerHTML=`Rarity score <b>${rs}</b> · lower is rarer${PICKS.plays>=50?` · ${PICKS.plays} players today`:""}`;
+  if(rs!=null) rb.innerHTML=`Rarity score <b>${rs}</b> · lower is rarer · ${PICKS.plays} players today`;
 }
 
 // ---- Sound effects: tiny synthesized blips made with Web Audio (no sound files) ----
@@ -3212,15 +3212,17 @@ async function submitResult(){
   }catch(e){}
 }
 // Share of today's players who picked this answer in square i (null if no data yet).
+// Pick % and the rarity score stay hidden until a day has MIN_PLAYS players; with fewer the numbers mean little.
+const MIN_PLAYS=50;
 function pickPct(i,name){
-  if(!PICKS||!PICKS.plays) return null;
+  if(!PICKS||!(PICKS.plays>=MIN_PLAYS)) return null;
   return 100*((PICKS.cells[i]||{})[name]||0)/PICKS.plays;
 }
 function pctText(x){ return x>0&&x<1 ? "<1%" : Math.round(x)+"%" }
 // Rarity score: add up the pick % of each of your answers, plus 100 for each square you
 // missed. Lower is rarer; a perfect grid of answers nobody else chose scores close to 0.
 function rarityScore(){
-  if(!PICKS||!PICKS.plays) return null;
+  if(!PICKS||!(PICKS.plays>=MIN_PLAYS)) return null;
   let t=0; for(let i=0;i<9;i++) t += state.cells[i] ? pickPct(i,state.cells[i]) : 100;
   return Math.round(t);
 }
