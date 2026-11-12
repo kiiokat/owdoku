@@ -2251,7 +2251,7 @@ const PLAYERS = [
 ];
 const COUNTRY = {"KR":"South Korea","US":"USA","CN":"China","EU":"Europe","NA":"N. America"};
 const REGION = {EU:["GB","FR","FI","SE","DK","ES","DE","RU","NL","BE","EE","PL","IS","PT","NO","AT","LV","RO","UA","IE","IT","CH"], NA:["US","CA","MX","PR"]};
-const NAT_START = "2026-11-13";   // dailies before this keep the grids they launched with
+const NAT_START = "2026-11-10";   // nationality columns from puzzle #1
 function buildCategories(){
   const cats = [];
   for (const k in TEAMS) cats.push({id:"t:"+k, kind:"team", team:k, label:TEAMS[k].n, test:p=>p.t.includes(k)});
@@ -2290,7 +2290,7 @@ function notable(row,col){const a=answersFor(row,col); if(isApex(row)||isApex(co
 let FORCE_THEME=null;   // dev only: "apex" builds the grid the way an APEX day would
 // Themed days: every Sunday from Nov 15 2026, alternating APEX Day and Contenders Day.
 // They count toward the daily streak but never move your rank; they earn pins instead.
-const THEME_START="2026-11-15";
+const THEME_START="2026-11-10";   // the weekly plan runs from puzzle #1
 const THEMES={APEX:{icon:"⛰️",name:"APEX Day",blurb:"Every row is an OGN APEX team"},
               Contenders:{icon:"🌱",name:"Contenders Day",blurb:"Every row is a Contenders team"}};
 // Weekly plan from THEME_START: Mon–Thu OWCS (current players), Fri Contenders, Sat OWL, Sun APEX.
@@ -2415,9 +2415,7 @@ function makeBalancedGrid(seed, avoid=[]){
   return best || makeGrid(seed, avoid, null);   // a themed day always stays themed if any themed grid exists
 }
 // Dailies already played keep the exact grid they launched with, even as new teams and players are added.
-const FIXED_GRIDS = {"2026-11-10":[["t:DAL","t:BOS","t:HZS"],["y:2023","r:DPS","h:Ana"]],
-  "2026-11-11":[["t:HOU","t:PHI","t:SEO"],["r:Tank","h:Winston","y:2018"]],
-  "2026-11-12":[["t:LDN","t:FLA","t:TOR"],["x:CH","h:D.Va","r:Support"]]};
+const FIXED_GRIDS = {};   // pin a date to an exact grid here if a played daily ever needs protecting from data changes
 function dailyGrid(k){
   if (GRID_CACHE[k]) return GRID_CACHE[k];
   const id=x=>CATS.find(c=>c.id===x);
