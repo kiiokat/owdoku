@@ -14,6 +14,7 @@ Usage:
 Output (next to this script, in liquipedia_data/):
   players.json       every player page on the Overwatch wiki
   squadplayers.json  every team roster entry (who played for which team, and when)
+  placements.json    team results at top-tier events since 2024 (OWCS Majors, Midseason, World Finals)
 
 Data from Liquipedia is licensed CC-BY-SA 3.0. Credit Liquipedia wherever it is shown.
 Needs only Python 3 (no extra packages). Requests are spaced out to respect
@@ -31,6 +32,8 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "liquipedia_data"
 DATASETS = {
     "players": ("player", "", "pagename ASC",
         "pagename,id,alternateid,name,romanizedname,nationality,nationality2,nationality3,status,type,team,extradata"),
+    # every team result at a top-tier (S-tier/tier 1) event since OWCS began, with the players who played
+    "placements": ("placement", "[[liquipediatier::1]] AND [[date::>2024-01-01]]", "date ASC", ""),
     "squadplayers": ("squadplayer", "", "link ASC",
         "pagename,link,id,name,nationality,position,role,type,status,joindate,leavedate,inactivedate,extradata"),
 }
@@ -65,7 +68,9 @@ def main():
     key = os.environ.get("LIQUIPEDIA_API_KEY") or getpass.getpass("Liquipedia API key (hidden): ").strip()
     if not key: sys.exit("No API key given.")
     os.makedirs(OUT, exist_ok=True)
+    only = sys.argv[1:]
     for name, (endpoint, cond, order, fields) in DATASETS.items():
+        if only and name not in only: continue
         rows, offset = [], 0
         print(f"Fetching {name}...")
         while True:
