@@ -36,7 +36,7 @@ DATASETS = {
 }
 
 def get(key, endpoint, conditions, order, fields, offset):
-    params = {"wiki": WIKI, "query": fields, "order": order, "limit": PAGE, "offset": offset}
+    params = {"wiki": WIKI, "order": order, "limit": PAGE, "offset": offset}   # no "query": get every column
     if conditions: params["conditions"] = conditions
     q = urllib.parse.urlencode(params)
     req = urllib.request.Request(f"{API}/{endpoint}?{q}", headers={
