@@ -597,6 +597,8 @@
   .dev-btn:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(255,157,46,.5),0 6px 14px rgba(0,0,0,.35)}
   .dev-btn:active{transform:scale(.9);transition-duration:.09s}
   @media (max-width:420px){ .dev-lbl{display:none} }
+  .rk-calc{font-style:normal;color:var(--muted);animation:calcPulse 1.1s ease-in-out infinite}
+  @keyframes calcPulse{50%{opacity:.4}}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
     animation:fall var(--t,1.6s) cubic-bezier(.25,.6,.4,1) forwards}
@@ -1640,25 +1642,27 @@ function emblem(t,still){
   return `<svg class="emblem" viewBox="0 0 100 100" overflow="visible" aria-hidden="true"><defs><linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c[0]}"/><stop offset=".55" stop-color="${c[1]}"/><stop offset="1" stop-color="${c[2]}"/></linearGradient><filter id="${id}b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter></defs>${s}</svg>`;
 }
 // ---- Rank display ----
-function rankBits(){ const R=rankState(); if(!R) return null; const r=rankOf(R.pts); return {R,r} }
+function rankBits(){ const R=RANK_PENDING?RANK_PREV:rankState(); if(!R) return null; const r=rankOf(R.pts); return {R,r} }
 function renderRank(){
   const b=rankBits(), card=document.getElementById("rankCard"), row=document.getElementById("rankRow");
   const deltaTxt=R=>{ if(!R.last||R.last.placed) return R&&R.last&&R.last.placed?"Placed":""; const d=R.last.delta; return R.last.prot?"Protected":(d>0?"+"+d:d<0?String(d):"±0") };
-  const html = !b ? `<div class="rk-top"><div class="rk-em">${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}</div><div class="rk-txt"><b>Unranked</b><span>Finish today's daily to get placed</span></div></div>`
-    : `<div class="rk-top"><div class="rk-em">${emblem(b.r.tier)}</div><div class="rk-txt"><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size}${b.R.last?` · <i class="${(b.R.last.delta||0)<0?"neg":"pos"}">${deltaTxt(b.R)}</i>`:""}</span>
+  const calc='<i class="rk-calc">Calculating…</i>';
+  const html = !b ? `<div class="rk-top"><div class="rk-em">${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}</div><div class="rk-txt"><b>Unranked</b><span>${RANK_PENDING?calc:"Finish today's daily to get placed"}</span></div></div>`
+    : `<div class="rk-top"><div class="rk-em">${emblem(b.r.tier)}</div><div class="rk-txt"><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size}${RANK_PENDING?" · "+calc:b.R.last?` · <i class="${(b.R.last.delta||0)<0?"neg":"pos"}">${deltaTxt(b.R)}</i>`:""}</span>
        <div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div></div></div>`;
   if(card && card._html!==html){ card._html=html; card.innerHTML=`<h4>Rank</h4>${html}<div id="rankWeek"></div>`; card._week=null; }
-  if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>Finish today's daily to place</span>`
-      : `${emblem(b.r.tier,true)}<b>${b.r.name}</b><div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div><span>${b.r.into}/${b.r.size}</span>`;
+  if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>${RANK_PENDING?calc:"Finish today's daily to place"}</span>`
+      : `${emblem(b.r.tier,true)}<b>${b.r.name}</b><div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div><span>${RANK_PENDING?calc:b.r.into+"/"+b.r.size}</span>`;
     if(row._html!==rh){ row._html=rh; row.innerHTML=rh } }
 }
 // After a game: a full card for placement or a new tier, a light pop for a new division,
 // and a quiet line for drops. Returns a promise so the archive panel waits its turn.
-let RANK_RESULT=null;
+let RANK_RESULT=null, RANK_PENDING=false, RANK_PREV=null;
 function rankLine(){
   const el=document.getElementById("rankLine"); if(!el) return; const rr=RANK_RESULT;
   if(!rr || mode!=="daily"){ el.style.display="none"; return }
   el.style.display="block";
+  if(RANK_PENDING){ el.innerHTML='<i class="rk-calc">Calculating rank…</i>'; return }
   el.innerHTML = rr.placed ? `Placed in <b>${rr.to.name}</b>`
     : rr.prot ? `${rr.from.name} · promotion protected`
     : rr.from.name===rr.to.name ? `${rr.to.name} · <i class="${rr.delta<0?"neg":"pos"}">${rr.delta>0?"+":""}${rr.delta}</i>`
@@ -1666,6 +1670,7 @@ function rankLine(){
 }
 function showRankUp(){
   const rr=RANK_RESULT; if(!rr) return Promise.resolve();
+  if(RANK_PENDING){ RANK_PENDING=false; setTimeout(renderSide, rr.up==="tier"||rr.placed ? 400 : 0); }
   if(rr.down) return new Promise(res=>{ const sc=document.getElementById("downScrim");
     document.getElementById("downEm").innerHTML=emblem(rr.to.tier);
     document.getElementById("downTitle").textContent=rr.to.name;
@@ -1850,7 +1855,7 @@ function finish(){
   const hist=store.get("owdoku-history",{});
   if (!hist[dayKey]) { hist[dayKey]={s:score(), x:state.strikes, a:mode==="archive"}; store.set("owdoku-history",hist); }
   if (mode==="daily"){
-    if(dayKey===todayKey() && !store.get("owdoku-testseed",null)){ const rr=applyRank(score(),state.strikes); if(rr) RANK_RESULT=rr; }
+    if(dayKey===todayKey() && !store.get("owdoku-testseed",null)){ const prev=rankState(); const rr=applyRank(score(),state.strikes); if(rr){ RANK_RESULT=rr; RANK_PREV=prev; RANK_PENDING=true; } }
     const s=store.get("owdoku-streak",{n:0,last:null,best:0});
     if (s.last!==todayKey()){
       s.n = score()>0 ? (s.last===addDays(todayKey(),-1) ? s.n:0)+1 : 0;
