@@ -2748,7 +2748,7 @@ for(const lg of ["APEX","Contenders"]){ const a=lg==="APEX"?"an":"a"; PIN_DEFS.p
   {id:lg+"-recruit",lg,shape:"round", name:lg+" Recruit", how:`Finished ${a} ${THEMES[lg].name}`},
   {id:lg+"-veteran",lg,shape:"shield",name:lg+" Veteran", how:`Scored 7/9 or better on 3 ${THEMES[lg].name}s`},
   {id:lg+"-legend", lg,shape:"star",  name:lg+" Legend",  how:`Perfect 9/9 on ${a} ${THEMES[lg].name}`},
-  {id:lg+"-deepcut",lg,shape:"gem",   name:lg+" Deep Cut",how:`Picked an answer fewer than 5% of players chose on ${a} ${THEMES[lg].name} (once 100+ people have played it)`}); }
+  {id:lg+"-deepcut",lg,shape:"gem",   name:lg+" Deep Cut",how:`Named one of the least-known players who fit a square on ${a} ${THEMES[lg].name}`}); }
 const PIN_COL={APEX:["#ff8a8f","#d33a44","#7a1420","#f4c95d"], Contenders:["#9ff0c3","#2fae6f","#11553a","#e6f7ee"]};
 let PIN_NEW=[];
 function pinStore(){ const P=store.get("owdoku-pins",null)||{}; P.earned=P.earned||{}; P.good=P.good||{}; P.good.APEX=P.good.APEX||[]; P.good.Contenders=P.good.Contenders||[]; return P }
@@ -2760,26 +2760,18 @@ function awardThemePins(lg,sc,x){ const P=pinStore(), got=[];
   if(sc>=7 && !P.good[lg].includes(dayKey)) P.good[lg].push(dayKey);
   if(P.good[lg].length>=3 && earnPin(P,lg+"-veteran")) got.push(lg+"-veteran");
   if(sc===9 && earnPin(P,lg+"-legend")) got.push(lg+"-legend");
-  // Deep Cut is judged later, once enough people have played that day (see checkDeepCut)
-  if(!store.get("owdoku-testseed",null)){ P.pending=P.pending||{}; P.pending[dayKey]={lg,cells:state.cells.slice(),sig:gridSig(grid)} }
+  if(state.cells.some((v,i)=>v&&isDeepCut(i,v)) && earnPin(P,lg+"-deepcut")) got.push(lg+"-deepcut");
   store.set("owdoku-pins",P); return got }
-// Deep Cut: one of your answers on a themed day was picked by fewer than 5% of players.
-// A percentage only means something with a real crowd, so it waits until 100+ people have finished that day,
-// and is checked again on later visits for up to a week while the count grows.
-const DEEP_MIN_PLAYS=100, DEEP_PCT=5;
-async function checkDeepCut(){
-  const P=pinStore(); if(!P.pending||!API_BASE) return; let changed=false;
-  for(const [day,info] of Object.entries(P.pending)){
-    if(addDays(day,7)<todayKey() || P.earned[info.lg+"-deepcut"]){ delete P.pending[day]; changed=true; continue }
-    let d = (day===dayKey && PICKS) ? PICKS : null;
-    if(!d){ try{ const r=await fetch(`${API_BASE}/api/stats?day=${day}&sig=${encodeURIComponent(info.sig)}`,{signal:withTimeout(4000),cache:"no-store"}); if(r.ok) d=await r.json() }catch(e){} }
-    if(!d||(d.plays||0)<DEEP_MIN_PLAYS) continue;
-    const rare=info.cells.some((v,i)=>v && 100*((d.cells[i]||{})[v]||0)/d.plays < DEEP_PCT);
-    if(rare && earnPin(P,info.lg+"-deepcut")){ PIN_NEW.push(info.lg+"-deepcut") }
-    if(addDays(day,1)<todayKey()||rare){ delete P.pending[day] }   // once the day is over its count is final
-    changed=true;
-  }
-  if(changed){ store.set("owdoku-pins",P); renderRank(); if(PIN_NEW.length&&!revealing&&!document.querySelector(".owcard.show")) showPinPops() }
+// Deep Cut, judged instantly from the game's own data (no player stats needed):
+// one of your answers was among the least-known players who fit that square.
+// "Known" = OWL hours + 15 per top OWCS event + 3 per team in the game. The square needs 5+ answers,
+// and your pick must sit in its least-known fifth and below the square's middle player.
+const fame=p=>(p.hr||0)+15*(p.ow||0)+3*p.t.length;
+function isDeepCut(i,name){
+  const a=answersFor(grid.rows[Math.floor(i/3)],grid.cols[i%3]); if(a.length<5) return false;
+  const f=a.map(fame).sort((x,y)=>x-y), me=fame(PLAYERS.find(p=>p.n===name)||{t:[]});
+  const cut=f[Math.max(0,Math.ceil(a.length*0.2)-1)], mid=f[Math.floor(a.length/2)];
+  return me<=cut && me<mid;
 }
 // Pins use the same round, bordered badge as team icons. The emoji says the league (⛰️ APEX, 🌱 Contenders,
 // 💎 Deep Cut); higher tiers animate: Veteran glows, Legend gets a turning gold ring.
@@ -3108,7 +3100,7 @@ async function fetchPicks(){
     const r=await fetch(`${API_BASE}/api/stats?day=${k}&sig=${encodeURIComponent(sig)}`,{signal:withTimeout(4000),cache:"no-store"});
     if(!r.ok) return null;
     const d=await r.json();
-    if(k===dayKey && sig===gridSig(grid) && mode==="daily"){ PICKS=d; if(!revealing) refreshPickNotes(); checkDeepCut(); }
+    if(k===dayKey && sig===gridSig(grid) && mode==="daily"){ PICKS=d; if(!revealing) refreshPickNotes(); }
     return d;
   }catch(e){ return null }
 }
@@ -3419,7 +3411,6 @@ function preloadHeroes(){
 }
 function boot(){
   preloadHeroes().then(()=>{
-    setTimeout(()=>{ try{ checkDeepCut() }catch(e){} }, 1500);
     try { init(); }
     catch(e){
       // A saved board or dev setting from an older version shouldn't lock the page on the loading screen:
