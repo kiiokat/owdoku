@@ -589,6 +589,10 @@
   .ps-info{position:sticky;bottom:-1px;z-index:2;box-shadow:0 -10px 18px 6px var(--surface);border:1px solid rgba(255,255,255,.06);
     display:flex;flex-direction:column;justify-content:center;align-items:center;
     min-height:58px;margin:14px 0 12px;padding:10px 12px;border-radius:12px;background:var(--bg);font-size:12.5px;color:var(--muted);text-align:center}
+  .ps-info{transition:height .28s var(--ease);overflow:hidden;box-sizing:border-box}
+  .pi-in{display:flex;flex-direction:column;align-items:center}
+  .pi-in.swap{animation:piFade .25s var(--ease)}
+  @keyframes piFade{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
   .ps-info b{display:block;color:var(--text);font-family:var(--display);font-size:15px;margin-bottom:2px} .ps-info em{display:block;font-style:normal;font-size:11px;margin-top:3px;color:var(--faint)}
   .pin-more{font-size:10px;font-weight:700;color:var(--muted);align-self:center;margin-right:1px}
   .rk-theme{margin-top:9px;font-size:11.5px;color:var(--muted)}
@@ -2855,6 +2859,16 @@ function pinsHTML(small){ const P=pinStore(), best={};
   return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your pins">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
 if(typeof document!=="undefined") document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".rk-pins"); if(!b) return;
   e.stopPropagation(); e.preventDefault(); openPins() },true);
+// The info box eases to the height of whatever it's showing instead of jumping
+function setPinInfo(html){
+  const box=document.getElementById("pinInfo"); let inner=box.querySelector(".pi-in");
+  if(!inner){ box.innerHTML='<div class="pi-in"></div>'; inner=box.firstChild; box.style.height="" }
+  if(inner._html===html) return; inner._html=html;
+  const from=box.getBoundingClientRect().height; inner.innerHTML=html;
+  box.style.height="auto"; const to=box.getBoundingClientRect().height;
+  box.style.height=from+"px"; void box.offsetHeight; box.style.height=to+"px";
+  inner.classList.remove("swap"); void inner.offsetWidth; inner.classList.add("swap");
+}
 // Pin showcase: every pin is shown; ones not earned yet are dark silhouettes whose descriptor is "???"
 function openPins(){
   const P=pinStore(), sc=document.getElementById("pinScrim"), box=document.getElementById("pinGrid"), info=document.getElementById("pinInfo");
@@ -2863,10 +2877,10 @@ function openPins(){
     const got=P.earned[d.id], fresh=got&&(P.unseen||[]).includes(d.id); return `<button class="ps-pin${got?"":" locked"}${fresh?" new":""}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` }).join("")}</div>`).join("");
   const n=PIN_DEFS.filter(d=>P.earned[d.id]).length;
   document.getElementById("pinCount").innerHTML=`<b>${n}</b> / ${PIN_DEFS.length} pins earned`;
-  const idle=`Hover or tap a pin to see how it's earned`; info.innerHTML=idle;
+  const idle=`Hover or tap a pin to see how it's earned`; info.innerHTML=""; info.style.height=""; setPinInfo(idle);
   const show=b=>{ const d=PIN_DEFS.find(x=>x.id===b.dataset.pin), got=P.earned[d.id];
-    info.innerHTML = got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`; };
-  box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); b.onmouseleave=()=>{ info.innerHTML=idle } });
+    setPinInfo(got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`); };
+  box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); b.onmouseleave=()=>setPinInfo(idle) });
   P.unseen=[]; store.set("owdoku-pins",P); document.querySelectorAll(".rk-pins").forEach(p=>p.classList.remove("glow"));
   document.getElementById("pinClose").onclick=()=>sc.classList.remove("open");
   sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") };
