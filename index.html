@@ -593,7 +593,15 @@
     background:#1a1f2b;box-shadow:0 12px 40px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);transform:translate(-50%,140%);opacity:0;pointer-events:none;
     transition:transform .45s var(--bouncy),opacity .25s}
   .pin-pop.show{transform:translate(-50%,0);opacity:1}
-  .pp-pin{width:52px;height:52px;flex:none} .pp-pin .pinbadge{border-width:3px} .pin-pop.show .pp-pin{animation:pinDrop .7s var(--bouncy) .1s both}
+  .pp-pins{display:flex;flex:none} .pp-pin{width:46px;height:46px;flex:none;margin-left:-12px} .pp-pin:first-child{margin-left:0}
+  .pp-pin .pinbadge{border-width:3px}
+  .pin-pop.show .pp-pin{animation:pinDrop .7s var(--bouncy) both;animation-delay:calc(.1s + var(--k)*.12s)}
+  .pin-pop{cursor:pointer}
+  .rk-pins{position:relative;border-radius:999px}
+  .rk-pins.glow{animation:pinsGlow 1.6s ease-in-out 4}
+  @keyframes pinsGlow{0%,100%{box-shadow:0 0 0 0 rgba(255,214,102,0)}50%{box-shadow:0 0 0 4px rgba(255,214,102,.18),0 0 18px 4px rgba(255,214,102,.35)}}
+  .rk-pins.has-new::after{content:"";position:absolute;top:-3px;right:-3px;width:8px;height:8px;border-radius:50%;background:#ffd666;box-shadow:0 0 6px #ffd666}
+  .ps-pin{position:relative} .ps-pin.new::after{content:"NEW";position:absolute;top:5px;right:6px;font-size:8.5px;font-weight:800;letter-spacing:.06em;color:#1a1300;background:#ffd666;border-radius:6px;padding:1px 4px} 
   @keyframes pinDrop{0%{transform:translateY(-40px) rotate(-25deg) scale(1.4);opacity:0}100%{transform:none;opacity:1}}
   .pp-txt small{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
   .pp-txt b{display:block;font-family:var(--display);font-size:17px} .pp-txt span{display:block;font-size:12px;color:var(--muted);max-width:240px}
@@ -2836,7 +2844,7 @@ function pinsHTML(small){ const P=pinStore(), best={};
   const all=PIN_DEFS.filter(d=>P.earned[d.id]&&(!d.chain||best[d.chain]===d)).sort((a,b)=>(P.earned[a.id]>P.earned[b.id])-(P.earned[a.id]<P.earned[b.id]));
   if(!all.length) return "";
   const got=small&&all.length>4?all.slice(-3):all, more=all.length-got.length;   // the phone rank bar shows the latest 3 and a count
-  return `<div class="rk-pins${small?" sm":""}" role="button" title="Your pins">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
+  return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your pins">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
 if(typeof document!=="undefined") document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".rk-pins"); if(!b) return;
   e.stopPropagation(); e.preventDefault(); openPins() },true);
 // Pin showcase: every pin is shown; ones not earned yet are dark silhouettes whose descriptor is "???"
@@ -2844,24 +2852,31 @@ function openPins(){
   const P=pinStore(), sc=document.getElementById("pinScrim"), box=document.getElementById("pinGrid"), info=document.getElementById("pinInfo");
   const fmt=k=>{ const d=dateOfKey(k); return d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}) };
   box.innerHTML=PIN_SECTIONS.map(([sec,label])=>`<h5>${label}</h5><div class="ps-row">${PIN_DEFS.filter(d=>d.sec===sec).map(d=>{
-    const got=P.earned[d.id]; return `<button class="ps-pin${got?"":" locked"}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` }).join("")}</div>`).join("");
+    const got=P.earned[d.id], fresh=got&&(P.unseen||[]).includes(d.id); return `<button class="ps-pin${got?"":" locked"}${fresh?" new":""}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` }).join("")}</div>`).join("");
   const n=PIN_DEFS.filter(d=>P.earned[d.id]).length;
   const idle=`${n} of ${PIN_DEFS.length} pins earned`; info.innerHTML=idle;
   const show=b=>{ const d=PIN_DEFS.find(x=>x.id===b.dataset.pin), got=P.earned[d.id];
     info.innerHTML = got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`; };
   box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); b.onmouseleave=()=>{ info.innerHTML=idle } });
+  P.unseen=[]; store.set("owdoku-pins",P); document.querySelectorAll(".rk-pins").forEach(p=>p.classList.remove("glow"));
   document.getElementById("pinClose").onclick=()=>sc.classList.remove("open");
   sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") };
   sc.classList.add("open");
 }
-// a small pin-drop card for each newly earned pin, one after another
+// One small card for everything earned this game (never full-screen), then the pins beside your rank glow
+// for a few seconds so players know where to look. New pins keep a dot in the showcase until it's opened.
 function showPinPops(){
   const list=PIN_NEW.splice(0); if(!list.length) return Promise.resolve();
-  const el=document.getElementById("pinPop");
-  return list.reduce((p,id)=>p.then(()=>new Promise(res=>{ const d=PIN_DEFS.find(x=>x.id===id);
-    el.innerHTML=`<div class="pp-pin">${pinSVG(d)}</div><div class="pp-txt"><small>Pin earned</small><b>${d.name}</b><span>${d.how}</span></div>`;
-    el.classList.remove("show"); void el.offsetWidth; el.classList.add("show"); SFX.rankDiv(); renderRank();
-    setTimeout(()=>{ el.classList.remove("show"); setTimeout(res,250) },2400); })), Promise.resolve());
+  const defs=list.map(id=>PIN_DEFS.find(x=>x.id===id)).filter(Boolean), el=document.getElementById("pinPop");
+  const P=pinStore(); P.unseen=[...new Set([...(P.unseen||[]),...list])]; store.set("owdoku-pins",P);
+  el.innerHTML=`<div class="pp-pins">${defs.slice(0,3).map((d,k)=>`<span class="pp-pin" style="--k:${k}">${pinSVG(d)}</span>`).join("")}</div>
+    <div class="pp-txt"><small>${defs.length>1?defs.length+" achievements earned!":"Achievement earned!"}</small><b>${defs.length>2?defs.slice(0,2).map(d=>d.name).join(", ")+` +${defs.length-2} more`:defs.map(d=>d.name).join(", ")}</b>
+    <span>${defs.length>1?"Tap your pins to see them":defs[0].how}</span></div>`;
+  el.onclick=()=>{ el.classList.remove("show"); openPins() };
+  el.classList.remove("show"); void el.offsetWidth; el.classList.add("show"); SFX.rankDiv(); renderRank();
+  setTimeout(()=>document.querySelectorAll(".rk-pins").forEach(p=>{ p.classList.remove("glow"); void p.offsetWidth; p.classList.add("glow");
+    clearTimeout(p._g); p._g=setTimeout(()=>p.classList.remove("glow"),6500) }),350);
+  return new Promise(res=>setTimeout(()=>{ el.classList.remove("show"); setTimeout(res,250) },3200));
 }
 // ---- Rank display ----
 function rankBits(){ const R=RANK_PENDING?RANK_PREV:rankState(); if(!R) return null; const r=rankOf(R.pts); return {R,r} }
@@ -3371,7 +3386,7 @@ function init(){
   document.getElementById("devApex").onclick=()=>forceTheme("apex","APEX","APEX-day grid");
   document.getElementById("devCont").onclick=()=>forceTheme("contenders","Contenders","Contenders-day grid");
   // DEV-ONLY: fills every empty square with a valid answer, one by one
-  document.getElementById("devFill").onclick=()=>revealRemaining(true);
+  document.getElementById("devFill").onclick=()=>revealRemaining(true,()=>{ if(state.over) showRankUp() });   // also plays rank and pin moments
   // DEV-ONLY: clears today's board and the streak
   document.getElementById("devFire").onclick=()=>{ state.combo=((state.combo||0)+1)%(BLAZE_AT+2); renderStats();
     toast(state.combo? state.combo+" in a row" : "Meter drained"); };
