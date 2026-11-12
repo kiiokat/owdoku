@@ -2305,6 +2305,9 @@ function load(){
     const fits=()=>state.cells.every((n,i)=>{ if(!n) return true; const p=PLAYERS.find(x=>x.n===n);
       return p && grid.rows[Math.floor(i/3)].test(p) && grid.cols[i%3].test(p); });
     if ((state.sig && state.sig!==sig) || (!state.sig && !fits())) state=freshState();
+    // drop revealed answers for players no longer in the data (e.g. merged duplicates)
+    state.rev=state.rev.map(n=>n&&PLAYERS.some(x=>x.n===n)?n:null);
+    if (state.cells.some(n=>n&&!PLAYERS.some(x=>x.n===n))) state=freshState();
     state.sig=sig;
     PICKS=null; if(mode==="daily") fetchPicks().then(()=>{ if(state.over&&!state.submitted) afterGame(); });   // retry a send that failed earlier
   } else {
@@ -3390,7 +3393,14 @@ function preloadHeroes(){
 }
 function boot(){
   preloadHeroes().then(()=>{
-    init();
+    try { init(); }
+    catch(e){
+      // A saved board or dev setting from an older version shouldn't lock the page on the loading screen:
+      // clear today's saved board and any dev test grid, then start again.
+      console.error("OWdoku start-up failed, resetting today's board", e);
+      try{ ["owdoku-testseed","owdoku-testtheme","owdoku-day-"+todayKey()].forEach(k=>localStorage.removeItem(k)) }catch(_){}
+      try{ mode="daily"; init(); }catch(e2){ console.error(e2) }
+    }
     const ld=document.getElementById("loader"); ld.classList.add("done"); setTimeout(()=>ld.remove(),400);
   });
 }
