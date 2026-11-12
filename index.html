@@ -627,7 +627,7 @@
   .hv-em{width:34px;height:34px}
   .hv-cal{color:var(--accent-2)} .hv-cal span{font-family:"Geist Mono",ui-monospace,monospace;font-size:13px;color:var(--text)}
   #hvDiff .diff{font-size:11px}
-  #hvDiff .dl{display:inline-block;width:54px;text-align:left;font-weight:inherit;transition:color .3s}
+  #hvDiff .dl{display:inline-block;text-align:left;font-weight:inherit;transition:color .3s}
   #hvDiff .diff{transition:color .3s} #hvDiff .diff i{transition:background .3s,box-shadow .3s}
   #hvCard .avatar{width:32px;height:32px;margin:0;border-width:1.5px}
   #hvCard .flag,#hvCard .role{width:14px;height:14px;padding:2px}
@@ -1796,6 +1796,17 @@ function fillHelp(){
   dv.innerHTML='<span class="diff"><i></i><i></i><i></i><i></i><b class="dl"></b></span>';
   const show=n=>{ const l=diffLevel(n), d=dv.firstChild; d.className="diff "+l[0];
     [...d.querySelectorAll("i")].forEach((e,k)=>e.className=k<l[2]?"on":""); d.querySelector(".dl").textContent=l[1]; };
+  // the word slot is exactly as wide as the longest word, so the row stays centered
+  const fit=()=>{ const dl=dv.querySelector(".dl"); let w=0;
+    for(const n of steps){ show(n); dl.style.width="auto"; w=Math.max(w,dl.getBoundingClientRect().width) }
+    dl.style.width=Math.ceil(w)+"px";
+    // nudge the row so the longest word sits exactly centered in the tile
+    const d=dv.firstChild; d.style.transform=""; show(steps[1]);
+    const box=dv.getBoundingClientRect(), r=document.createRange(); r.selectNodeContents(dl);
+    const L=d.querySelector("i").getBoundingClientRect().left-box.left, R=box.right-r.getBoundingClientRect().right;
+    if(box.width) d.style.transform=`translateX(${((R-L)/2).toFixed(1)}px)`;
+    show(steps[di]); };
+  fit(); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit);   // re-measure once the real font has loaded
   show(steps[0]);
   clearInterval(fillHelp._t);
   fillHelp._t=setInterval(()=>{ if(!document.getElementById("helpScrim").classList.contains("open")) return;
