@@ -711,6 +711,7 @@
   <div id="devTools" class="dev-tools" style="display:none">
   <span class="dev-lbl">Dev</span>
   <button class="dev-btn" id="devRandom" title="New random grid" aria-label="New random grid">🎲</button>
+  <button class="dev-btn" id="devApex" title="Force an APEX-day grid" aria-label="Force an APEX-day grid">⛰️</button>
   <button class="dev-btn" id="devFill" title="Fill remaining" aria-label="Fill remaining">⚡</button>
   <button class="dev-btn" id="devFire" title="Add to On Fire meter" aria-label="Add to On Fire meter">🔥</button>
   <button class="dev-btn" id="devDefeat" title="Play DEFEAT screen" aria-label="Play DEFEAT screen">💀</button>
@@ -1571,6 +1572,7 @@ const isApex=c=>c.kind==="team"&&TEAMS[c.team].lg==="APEX";
 function notable(row,col){const a=answersFor(row,col); return (isApex(row)||isApex(col)) ? a.length : a.filter(p=>p.hr>=NOTABLE_HOURS||(p.ow||0)>=2).length}
 // Build a grid: rows are teams, columns mix teams and attributes.
 // Every square must have several well-known answers, though any correct player is accepted.
+let FORCE_THEME=null;   // dev only: "apex" builds the grid the way an APEX day would
 function makeGrid(seedStr, avoid=[]){
   const r = rng(hashStr(seedStr));
   const dm=/^owdoku-(\d{4}-\d\d-\d\d)/.exec(seedStr), natAllowed=!dm||dm[1]>=NAT_START;
@@ -1579,7 +1581,7 @@ function makeGrid(seedStr, avoid=[]){
   // APEX day (about 1 in 6): one APEX team leads, joined by teams that share the most players with it,
   // so APEX squads and their niche players actually get a grid they fit in
   const apexTeams = teams.filter(c=>TEAMS[c.team].lg==="APEX");
-  const apex = natAllowed && apexTeams.length && r() < 0.17 ? apexTeams[Math.floor(r()*apexTeams.length)] : null;
+  const apex = (FORCE_THEME==="apex" || (natAllowed && apexTeams.length && r() < 0.17)) ? apexTeams[Math.floor(r()*apexTeams.length)] : null;
   const shared = (a,b)=>PLAYERS.filter(p=>p.t.includes(a.team)&&p.t.includes(b.team)).length;
   const partners = apex ? teams.filter(t=>t!==apex).map(t=>[t,shared(apex,t)]).filter(x=>x[1]>=3).sort((x,y)=>y[1]-x[1]).slice(0,10).map(x=>x[0]) : [];
   for (let pass of [0,1]) for (let minAns of [3,2,1]) for (let tries=0; tries<4000; tries++){
@@ -1662,7 +1664,9 @@ function load(){
     if (mode==="daily") dayKey=todayKey();
     // DEV-ONLY: a saved test seed overrides today's grid (see the "New random grid" button)
     const testSeed = mode==="daily" ? store.get("owdoku-testseed",null) : null;
+    if (testSeed) FORCE_THEME=store.get("owdoku-testtheme",null);
     grid = testSeed ? makeBalancedGrid(testSeed) : dailyGrid(dayKey);
+    FORCE_THEME=null;
     state = store.get("owdoku-day-"+dayKey, freshState());
     if (state.strikes==null) state.strikes=0;            // boards saved before strikes existed
     if (!state.rev) state.rev=Array(9).fill(null);
@@ -2524,9 +2528,20 @@ function init(){
   // The seed is saved so the same test grid survives a reload.
   document.getElementById("devRandom").onclick=()=>{
     if (revealing) return;
-    store.set("owdoku-testseed","test-"+Math.random());
+    store.set("owdoku-testseed","test-"+Math.random()); store.set("owdoku-testtheme",null);
     try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
     mode="daily"; setTabs(); load(); toast("New random grid");
+  };
+  // DEV-ONLY: a grid built the way an APEX day builds it (one APEX team plus the teams it shares the most players with)
+  document.getElementById("devApex").onclick=()=>{
+    if (revealing) return;
+    let seed; FORCE_THEME="apex";
+    for(let k=0;k<60;k++){ seed="apex-"+Math.random(); const g=makeBalancedGrid(seed);
+      if(g&&g.rows.concat(g.cols).some(c=>c.kind==="team"&&TEAMS[c.team].lg==="APEX")) break; }
+    FORCE_THEME=null;
+    store.set("owdoku-testseed",seed); store.set("owdoku-testtheme","apex");
+    try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
+    mode="daily"; setTabs(); load(); toast("APEX-day grid");
   };
   // DEV-ONLY: fills every empty square with a valid answer, one by one
   document.getElementById("devFill").onclick=()=>revealRemaining(true);
@@ -2544,7 +2559,7 @@ function init(){
   document.getElementById("devRankReset").onclick=()=>{ store.set("owdoku-rank",null); RANK_RESULT=null; renderSide(); toast("Rank reset: Unranked") };
   document.getElementById("devReset").onclick=()=>{
     try{localStorage.removeItem("owdoku-day-"+todayKey());localStorage.removeItem("owdoku-streak");
-        localStorage.removeItem("owdoku-testseed");                  // also returns to the real daily grid
+        localStorage.removeItem("owdoku-testseed"); localStorage.removeItem("owdoku-testtheme");   // also returns to the real daily grid
         const h=store.get("owdoku-history",{}); delete h[todayKey()]; store.set("owdoku-history",h)}catch(e){}
     mode="daily"; setTabs();
     load();

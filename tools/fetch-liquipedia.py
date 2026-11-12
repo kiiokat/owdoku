@@ -15,6 +15,7 @@ Output (next to this script, in liquipedia_data/):
   players.json       every player page on the Overwatch wiki
   squadplayers.json  every team roster entry (who played for which team, and when)
   placements.json    team results at top-tier events since 2024 (OWCS Majors, Midseason, World Finals)
+  contenders.json    team results at tier-2 events 2018-2023 (Overwatch Contenders)
 
 Data from Liquipedia is licensed CC-BY-SA 3.0. Credit Liquipedia wherever it is shown.
 Needs only Python 3 (no extra packages). Requests are spaced out to respect
@@ -34,6 +35,8 @@ DATASETS = {
         "pagename,id,alternateid,name,romanizedname,nationality,nationality2,nationality3,status,type,team,extradata"),
     # every team result at a top-tier (S-tier/tier 1) event since OWCS began, with the players who played
     "placements": ("placement", "[[liquipediatier::1]] AND [[date::>2024-01-01]]", "date ASC", ""),
+    # every team result at tier-2 events from 2018 to 2023 (Overwatch Contenders seasons, finals and The Gauntlet)
+    "contenders": ("placement", "[[liquipediatier::2]] AND [[date::>2017-12-01]] AND [[date::<2024-01-01]]", "date ASC", ""),
     "squadplayers": ("squadplayer", "", "link ASC",
         "pagename,link,id,name,nationality,position,role,type,status,joindate,leavedate,inactivedate,extradata"),
 }
