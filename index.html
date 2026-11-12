@@ -2261,7 +2261,10 @@ function teamCountry(t){ if(TEAM_CC[t]==null){ const c={}; for(const p of PLAYER
 // ---------- DATE / STORAGE ----------
 const EPOCH = new Date(2026,10,10); // puzzle #1 = Nov 10 2026
 function keyOf(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function todayKey(){return keyOf(new Date())}
+// Daily rotation switch. Until ROTATION_START is set, every day is puzzle #1: the countdown still runs,
+// but midnight brings nothing new. Set it to a date ("YYYY-MM-DD") to start a new grid each day from then.
+const ROTATION_START=null;
+function todayKey(){ const real=keyOf(new Date()); return (!ROTATION_START||real<ROTATION_START) ? keyOf(EPOCH) : real }
 function dateOfKey(k){const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d)}
 function addDays(k,n){const d=dateOfKey(k);d.setDate(d.getDate()+n);return keyOf(d)}
 function puzzleNum(k=todayKey()){return Math.round((dateOfKey(k)-EPOCH)/864e5)+1}
