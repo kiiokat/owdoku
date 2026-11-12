@@ -216,7 +216,10 @@
   .scrim.open .stat:nth-child(4){animation-delay:.09s}.scrim.open .stat:nth-child(5){animation-delay:.12s}.scrim.open .stat:nth-child(6){animation-delay:.15s}
   .stat b{display:block;font-family:var(--display);font-size:22px;letter-spacing:-.03em}
   .stat span{font-size:11px;color:var(--muted)}
+  .dist-box{margin:8px 0 14px;padding:12px 14px 10px;border-radius:14px;background:var(--bg);box-shadow:var(--sh-1)}
+  .dist-box .sub2{margin:0 0 8px}
   .bar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+  #dist .bar>span{flex:1;min-width:0;display:block;border-radius:999px;background:rgba(255,255,255,.025)}
   .bar i{font-style:normal;width:14px;text-align:right;color:var(--muted);font-family:"Geist Mono",ui-monospace,monospace}
   .bar div{height:18px;border-radius:999px;background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--line);min-width:22px;color:var(--muted);font-weight:700;
     font-size:11px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;box-sizing:border-box;transform-origin:left}
@@ -658,8 +661,8 @@
   #rankWeek{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
   #rankWeek .week .dot{width:22px;height:22px;font-size:10px}
   #rankWeek .week-foot{margin-top:6px}
-  .rk-pop{animation:rkPop .7s var(--bouncy)}
-  @keyframes rkPop{0%{transform:scale(1)}35%{transform:scale(1.3) rotate(-6deg);filter:brightness(1.4)}100%{transform:none}}
+  .rk-pop{animation:rkPop .6s cubic-bezier(.3,.7,.3,1)}
+  @keyframes rkPop{0%{transform:none}35%{transform:scale(1.25);filter:brightness(1.35)}100%{transform:none;filter:none}}
   .rank-row{display:none;width:100%;align-items:center;gap:9px;margin:0 0 9px;padding:5px 12px;border:0;border-radius:999px;cursor:pointer;
     background:var(--surface);box-shadow:var(--sh-1);color:var(--text);font-family:inherit;text-align:left}
   .rank-row .emblem{width:22px;height:22px;flex:none}
@@ -683,8 +686,8 @@
   .ru-em{position:relative;width:130px;height:130px}
   .ru-row{position:relative;width:100vw;display:flex;align-items:center;justify-content:center;padding:16px 0}
   #rankup .ru-row .def-band{top:0;bottom:0;height:auto;margin:0}
-  #rankup.show .ru-em{animation:ruEm 3s var(--ease) both}
-  @keyframes ruEm{0%{transform:scale(.2) rotate(-40deg);opacity:0}14%{transform:scale(1.15) rotate(6deg);opacity:1}22%{transform:scale(1) rotate(0)}100%{transform:scale(1.04)}}
+  #rankup.show .ru-em{animation:ruEm 3s var(--ease) both;will-change:transform,opacity}
+  @keyframes ruEm{0%{transform:scale(.3) rotate(-30deg);opacity:0}16%{transform:scale(1.08) rotate(2deg);opacity:1;animation-timing-function:cubic-bezier(.3,0,.2,1)}30%,100%{transform:none;opacity:1}}
   .ru-name{position:relative;line-height:1;font-family:"Saira Extra Condensed",var(--display);font-weight:900;font-size:clamp(40px,11vw,64px);
     text-transform:uppercase;letter-spacing:.05em;transform:skewX(-9deg);color:#fff;text-shadow:0 0 22px var(--rk)}
   #rankup.show .ru-name{animation:subIn 3s var(--ease) both}
@@ -929,8 +932,7 @@
     <h2 class="mtitle">Your stats</h2>
     <div class="rank-big" id="rankBig"></div>
     <div class="statgrid" id="statGrid"></div>
-    <h3 class="sub2">Score distribution</h3>
-    <div id="dist"></div>
+    <div class="dist-box"><h3 class="sub2">Score distribution</h3><div id="dist"></div></div>
     <div class="next">Next puzzle in <b data-countdown>--:--:--</b></div>
     <p class="fine">Stats are saved in this browser and count daily puzzles played on their day.</p>
     <button class="btn ghost" id="statsClose">Close</button>
@@ -3576,7 +3578,7 @@ function openStats(){
   const counts=Array(10).fill(0); days.forEach(h=>counts[h.s]++);
   const max=Math.max(1,...counts), todays=hist[todayKey()];
   document.getElementById("dist").innerHTML=counts.map((c,i)=>({c,i})).reverse().map(({c,i})=>
-    `<div class="bar"><i>${i}</i><div class="${todays&&!todays.a&&todays.s===i?"on":""}" style="width:${8+c/max*82}%">${c}</div></div>`).join("");
+    `<div class="bar"><i>${i}</i><span><div class="${todays&&!todays.a&&todays.s===i?"on":""}" style="width:${Math.max(9,c/max*100)}%">${c}</div></span></div>`).join("");
   { const b=rankBits(), el=document.getElementById("rankBig");
     el.innerHTML = b ? `${emblem(b.r.tier)}<div><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size} points</span><span>Peak: ${rankOf(b.R.peak).name}</span></div>`
       : `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<div><b>Unranked</b><span>Finish a daily puzzle on its day to get placed.</span></div>`; }
