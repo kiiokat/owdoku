@@ -32,6 +32,7 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
   button{font-family:inherit}
   .app{width:100%;max-width:480px;padding:18px 14px 44px;animation:appIn .6s var(--ease) both}
+  .app.in{animation:none}   /* once the page has faded in, removing the DEFEAT shake must not replay the fade */
   @keyframes appIn{from{opacity:0;transform:translateY(8px)}}
   header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
   h1{font-family:var(--display);font-size:30px;font-weight:800;margin:0;letter-spacing:-.04em;line-height:1}
@@ -2205,6 +2206,7 @@ function renderNudge(){
   if(keys.length) el.innerHTML=`🗓️<span>${keys.length===1?"1 past grid":keys.length+" past grids"} left to play</span><i>→</i>`;
 }
 // Full-screen DEFEAT card (Overwatch-style), shown when you run out of strikes.
+if(typeof document!=="undefined") document.addEventListener("animationend",e=>{ if(e.animationName==="appIn"&&e.target.classList.contains("app")) e.target.classList.add("in") });
 function showCard(id,ms,sound,shake){
   return new Promise(res=>{
     const d=document.getElementById(id), app=document.querySelector(".app");
