@@ -2775,7 +2775,12 @@ function pinSVG(def){
   const [bg,ring]=PIN_RING[def.lg], img=def.shape==="gem"?PIN_ICON.gem:PIN_ICON[def.lg];
   return `<span class="pinbadge t-${def.shape}" style="--pbg:${bg};--pring:${ring}"><img src="${img}" alt=""></span>`;
 }
-function pinsHTML(small){ const P=pinStore(); const all=PIN_DEFS.filter(d=>P.earned[d.id]); if(!all.length) return "";
+// Recruit < Veteran < Legend: next to your rank only the highest tier you hold in each league is shown
+const PIN_CHAIN=["recruit","veteran","legend"];
+function pinsHTML(small){ const P=pinStore();
+  const top=lg=>{ for(let i=PIN_CHAIN.length-1;i>=0;i--) if(P.earned[lg+"-"+PIN_CHAIN[i]]) return lg+"-"+PIN_CHAIN[i]; return null };
+  const keep=new Set(["APEX","Contenders"].map(top).filter(Boolean));
+  const all=PIN_DEFS.filter(d=>P.earned[d.id] && (!PIN_CHAIN.includes(d.id.split("-")[1]) || keep.has(d.id))); if(!all.length) return "";
   const got=small&&all.length>4?all.slice(-3):all, more=all.length-got.length;   // the phone rank bar shows the latest 3 and a count
   return `<div class="rk-pins${small?" sm":""}" role="button" title="Your pins">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
 if(typeof document!=="undefined") document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".rk-pins"); if(!b) return;
