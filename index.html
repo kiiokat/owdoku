@@ -748,7 +748,8 @@
   <!-- DEV-ONLY: testing tools, shown only when the address ends in #dev -->
   <div id="devTools" class="dev-tools" style="display:none">
   <span class="dev-lbl">Dev</span>
-  <button class="dev-btn" id="devRandom" title="New random grid" aria-label="New random grid">🎲</button>
+  <button class="dev-btn" id="devToday" title="Back to today's real grid" aria-label="Back to today's real grid">📆</button>
+  <button class="dev-btn" id="devRandom" title="New random regular-day grid" aria-label="New random regular-day grid">🎲</button>
   <button class="dev-btn" id="devApex" title="Force an APEX-day grid" aria-label="Force an APEX-day grid">⛰️</button>
   <button class="dev-btn" id="devCont" title="Force a Contenders-day grid" aria-label="Force a Contenders-day grid">🌱</button>
   <button class="dev-btn" id="devPin" title="Earn the next pin (reset with rank reset)" aria-label="Earn the next pin">📌</button>
@@ -3285,7 +3286,7 @@ function init(){
     if (revealing) return;
     store.set("owdoku-testseed","test-"+Math.random()); store.set("owdoku-testtheme",null);
     try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
-    mode="daily"; setTabs(); load(); toast("New random grid");
+    mode="daily"; setTabs(); load(); renderSide(); toast("New random regular-day grid");
   };
   // DEV-ONLY: a grid built the way an APEX day builds it (one APEX team plus the teams it shares the most players with)
   const forceTheme=(theme,lg,label)=>{
@@ -3297,6 +3298,12 @@ function init(){
     store.set("owdoku-testseed",seed); store.set("owdoku-testtheme",theme);
     try{localStorage.removeItem("owdoku-day-"+todayKey())}catch(e){}
     mode="daily"; setTabs(); load(); toast(label);
+  };
+  // DEV-ONLY: leave any test grid (random, APEX or Contenders) and go back to the real daily, keeping its saved board
+  document.getElementById("devToday").onclick=()=>{
+    if (revealing) return;
+    try{ localStorage.removeItem("owdoku-testseed"); localStorage.removeItem("owdoku-testtheme") }catch(e){}
+    mode="daily"; setTabs(); load(); renderSide(); toast(dayTheme(todayKey())?"Today's "+THEMES[dayTheme(todayKey())].name:"Today's real grid");
   };
   document.getElementById("devPin").onclick=()=>{ const P=pinStore(), d=PIN_DEFS.find(x=>!P.earned[x.id]); if(!d){ toast("All pins earned"); return }
     P.earned[d.id]=todayKey(); store.set("owdoku-pins",P); PIN_NEW.push(d.id); renderRank(); showPinPops() };
