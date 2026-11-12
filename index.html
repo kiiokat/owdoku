@@ -832,14 +832,14 @@
       <div class="hv-tile" style="--k:6"><div class="hv-vis" id="hvCard"></div><p>Cards show top hero,<br>flag and role</p></div>
     </div>
     <p class="hv-fine">Teams come from four leagues: OGN APEX (2016–2018), the OWL and Contenders (2018–2023) and OWCS (2024–2026). Hover or tap a team's icon to see which.
-      Anyone who played for a team in that league counts. Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day: rank is paused and you earn pins instead. Each player once per grid. After the daily, see how rare your picks were.</p>
+      Anyone who played for a team in that league counts. Sundays alternate ⛰️ APEX Day and 🌱 Contenders Day: rank is paused and you earn achievements instead. Each player once per grid. After the daily, see how rare your picks were.</p>
     <button class="btn primary" id="helpClose">Let's play</button>
   </div>
 </div>
 <div class="scrim" id="pinScrim">
   <div class="modal pin-modal">
     <button class="mx" id="pinX" aria-label="Close" data-nosfx><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <h2 class="mtitle">Pins</h2>
+    <h2 class="mtitle">Achievements</h2>
     <div class="ps-count" id="pinCount"></div>
     <p class="sub">Earned by playing the daily, the archive and themed Sundays.</p>
     <div id="pinGrid"></div>
@@ -2548,7 +2548,7 @@ function render(){
   pn.title = th ? THEMES[th].name : "";
   const era=document.querySelector(".intro .era"), ip=document.querySelector(".intro p");
   if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name : "APEX · OWL · Contenders · OWCS, 2016–2026"; era.classList.toggle("themed",!!th) }
-  if(ip) ip.textContent = th ? THEMES[th].blurb+". Rank is paused today; earn pins instead." : "Name a pro who fits both the row and the column.";
+  if(ip) ip.textContent = th ? THEMES[th].blurb+". Rank is paused today; earn achievements instead." : "Name a pro who fits both the row and the column.";
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
   grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr col";d.innerHTML=headerHTML(c);g.appendChild(d)});
@@ -2862,7 +2862,7 @@ function pinsHTML(small){ const P=pinStore(), best={};
   const all=PIN_DEFS.filter(d=>P.earned[d.id]&&(!d.chain||best[d.chain]===d)).sort((a,b)=>(P.earned[a.id]>P.earned[b.id])-(P.earned[a.id]<P.earned[b.id]));
   if(!all.length) return "";
   const got=small&&all.length>4?all.slice(-3):all, more=all.length-got.length;   // the phone rank bar shows the latest 3 and a count
-  return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your pins">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
+  return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your achievements">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
 if(typeof document!=="undefined") document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".rk-pins"); if(!b) return;
   e.stopPropagation(); e.preventDefault(); openPins() },true);
 // The info box eases to the height of whatever it's showing instead of jumping
@@ -2882,8 +2882,8 @@ function openPins(){
   box.innerHTML=PIN_SECTIONS.map(([sec,label])=>`<h5>${label}</h5><div class="ps-row">${PIN_DEFS.filter(d=>d.sec===sec).map(d=>{
     const got=P.earned[d.id], fresh=got&&(P.unseen||[]).includes(d.id); return `<button class="ps-pin${got?"":" locked"}${fresh?" new":""}" data-pin="${d.id}">${pinSVG(d)}<small>${got?d.name.replace(/^(APEX|Contenders) /,""):"???"}</small></button>` }).join("")}</div>`).join("");
   const n=PIN_DEFS.filter(d=>P.earned[d.id]).length;
-  document.getElementById("pinCount").innerHTML=`<b>${n}</b> / ${PIN_DEFS.length} pins earned`;
-  const idle=`Hover or tap a pin to see how it's earned`; info.innerHTML=""; info.style.height=""; setPinInfo(idle);
+  document.getElementById("pinCount").innerHTML=`<b>${n}</b> / ${PIN_DEFS.length} achievements earned`;
+  const idle=`Hover or tap an achievement to see how it's earned`; info.innerHTML=""; info.style.height=""; setPinInfo(idle);
   const show=b=>{ const d=PIN_DEFS.find(x=>x.id===b.dataset.pin), got=P.earned[d.id];
     setPinInfo(got ? `<b>${d.name}</b>${d.how}<em>Earned ${fmt(got)}</em>` : `<b>???</b>Keep playing to find out`); };
   box.querySelectorAll(".ps-pin").forEach(b=>{ b.onmouseenter=()=>show(b); b.onfocus=()=>show(b); b.onclick=()=>show(b); });
@@ -2902,7 +2902,7 @@ function showPinPops(){
   const P=pinStore(); P.unseen=[...new Set([...(P.unseen||[]),...list])]; store.set("owdoku-pins",P);
   el.innerHTML=`<div class="pp-pins">${defs.slice(0,3).map((d,k)=>`<span class="pp-pin" style="--k:${k}">${pinSVG(d)}</span>`).join("")}</div>
     <div class="pp-txt"><small>${defs.length>1?defs.length+" achievements earned!":"Achievement earned!"}</small><b>${defs.length>2?defs.slice(0,2).map(d=>d.name).join(", ")+` +${defs.length-2} more`:defs.map(d=>d.name).join(", ")}</b>
-    <span>${defs.length>1?"Tap your pins to see them":defs[0].how}</span></div>`;
+    <span>${defs.length>1?"Tap your achievements to see them":defs[0].how}</span></div>`;
   el.onclick=()=>{ el.classList.remove("show"); openPins() };
   el.classList.remove("show"); void el.offsetWidth; el.classList.add("show"); SFX.rankDiv(); renderRank();
   setTimeout(()=>document.querySelectorAll(".rk-pins").forEach(p=>{ p.classList.remove("glow"); void p.offsetWidth; p.classList.add("glow");
@@ -2919,7 +2919,7 @@ function renderRank(){
     : `<div class="rk-top"><div class="rk-em">${emblem(b.r.tier)}</div><div class="rk-txt"><b>${b.r.name}</b><span>${b.r.into} / ${b.r.size}${RANK_PENDING?" · "+calc:b.R.last?` · <i class="${(b.R.last.delta||0)<0?"neg":"pos"}">${deltaTxt(b.R)}</i>`:""}</span>
        <div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div></div></div>`;
   const th=dayKey===todayKey()?activeTheme():null;
-  const note = th ? `<div class="rk-theme">${THEMES[th].icon} ${THEMES[th].name}: rank paused, pins up for grabs</div>` : "";
+  const note = th ? `<div class="rk-theme">${THEMES[th].icon} ${THEMES[th].name}: rank paused, achievements up for grabs</div>` : "";
   const full = html+note+pinsHTML(false);
   if(card && card._html!==full){ card._html=full; card.innerHTML=`<h4>Rank</h4>${full}<div id="rankWeek"></div>`; card._week=null; renderWeekCard(); }   // rebuild the week/streak strip too
   if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>${RANK_PENDING?calc:"Finish today's daily to place"}</span>`
@@ -3414,7 +3414,7 @@ function init(){
     try{ localStorage.removeItem("owdoku-testseed"); localStorage.removeItem("owdoku-testtheme") }catch(e){}
     mode="daily"; setTabs(); load(); renderSide(); toast(dayTheme(todayKey())?"Today's "+THEMES[dayTheme(todayKey())].name:"Today's real grid");
   };
-  document.getElementById("devPin").onclick=()=>{ const P=pinStore(), d=PIN_DEFS.find(x=>!P.earned[x.id]); if(!d){ toast("All pins earned"); return }
+  document.getElementById("devPin").onclick=()=>{ const P=pinStore(), d=PIN_DEFS.find(x=>!P.earned[x.id]); if(!d){ toast("All achievements earned"); return }
     P.earned[d.id]=todayKey(); store.set("owdoku-pins",P); PIN_NEW.push(d.id); renderRank(); showPinPops() };
   document.getElementById("devApex").onclick=()=>forceTheme("apex","APEX","APEX-day grid");
   document.getElementById("devCont").onclick=()=>forceTheme("contenders","Contenders","Contenders-day grid");
