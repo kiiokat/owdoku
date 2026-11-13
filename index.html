@@ -889,7 +889,7 @@
   <!-- shown only away from today's daily (practice or an archive grid), with a way back -->
   <div class="modebar" id="modeBar" hidden><span id="modeLbl"></span><button class="mb-back" id="tabDaily">Back to today's grid</button></div>
   <div class="st-bar" id="stBar" hidden>
-    <div class="sb-chan"><b>🎥 Streamer vs Chat</b><span id="sbChan"></span></div>
+    <div class="sb-chan"><b id="sbTitle">🎥 Streamer vs Chat</b><span id="sbChan"></span></div>
     <label class="sb-lg">League <select id="sbLg"><option value="OWCS">OWCS</option><option value="OWL">OWL</option><option value="Contenders">Contenders</option><option value="APEX">APEX</option></select></label>
     <button class="sb-exit" id="sbExit">Exit</button>
   </div>
@@ -2851,7 +2851,7 @@ function buildCell(i){
       d.onmouseenter=()=>{ sqHover=i; renderSqCard() };
       d.onmouseleave=()=>{ if(sqHover===i){ sqHover=-1; renderSqCard() } };
       if(STREAM.on){ const o=state.own&&state.own[i];
-        if(o){ d.classList.add(o.by==="s"?"own-s":"own-c"); d.insertAdjacentHTML("beforeend",`<span class="own-tag">${o.by==="s"?"Streamer":"@"+esc(o.user)}</span>`) }
+        if(o){ d.classList.add(o.by==="s"?"own-s":"own-c"); d.insertAdjacentHTML("beforeend",`<span class="own-tag">${o.by==="s"?esc(stName()):"@"+esc(o.user)}</span>`) }
         else if(STREAM.live===i) d.classList.add("live") }
       d.id="cell"+i; return d;
 }
@@ -3515,13 +3515,15 @@ function chatNeed(){ const now=Date.now(); let n=0; for(const t of STREAM.seen.v
 function newLive(){ STREAM.tried=new Set(); STREAM.votes=new Map(); STREAM.close=false }
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const sqName=i=>"ABC"[Math.floor(i/3)]+(i%3+1);
+const stName=()=>STREAM.fake ? "Streamer" : (STREAM.name||STREAM.chan);
 // Streamer vs Chat is a desktop feature (streams run from a computer)
 const streamOK=()=>{ if(innerWidth>=860) return true; toast("Streamer mode is only available on desktop"); return false };
 function openStreamSetup(){ if(!streamOK()) return; const sc=document.getElementById("streamScrim"), inp=document.getElementById("stChan");
   inp.value=store.get("owdoku-stream-chan",""); sc.classList.add("open"); setTimeout(()=>inp.focus(),30);
   const go=()=>{ const c=inp.value.trim().replace(/^.*twitch\.tv\//i,"").replace(/^[#@]/,"").toLowerCase();
     if(!/^[a-z0-9_]{3,25}$/.test(c)){ toast("Enter your Twitch channel name"); return }
-    store.set("owdoku-stream-chan",c); sc.classList.remove("open"); startStream(c) };
+    const shown=inp.value.trim().replace(/^.*twitch\.tv\//i,"").replace(/^[#@]/,"");   // keep the streamer's own capitalisation for display
+    store.set("owdoku-stream-chan",shown); sc.classList.remove("open"); STREAM.name=shown; startStream(c) };
   document.getElementById("stGo").onclick=go; document.getElementById("stForm").onsubmit=e=>{ e.preventDefault(); go() };
   document.getElementById("stCancel").onclick=()=>sc.classList.remove("open"); sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") } }
 function startStream(chan,fake){
@@ -3568,7 +3570,7 @@ function streamGuess(p,by,user){
   if(by==="s") closePicker();
   if(!used && row.test(p)&&col.test(p)){
     state.cells[i]=p.n; state.own[i]={by,user:user||""}; justFilled=i; STREAM.live=-1; SFX.correct();
-    streamFeed(by==="s" ? `<b>Streamer</b> claimed ${sqName(i)} with ${esc(p.n)}` : `<b>${esc(user)}</b> stole ${sqName(i)} with ${esc(p.n)}!`,"ok"); newLive();
+    streamFeed(by==="s" ? `<b>${esc(stName())}</b> claimed ${sqName(i)} with ${esc(p.n)}` : `<b>${esc(user)}</b> stole ${sqName(i)} with ${esc(p.n)}!`,"ok"); newLive();
     if(by==="c" && document.getElementById("scrim").classList.contains("open")) closePicker();
     if(state.own.every(Boolean)) streamEnd();
   } else { SFX.wrong();
@@ -3589,14 +3591,15 @@ function fcAnswer(right){ const p=fcPick(right); if(p) fcSay(fcName(),fcText(p))
 function fakeAuto(on){ clearInterval(FC_T); FC_T=null; const b=document.getElementById("fcAuto"); if(b) b.classList.toggle("on",!!on);
   if(on) FC_T=setInterval(()=>{ if(STREAM.on&&STREAM.live>=0&&!state.own[STREAM.live]) fcAnswer(Math.random()<.45) },2200) }
 function streamEnd(){ const s=state.own.filter(o=>o.by==="s").length, c=9-s; state.over=true;
-  const msg = s>c ? `Streamer wins ${s}–${c}!` : `Chat wins ${c}–${s}!`;
+  const msg = s>c ? `${stName()} wins ${s}–${c}!` : `Chat wins ${c}–${s}!`;
   streamFeed(`<b>${msg}</b> Hit “New grid” for a rematch.`,"ok"); toast(msg); if(s>c) setTimeout(confetti,200) }
 function streamFeed(html,cls=""){ STREAM.feed.push({html,cls}); STREAM.feed=STREAM.feed.slice(-6); const el=document.getElementById("stFeed");
   el.hidden=!STREAM.on; el.innerHTML=STREAM.feed.slice().reverse().map(f=>`<div class="${f.cls}">${f.html}</div>`).join("") }
 function streamUI(){ if(!STREAM.on||!state||!grid) return; const own=state.own||[], s=own.filter(o=>o&&o.by==="s").length, c=own.filter(o=>o&&o.by==="c").length;
+  document.getElementById("sbTitle").textContent=`🎥 ${stName()} vs Chat`;
   document.getElementById("sbChan").innerHTML=`<i class="dot"></i>${STREAM.fake?"fake chat":"#"+esc(STREAM.chan)}`;
   document.getElementById("sbLg").value=PRACTICE_LG;
-  document.getElementById("stBoard").innerHTML=`<div class="side-s"><b>${s}</b><span>Streamer</span></div><div class="vs">VS</div><div class="side-c"><b>${c}</b><span>Chat</span></div>`
+  document.getElementById("stBoard").innerHTML=`<div class="side-s"><b>${s}</b><span>${esc(stName())}</span></div><div class="vs">VS</div><div class="side-c"><b>${c}</b><span>Chat</span></div>`
     +`<div class="left">${9-s-c ? (9-s-c)+" square"+(9-s-c===1?"":"s")+" left · chat needs "+chatNeed()+" matching names" : "Grid complete"}</div>`;
   const b=document.getElementById("stBanner"), i=STREAM.live;
   if(i>=0 && !own[i]){ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
