@@ -607,6 +607,9 @@
   .rk-pins{cursor:pointer}
   .rk-pins .pinb{width:26px;height:26px;display:block;transition:transform .25s var(--bouncy)}
   @media (hover:hover){.rk-pins:hover .pinb{transform:translateY(-2px)}}
+  .rk-pins.one{flex-wrap:nowrap;overflow:hidden} .rk-pins.one .pinb{flex:none} .pinb[hidden]{display:none!important}
+  .pin-plus{display:grid!important;place-items:center;border-radius:50%;background:var(--surface-2);box-shadow:inset 0 0 0 1.5px var(--line);font-size:10px;font-weight:800;color:var(--muted);letter-spacing:-.02em}
+  .pin-plus[hidden]{display:none!important} .rk-pins.sm .pin-plus{font-size:8.5px}
   .rk-pins.sm{display:inline-flex;margin:0 0 0 auto;gap:4px;flex-wrap:nowrap} .rk-pins.sm .pinb{width:19px;height:19px}
   .pinbadge{position:relative;display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:var(--pbg);
     border:2px solid var(--pring);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 2px 6px rgba(0,0,0,.4)}
@@ -3071,8 +3074,20 @@ function pinsHTML(small){ const P=pinStore(), best={};
   for(const d of PIN_DEFS) if(P.earned[d.id]&&d.chain&&(best[d.chain]==null||d.tier>best[d.chain].tier)) best[d.chain]=d;
   const all=PIN_DEFS.filter(d=>P.earned[d.id]&&(!d.chain||best[d.chain]===d)).sort((a,b)=>(P.earned[a.id]>P.earned[b.id])-(P.earned[a.id]<P.earned[b.id]));
   if(!all.length) return "";
-  const got=small&&all.length>4?all.slice(-3):all, more=all.length-got.length;   // the phone rank bar shows the latest 3 and a count
-  return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your achievements">${more?`<span class="pin-more">+${more}</span>`:""}${got.map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}</div>` }
+  const got=small&&all.length>3?all.slice(-2):all, more=all.length-got.length;   // the phone rank bar shows the latest 3 and a count
+  // the rank-card shelf keeps every pin (newest first) plus a "+N" chip; fitPinShelf() hides what doesn't fit on one row
+  if(!small) return `<div class="rk-pins one${(P.unseen||[]).length?" has-new":""}" role="button" title="Your achievements">${all.slice().reverse().map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}<span class="pinb pin-plus" hidden></span></div>`;
+  return `<div class="rk-pins${small?" sm":""}${(P.unseen||[]).length?" has-new":""}" role="button" title="Your achievements">${got.slice().reverse().map(d=>`<span class="pinb">${pinSVG(d)}</span>`).join("")}${more?`<span class="pinb pin-plus">+${more}</span>`:""}</div>` }
+// One row only: show as many pins as fit, and swap the last spot for a "+N" chip when some are hidden
+function fitPinShelf(){ document.querySelectorAll(".rk-pins.one").forEach(el=>{
+  const pins=[...el.querySelectorAll(".pinb:not(.pin-plus)")], plus=el.querySelector(".pin-plus"); if(!pins.length) return;
+  pins.forEach(p=>p.hidden=false); plus.hidden=true;
+  const cs=getComputedStyle(el), room=el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight), gap=parseFloat(cs.columnGap)||6, size=pins[0].offsetWidth||26;
+  const fit=Math.max(1,Math.floor((room+gap)/(size+gap)));
+  if(pins.length<=fit) return;
+  const show=fit-1; pins.forEach((p,i)=>p.hidden=i>=show);
+  plus.hidden=false; plus.textContent="+"+(pins.length-show); }) }
+if(typeof window!=="undefined") window.addEventListener("resize",()=>fitPinShelf());
 if(typeof document!=="undefined") document.addEventListener("click",e=>{ const b=e.target.closest&&e.target.closest(".rk-pins"); if(!b) return;
   e.stopPropagation(); e.preventDefault(); openPins() },true);
 // The info box eases to the height of whatever it's showing instead of jumping
@@ -3153,7 +3168,8 @@ function renderRank(){
   const th=dayKey===todayKey()?activeTheme():null;
   const note = th ? `<div class="rk-theme">${THEMES[th].icon} ${THEMES[th].name}: rank paused, achievements up for grabs</div>` : "";
   const full = html+note+pinsHTML(false);
-  if(card && card._html!==full){ card._html=full; card.innerHTML=`<h4>Rank</h4>${full}<div id="rankWeek"></div>`; card._week=null; renderWeekCard(); }   // rebuild the week/streak strip too
+  if(card && card._html!==full){ card._html=full; card.innerHTML=`<h4>Rank</h4>${full}<div id="rankWeek"></div>`; card._week=null; renderWeekCard(); }
+  fitPinShelf();   // rebuild the week/streak strip too
   if(row){ const rh = !b ? `${emblem(0,true).replace('class="emblem"','class="emblem unranked"')}<b>Unranked</b><span>${RANK_PENDING?calc:"Finish today's daily to place"}</span>`
       : `${emblem(b.r.tier,true)}<b>${b.r.name}</b><div class="rk-bar"><div style="width:${Math.min(100,b.r.into/b.r.size*100)}%"></div></div><span>${RANK_PENDING?calc:b.r.into+"/"+b.r.size}</span>`;
     const rh2 = rh + (th?`<em class="rk-th" title="${THEMES[th].name}: rank paused">${THEMES[th].icon}</em>`:"") + pinsHTML(true);
