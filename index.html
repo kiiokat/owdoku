@@ -3100,7 +3100,8 @@ const PIN_SECTIONS=[["Daily","🎮 Every grid"],["Current","🌍 OWCS & World Cu
 const PIN_LEAGUES=[["APEX","⛰️ APEX"],["Contenders","🌱 Contenders"]];   // share one fold-out below the main sections
 // Each group is a fold-out; "Every grid" starts open. Open/closed state lasts until the page reloads.
 // When a league's achievements can next be earned: Contenders on Fridays, APEX on Sundays.
-function sundayNote(lg){ const t=new Date(); t.setHours(12,0,0,0);
+function sundayNote(lg){ if(!ROTATION_START) return lg==="APEX"?"Earnable on Sundays":"Earnable on Fridays";   // no themed days until rotation starts
+  const t=new Date(); t.setHours(12,0,0,0);
   for(let d=0;d<14;d++){ const dt=new Date(t.getTime()+d*864e5), k=keyOf(dt); if(dayTheme(k)===lg) return d===0?"Earnable today":"Earnable "+(d<=6?"this ":"next ")+dt.toLocaleDateString("en-US",{weekday:"long"}) }
   return lg==="APEX"?"Earnable on Sundays":"Earnable on Fridays" }
 const PIN_FOLD={Daily:true,Current:false,Sunday:false,Habits:false,Leagues:false};
