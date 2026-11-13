@@ -45,7 +45,15 @@
 
   /* segmented tabs with a sliding indicator (--ti is set from JS) */
   .modebar{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:7px 7px 7px 14px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1);font-size:12.5px;color:var(--muted);animation:rise .35s var(--ease) both}
-  .modebar[hidden]{display:none} #modeLbl i{font-style:normal} @media (max-width:420px){ #modeLbl i{display:none} } .modebar b{color:var(--text);font-weight:700} #modeLbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .modebar[hidden]{display:none}
+  .ptabs{position:relative;display:grid;grid-template-columns:repeat(4,1fr);padding:4px;margin:-6px 0 14px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
+  .ptabs[hidden]{display:none}
+  .ptabs::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/4);border-radius:999px;background:var(--surface-2);
+    box-shadow:0 0 0 1px var(--line-2),0 4px 12px rgba(0,0,0,.35);transform:translateX(calc(var(--ti,0)*100%));transition:transform .46s var(--spring)}
+  .ptabs button{position:relative;z-index:1;border:0;background:none;padding:8px 2px;border-radius:999px;color:var(--muted);font:inherit;font-weight:700;font-size:12.5px;cursor:pointer;transition:color .2s}
+  .ptabs button.on{color:var(--text)} @media (hover:hover){.ptabs button:hover{color:var(--text)}}
+  /* rank doesn't apply in practice */
+  body.practicing #rankRow, body.practicing #rankCard{display:none!important} #modeLbl i{font-style:normal} @media (max-width:420px){ #modeLbl i{display:none} } .modebar b{color:var(--text);font-weight:700} #modeLbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mb-back{flex:none;border:0;border-radius:999px;padding:7px 12px;background:var(--surface-2);box-shadow:0 0 0 1px var(--line-2);color:var(--text);font:inherit;font-weight:700;font-size:12px;cursor:pointer}
   @media (hover:hover){.mb-back:hover{box-shadow:0 0 0 1px rgba(255,157,46,.6)}}
   .tabs{position:relative;display:flex;padding:4px;margin-bottom:16px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
@@ -820,6 +828,7 @@
   <div class="board">
   <!-- shown only away from today's daily (practice or an archive grid), with a way back -->
   <div class="modebar" id="modeBar" hidden><span id="modeLbl"></span><button class="mb-back" id="tabDaily">Back to today's grid</button></div>
+  <div class="ptabs" id="pTabs" hidden><button data-lg="OWCS">OWCS</button><button data-lg="OWL">OWL</button><button data-lg="Contenders">Contenders</button><button data-lg="APEX">APEX</button></div>
   <div class="grid" id="grid"></div>
   </div>
   <div class="side">
@@ -2500,7 +2509,9 @@ function load(){
     PICKS=null; if(mode==="daily") fetchPicks().then(()=>{ if(state.over&&!state.submitted) afterGame(); });   // retry a send that failed earlier
   } else {
     PICKS=null;
+    FORCE_THEME = {OWCS:"owcs",OWL:"owl",Contenders:"contenders",APEX:"apex"}[PRACTICE_LG]||null;
     grid = makeBalancedGrid("practice-"+Math.random());
+    FORCE_THEME = null;
     state = freshState();
   }
   lastScore=null; lastStrikes=null; lastCombo=null; introNext=true; sqHover=-1; RANK_RESULT=null; applyDecay();
@@ -3576,6 +3587,8 @@ function init(){
     document.getElementById("ansScrim").classList.add("open")};
   document.getElementById("ansClose").onclick=()=>document.getElementById("ansScrim").classList.remove("open");
   document.getElementById("tabDaily").onclick=()=>{if(revealing)return;mode="daily";setTabs();load()};
+  document.querySelectorAll("#pTabs button").forEach(b=>b.onclick=()=>{ if(revealing||b.dataset.lg===PRACTICE_LG) return;
+    PRACTICE_LG=b.dataset.lg; store.set("owdoku-practice-lg",PRACTICE_LG); setTabs(); load(); });
   document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode=mode==="practice"?"daily":"practice";setTabs();load();renderSide()};
   document.getElementById("tabArchive").onclick=openArchive;
   document.getElementById("statsBtn").onclick=openStats;
@@ -3732,7 +3745,13 @@ function init(){
   load();
   fillHelp();   // needs a loaded board for the sample card
 }
+// Practice league: which kind of grid practice builds (OWCS, OWL, Contenders or APEX). Remembered between visits.
+let PRACTICE_LG=store.get("owdoku-practice-lg","OWCS");
 function setTabs(){
+  document.body.classList.toggle("practicing",mode==="practice");
+  const pt=document.getElementById("pTabs"); pt.hidden = mode!=="practice";
+  const lgs=["OWCS","OWL","Contenders","APEX"]; pt.style.setProperty("--ti",Math.max(0,lgs.indexOf(PRACTICE_LG)));
+  pt.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.lg===PRACTICE_LG));
   document.getElementById("tabPractice").classList.toggle("on",mode==="practice");
   document.getElementById("tabArchive").classList.toggle("on",mode==="archive");
   const bar=document.getElementById("modeBar"); bar.hidden = mode==="daily";
