@@ -559,7 +559,7 @@
   /* wide screens: grid on the left, score and buttons on the right */
   @media (min-width:860px){
     .app{--bw:min(520px,calc((100vh - 270px)*1.27));max-width:none;width:calc(var(--bw) + 336px);display:grid;
-      grid-template-columns:var(--bw) 300px;grid-template-rows:auto auto 1fr auto;grid-template-areas:"head head" "intro side" "board side" "foot foot";
+      grid-template-columns:var(--bw) 300px;grid-template-rows:auto auto 1fr auto;grid-template-areas:"head head" "intro intro" "board side" "foot foot";   /* intro spans both columns so the grid and side column share a top edge */
       column-gap:36px;align-content:start;justify-content:center;padding-top:22px}
     .app>header{grid-area:head;margin-bottom:14px}
     .intro{grid-area:intro;margin:0 0 14px}
