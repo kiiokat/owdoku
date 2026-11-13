@@ -140,10 +140,11 @@
   .badge{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
     font-size:10px;font-weight:800;letter-spacing:.3px;color:#fff;border:2px solid rgba(255,255,255,.25);
     box-shadow:0 4px 10px rgba(0,0,0,.35);transition:transform .4s var(--bouncy)}
-  @media (hover:hover){.hdr:hover .badge{transform:scale(1.08) rotate(-4deg)}}
   /* the tilt keeps its bounce going in; coming back it eases out with no overshoot, so it settles instead of popping */
-  .hdr .badge,.hdr .cbadge{transform:scale(1) rotate(0deg);transition:transform .32s var(--ease)}
-  @media (hover:hover){.hdr:hover .badge,.hdr:hover .cbadge{transform:scale(1.08) rotate(-4deg);transition:transform .4s var(--bouncy)}}
+  /* Hover: lift by whole pixels with no filters. Scaling or rotating made Chrome redraw the emoji at a
+     lower resolution mid-animation (a smeared, pixelated frame), so the icon itself is never scaled. */
+  .hdr .badge,.hdr .cbadge{transform:translateY(0);transition:transform .25s var(--ease)}
+  @media (hover:hover){.hdr:hover .badge,.hdr:hover .cbadge{transform:translateY(-3px)}}
   .badge.icon{border:3px solid;box-shadow:0 0 0 1px rgba(255,255,255,.18),inset 0 2px 4px rgba(255,255,255,.12),0 4px 10px rgba(0,0,0,.35)}
   .badge img{width:64%;height:64%;display:block}   /* no drop-shadow filter: it smeared edge pixels for a frame when the hover tilt began */
 
@@ -522,7 +523,6 @@
     white-space:nowrap;max-width:100%;overflow:hidden}
   .cbadge{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;flex:none;position:relative;
     box-shadow:0 4px 10px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.14);transition:transform .4s var(--bouncy)}
-  @media (hover:hover){.hdr:hover .cbadge{transform:scale(1.08) rotate(-4deg)}}
   .cbadge svg{width:52%;height:52%}
   .cbadge.r-tank{background:radial-gradient(circle at 35% 30%,#2f6db8,#173b6a);color:#cfe6ff;border:3px solid #5aa9ff}
   .cbadge.r-dps{background:radial-gradient(circle at 35% 30%,#b8323a,#651a20);color:#ffd9da;border:3px solid #ff6468}
