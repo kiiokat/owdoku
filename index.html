@@ -3556,7 +3556,7 @@ function streamEnd(){ const s=state.own.filter(o=>o.by==="s").length, c=9-s; sta
   streamFeed(`<b>${msg}</b> Hit “New practice grid” for a rematch.`,"ok"); toast(msg); if(s>c) setTimeout(confetti,200) }
 function streamFeed(html,cls=""){ STREAM.feed.push({html,cls}); STREAM.feed=STREAM.feed.slice(-6); const el=document.getElementById("stFeed");
   el.hidden=!STREAM.on; el.innerHTML=STREAM.feed.slice().reverse().map(f=>`<div class="${f.cls}">${f.html}</div>`).join("") }
-function streamUI(){ if(!STREAM.on) return; const own=state.own||[], s=own.filter(o=>o&&o.by==="s").length, c=own.filter(o=>o&&o.by==="c").length;
+function streamUI(){ if(!STREAM.on||!state||!grid) return; const own=state.own||[], s=own.filter(o=>o&&o.by==="s").length, c=own.filter(o=>o&&o.by==="c").length;
   document.getElementById("modeLbl").innerHTML=`<b>🎥 Streamer vs Chat</b><span class="st-score"><i>You</i><span class="s">${s}</span><i>–</i><span class="c">${c}</span><i>Chat</i></span>`;
   const b=document.getElementById("stBanner"), i=STREAM.live;
   if(i>=0 && !own[i]){ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
