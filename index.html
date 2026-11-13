@@ -782,6 +782,12 @@
     .hv-cap{font-size:12.5px} .help-modal h2{margin-bottom:8px} .hv-fine{font-size:11px;margin-top:8px}
   }
   @media (min-width:700px){ .help-modal{max-width:560px} .hv-tiles{grid-template-columns:repeat(3,minmax(0,1fr))} }
+  /* desktop: give the reading pop-ups more room */
+  @media (min-width:860px){
+    .modal.info-modal{max-width:680px;padding:20px 24px} .faq-legend{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .modal.pin-modal{max-width:680px;padding:20px 24px} .pin-modal .ps-row{grid-template-columns:repeat(6,minmax(0,1fr))}
+    .modal.help-modal{max-width:640px}
+  }
   .hv-fine{font-size:11.5px;line-height:1.5;color:var(--faint);margin:10px 2px 0;text-align:center;text-wrap:balance}
   /* confetti for a perfect board */
   .confetti{position:fixed;top:-12px;width:8px;height:12px;border-radius:2px;z-index:46;pointer-events:none;
