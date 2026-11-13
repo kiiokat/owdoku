@@ -44,6 +44,10 @@
   #pnum{white-space:nowrap;font-family:"Geist Mono",ui-monospace,monospace;font-size:12px;color:var(--muted);padding:5px 9px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
 
   /* segmented tabs with a sliding indicator (--ti is set from JS) */
+  .modebar{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:7px 7px 7px 14px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1);font-size:12.5px;color:var(--muted);animation:rise .35s var(--ease) both}
+  .modebar[hidden]{display:none} #modeLbl i{font-style:normal} @media (max-width:420px){ #modeLbl i{display:none} } .modebar b{color:var(--text);font-weight:700} #modeLbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mb-back{flex:none;border:0;border-radius:999px;padding:7px 12px;background:var(--surface-2);box-shadow:0 0 0 1px var(--line-2);color:var(--text);font:inherit;font-weight:700;font-size:12px;cursor:pointer}
+  @media (hover:hover){.mb-back:hover{box-shadow:0 0 0 1px rgba(255,157,46,.6)}}
   .tabs{position:relative;display:flex;padding:4px;margin-bottom:16px;border-radius:999px;background:var(--surface);box-shadow:var(--sh-1)}
   .tabs::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/2);border-radius:999px;
     background:var(--surface-2);box-shadow:0 0 0 1px var(--line-2),0 4px 12px rgba(0,0,0,.35);
@@ -179,7 +183,7 @@
   .help{width:32px;height:32px;border-radius:50%;border:0;background:var(--surface);box-shadow:var(--sh-1);
     color:var(--text);font-weight:800;font-size:14px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;
     transition:transform .35s var(--bouncy),box-shadow .2s,color .2s}
-  .help:hover{box-shadow:0 0 0 1px rgba(255,157,46,.5),0 6px 14px rgba(0,0,0,.35);transform:translateY(-1px)}
+  @media (hover:hover){.help:hover{box-shadow:0 0 0 1px rgba(255,157,46,.5),0 6px 14px rgba(0,0,0,.35);transform:translateY(-1px)}}
   .help:active{transform:scale(.9);transition-duration:.09s}
   #soundBtn.off{color:var(--faint)}
   .help-modal h2{margin:2px 0 10px;font-family:var(--display);font-size:22px;letter-spacing:-.03em}
@@ -810,14 +814,12 @@
   <div class="ld-text" id="ldText">Loading heroes…</div>
 </div>
 <div class="app">
-  <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><b>OW<span>doku</span></b></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="tabArchive" aria-label="Archive of past grids" title="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
+  <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><b>OW<span>doku</span></b></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="tabArchive" aria-label="Archive of past grids" title="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></button><button class="help" id="tabPractice" aria-label="Practice" title="Practice: unlimited grids that don't count"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg></button><button class="help" id="statsBtn" aria-label="Your stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg></button><button class="help" id="soundBtn" data-nosfx></button><button class="help" id="helpBtn" aria-label="How to play">?</button></div></header>
   <div class="intro"><span class="era">&nbsp;</span><p>Name a pro who fits both the row and the column.</p></div>
   <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="board">
-  <div class="tabs">
-    <button class="tab on" id="tabDaily">Daily</button>
-    <button class="tab" id="tabPractice">Practice</button>
-  </div>
+  <!-- shown only away from today's daily (practice or an archive grid), with a way back -->
+  <div class="modebar" id="modeBar" hidden><span id="modeLbl"></span><button class="mb-back" id="tabDaily">Back to today's grid</button></div>
   <div class="grid" id="grid"></div>
   </div>
   <div class="side">
@@ -2714,7 +2716,7 @@ function gridLeagues(){ const set=new Set();
   return (order.length?order:["OWL"]).map(l=>LEAGUE_SPAN[l]).join(" · ") }
 function render(){
   const th = mode==="practice" ? null : (activeTheme()||dayTheme(dayKey)), pn=document.getElementById("pnum");
-  pn.textContent = mode==="practice" ? "Practice" : (th?THEMES[th].icon+" ":"")+"#"+puzzleNum(dayKey);   // archive mode is shown by the lit calendar button
+  pn.textContent = mode==="practice" ? "" : (th?THEMES[th].icon+" ":"")+"#"+puzzleNum(dayKey); pn.hidden = mode==="practice";   // the mode bar already says Practice   // archive mode is shown by the lit calendar button
   pn.title = th ? THEMES[th].name : "";
   const era=document.querySelector(".intro .era"), ip=document.querySelector(".intro p");
   const owlDay = !th && mode!=="practice" && ((store.get("owdoku-testseed",null)&&store.get("owdoku-testtheme",null)==="owl") || (!store.get("owdoku-testseed",null)&&dayLeague(dayKey)==="OWL"));
@@ -3574,7 +3576,7 @@ function init(){
     document.getElementById("ansScrim").classList.add("open")};
   document.getElementById("ansClose").onclick=()=>document.getElementById("ansScrim").classList.remove("open");
   document.getElementById("tabDaily").onclick=()=>{if(revealing)return;mode="daily";setTabs();load()};
-  document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode="practice";setTabs();load()};
+  document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode=mode==="practice"?"daily":"practice";setTabs();load();renderSide()};
   document.getElementById("tabArchive").onclick=openArchive;
   document.getElementById("statsBtn").onclick=openStats;
   document.getElementById("rankRow").onclick=openStats;
@@ -3730,10 +3732,12 @@ function init(){
   load();
   fillHelp();   // needs a loaded board for the sample card
 }
-function setTabs(){const T=[["tabDaily","daily"],["tabPractice","practice"],["tabArchive","archive"]];
-  for(const [id,m] of T) document.getElementById(id).classList.toggle("on",mode===m);
-  const tabs=document.querySelector(".tabs"), ti=T.findIndex(t=>t[1]===mode);
-  tabs.classList.toggle("none",ti>1); if(ti<=1) tabs.style.setProperty("--ti",ti)}
+function setTabs(){
+  document.getElementById("tabPractice").classList.toggle("on",mode==="practice");
+  document.getElementById("tabArchive").classList.toggle("on",mode==="archive");
+  const bar=document.getElementById("modeBar"); bar.hidden = mode==="daily";
+  document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice</b><i> · nothing counts</i>"
+    : mode==="archive" ? `<b>Archive #${puzzleNum(dayKey)}</b><i> · doesn't move your rank</i>` : "" }
 function openStats(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null});
   const days=Object.values(hist).filter(h=>!h.a), played=days.length;
