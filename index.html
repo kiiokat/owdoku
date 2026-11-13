@@ -3736,7 +3736,7 @@ function setTabs(){
   document.getElementById("tabPractice").classList.toggle("on",mode==="practice");
   document.getElementById("tabArchive").classList.toggle("on",mode==="archive");
   const bar=document.getElementById("modeBar"); bar.hidden = mode==="daily";
-  document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice</b><i> · nothing counts</i>"
+  document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice</b><i> · nothing counts towards rank or achievements</i>"
     : mode==="archive" ? `<b>Archive #${puzzleNum(dayKey)}</b><i> · doesn't move your rank</i>` : "" }
 function openStats(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null});
