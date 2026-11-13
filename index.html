@@ -35,7 +35,10 @@
   .stream-modal{max-width:460px} .st-lead{font-size:13.5px;line-height:1.55;color:var(--muted);margin:0 0 14px}
   .st-lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
   .st-row{display:flex;align-items:center;gap:0;border-radius:12px;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line-2);padding:0 12px;margin-bottom:8px}
-  .st-at{color:var(--faint);font-size:14px} .st-row input{flex:1;min-width:0;border:0;background:none;color:var(--text);font:inherit;font-size:15px;padding:12px 2px;outline:none}
+  .st-at{color:var(--faint);font-size:14px}
+  .modal .st-row input,.modal .st-row input:focus{flex:1;min-width:0;width:auto;margin:0;border:0;border-radius:0;background:none;box-shadow:none;color:var(--text);font:inherit;font-size:15px;padding:12px 2px;outline:none}
+  /* the whole field (prefix included) lights up when focused */
+  .st-row{transition:box-shadow .15s} .st-row:focus-within{box-shadow:inset 0 0 0 1px rgba(255,157,46,.7),0 0 0 4px rgba(255,157,46,.12)}
   .st-fine{font-size:11.5px;color:var(--faint);margin:0 0 12px} .stream-modal .btn+.btn{margin-top:8px}
   .fake-chat{position:fixed;right:14px;bottom:14px;z-index:420;width:300px;padding:10px;border-radius:14px;background:rgba(19,22,30,.96);
     box-shadow:0 0 0 1px rgba(145,70,255,.45),0 10px 30px rgba(0,0,0,.5);font-size:12px}
