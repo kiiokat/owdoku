@@ -3494,7 +3494,9 @@ function chatNeed(){ const now=Date.now(); let n=0; for(const t of STREAM.seen.v
 function newLive(){ STREAM.tried=new Set(); STREAM.votes=new Map(); STREAM.close=false }
 const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const sqName=i=>"ABC"[Math.floor(i/3)]+(i%3+1);
-function openStreamSetup(){ const sc=document.getElementById("streamScrim"), inp=document.getElementById("stChan");
+// Streamer vs Chat is a desktop feature (streams run from a computer)
+const streamOK=()=>{ if(innerWidth>=860) return true; toast("Streamer mode is only available on desktop"); return false };
+function openStreamSetup(){ if(!streamOK()) return; const sc=document.getElementById("streamScrim"), inp=document.getElementById("stChan");
   inp.value=store.get("owdoku-stream-chan",""); sc.classList.add("open"); setTimeout(()=>inp.focus(),30);
   const go=()=>{ const c=inp.value.trim().replace(/^.*twitch\.tv\//i,"").replace(/^[#@]/,"").toLowerCase();
     if(!/^[a-z0-9_]{3,25}$/.test(c)){ toast("Enter your Twitch channel name"); return }
@@ -3885,7 +3887,7 @@ function init(){
     mode="daily"; setTabs(); load(); renderSide(); toast(dayTheme(todayKey())?"Today's "+THEMES[dayTheme(todayKey())].name:"Today's real grid");
   };
   // DEV-ONLY: Streamer vs Chat with a fake chat panel instead of Twitch
-  document.getElementById("devStream").onclick=()=>{ if(revealing) return; startStream("devtest",true) };
+  document.getElementById("devStream").onclick=()=>{ if(revealing||!streamOK()) return; startStream("devtest",true) };
   document.getElementById("fcForm").onsubmit=e=>{ e.preventDefault(); const u=document.getElementById("fcUser").value.trim()||"TestViewer", m=document.getElementById("fcMsg");
     if(m.value.trim()){ fcSay(u,m.value.trim()); m.value="" } };
   document.getElementById("fcRight").onclick=()=>fcAnswer(true);
