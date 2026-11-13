@@ -44,7 +44,7 @@
   .fc-row input:first-child{width:90px;flex:none} .fc-row input:nth-child(2){flex:1}
   .fake-chat button{border:0;border-radius:8px;padding:7px 9px;background:var(--surface-2);color:var(--text);font:inherit;font-weight:700;cursor:pointer;box-shadow:0 0 0 1px var(--line-2)}
   .fc-btns{display:grid;grid-template-columns:repeat(5,1fr);gap:5px} .fc-btns button{padding:7px 4px;font-size:11px} .fake-chat button.on{background:#9146ff}
-  @media (max-width:859px){ .fake-chat{left:12px;right:12px;width:auto;bottom:auto;top:12px} }
+  @media (max-width:859px){ .fake-chat{left:12px;right:12px;width:auto} }
   body.streaming .stats, body.streaming .fire, body.streaming #giveUpBtn, body.streaming #pTabs .x{display:none!important}
   body.streaming .modebar{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(145,70,255,.35)} body.streaming .modebar b{color:#c9a8ff}
   .st-score{display:inline-flex;align-items:center;gap:8px;margin-left:10px;font-family:var(--display);font-weight:800;font-size:14px;color:var(--text)}
@@ -55,9 +55,11 @@
   .own-tag{position:absolute;left:50%;top:-9px;transform:translateX(-50%);max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     font-size:9.5px;font-weight:800;letter-spacing:.02em;padding:2px 7px;border-radius:999px;z-index:3}
   .own-s .own-tag{background:#ff9d2e;color:#2a1600} .own-c .own-tag{background:#9146ff;color:#fff}
-  .st-banner{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:400;display:flex;align-items:center;gap:14px;max-width:min(760px,94vw);
+  .st-banner{position:fixed;left:0;right:0;top:14px;margin:0 auto;width:fit-content;z-index:400;display:flex;align-items:center;gap:14px;max-width:min(760px,calc(100vw - 24px));box-sizing:border-box;
     padding:12px 14px 12px 18px;border-radius:16px;background:linear-gradient(180deg,#24124a,#170b33);box-shadow:0 0 0 1px rgba(185,147,255,.45),0 12px 34px rgba(0,0,0,.55);color:#fff}
-  .st-banner[hidden]{display:none} .st-banner .bt{font-size:14px;line-height:1.4} .st-banner .bt small{display:block;color:#cdb8ff;font-size:12px;margin-top:2px}
+  .st-banner[hidden]{display:none}
+  /* while a square is live, the search window sits below the banner with room to spare */
+  body.st-live #scrim{padding-top:max(8vh,calc(var(--stb,90px) + 18px))} .st-banner .bt{font-size:14px;line-height:1.4} .st-banner .bt small{display:block;color:#cdb8ff;font-size:12px;margin-top:2px}
   .st-banner code{font-family:"Geist Mono",ui-monospace,monospace;font-size:15px;font-weight:700;background:rgba(255,255,255,.12);padding:2px 8px;border-radius:7px;color:#fff}
   .st-banner button{flex:none;border:0;border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:700;font-size:12px;cursor:pointer}
   .st-feed{display:flex;flex-direction:column;gap:6px;pointer-events:none}
@@ -3507,7 +3509,7 @@ function startStream(chan,fake){
 function stopStream(silent){ if(STREAM.ws){ STREAM.ws.onclose=null; try{STREAM.ws.close()}catch(e){} } STREAM.ws=null;
   fakeAuto(false); document.getElementById("fakeChat").hidden=true;
   if(!STREAM.on) return; STREAM.on=false; STREAM.live=-1; document.body.classList.remove("streaming");
-  document.getElementById("stBanner").hidden=true; document.getElementById("stFeed").hidden=true; if(!silent) setTabs() }
+  document.getElementById("stBanner").hidden=true; document.getElementById("stFeed").hidden=true; document.body.classList.remove("st-live"); if(!silent) setTabs() }
 function streamConnect(){
   const ws=new WebSocket("wss://irc-ws.chat.twitch.tv:443"); STREAM.ws=ws; STREAM.joined=false;
   // Twitch stays silent when a channel doesn't exist, so say so if the join never confirms
@@ -3572,8 +3574,10 @@ function streamUI(){ if(!STREAM.on||!state||!grid) return; const own=state.own||
   const b=document.getElementById("stBanner"), i=STREAM.live;
   if(i>=0 && !own[i]){ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
     b.innerHTML=`<div class="bt">🎯 <b>${esc(row.label)} × ${esc(col.label)}</b> is live! Chat, type a <code>player name</code><small>${STREAM.close?"🔥 Chat is close… ":""}${chatNeed()} chatters naming the same correct player steal it · one guess each</small></div><button id="stPass">Pass</button>`;
-    b.hidden=false; document.getElementById("stPass").onclick=()=>{ STREAM.live=-1; closePicker(); streamFeed(`Square ${sqName(i)} passed`,"sys"); render(); streamUI() } }
-  else b.hidden=true }
+    b.hidden=false; document.body.classList.add("st-live");
+    document.body.style.setProperty("--stb",Math.ceil(b.getBoundingClientRect().bottom)+"px");
+    document.getElementById("stPass").onclick=()=>{ STREAM.live=-1; closePicker(); streamFeed(`Square ${sqName(i)} passed`,"sys"); render(); streamUI() } }
+  else { b.hidden=true; document.body.classList.remove("st-live") } }
 function guess(p){
   if(STREAM.on) return streamGuess(p,"s");
   const i=activeCell, row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
