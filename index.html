@@ -77,6 +77,10 @@
   .st-banner[hidden]{display:none}
   /* while a square is live, the search window sits below the banner with room to spare */
   body.st-live #scrim{padding-top:max(8vh,calc(var(--stb,90px) + 18px))} .st-banner .bt{font-size:14px;line-height:1.4} .st-banner .bt small{display:block;color:#cdb8ff;font-size:12px;margin-top:2px}
+  .st-banner .bt b{display:block;font-family:var(--display);font-size:17px;letter-spacing:-.01em}
+  .st-banner .bt-k{display:block;font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#b993ff;margin-bottom:2px}
+  .st-banner .bt small{font-size:12.5px;margin-top:4px}
+  .bt-close{flex:none;padding:6px 10px;border-radius:999px;background:rgba(255,120,60,.18);box-shadow:inset 0 0 0 1px rgba(255,140,80,.5);color:#ffc29a;font-size:12px;font-weight:800;white-space:nowrap}
   .st-banner code{font-family:"Geist Mono",ui-monospace,monospace;font-size:15px;font-weight:700;background:rgba(255,255,255,.12);padding:2px 8px;border-radius:7px;color:#fff}
   .st-banner button{flex:none;border:0;border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:700;font-size:12px;cursor:pointer}
   .st-feed{display:flex;flex-direction:column;gap:6px;pointer-events:none}
@@ -3606,7 +3610,7 @@ function streamUI(){ if(!STREAM.on||!state||!grid) return; const own=state.own||
     +`<div class="left">${9-s-c ? (9-s-c)+" square"+(9-s-c===1?"":"s")+" left · chat needs "+chatNeed()+" matching names" : "Grid complete"}</div>`;
   const b=document.getElementById("stBanner"), i=STREAM.live;
   if(i>=0 && !own[i]){ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
-    b.innerHTML=`<div class="bt">🎯 <b>${esc(row.label)} × ${esc(col.label)}</b> is live! Chat, type a <code>player name</code><small>${STREAM.close?"🔥 Chat is close… ":""}${chatNeed()} chatters naming the same correct player steal it · one guess each</small></div><button id="stPass">Pass</button>`;
+    b.innerHTML=`<div class="bt"><span class="bt-k">Live square</span><b>${esc(row.label)} × ${esc(col.label)}</b><small>Chat: type a player who fits. If ${chatNeed()===2?"two":"three"} of you name the same correct player, chat steals the square. One guess each.</small></div>${STREAM.close?'<span class="bt-close">🔥 Chat is close</span>':""}<button id="stPass">Pass</button>`;
     b.hidden=false; document.body.classList.add("st-live");
     document.body.style.setProperty("--stb",Math.ceil(b.getBoundingClientRect().bottom)+"px");
     document.getElementById("stPass").onclick=()=>{ STREAM.live=-1; closePicker(); streamFeed(`Square ${sqName(i)} passed`,"sys"); render(); streamUI() } }
