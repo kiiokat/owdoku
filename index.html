@@ -2955,7 +2955,7 @@ PIN_DEFS.push(
   {id:"globe",sec:"Daily",icon:"globe",name:"Globetrotter",how:"Answers from 5 different countries in one grid, in squares that didn't ask for a country"},
   {id:"champs",sec:"Daily",icon:"trophy",name:"Champions' Circle",how:"Named 3 champions in one grid (OWL, OWCS international or World Cup), in squares that didn't ask for a champion"},
   {id:"bench",sec:"Daily",icon:"chair",name:"Deep Bench",how:"Named a player who barely played at the top level: under 5 OWL hours, or a single OWCS season with no more than one international event"},
-  {id:"oldguard",sec:"Daily",icon:"clock",name:"Old Guard",how:"Named 3 players from the 2018 season in one grid, in squares that didn't ask for 2018"},
+  {id:"oldguard",sec:"Daily",icon:"clock",name:"Old Guard",how:"Named 3 first-era players in one grid (OGN APEX, or the 2018 OWL season), in squares that didn't ask for 2018 or an APEX team"},
   // OWCS and World Cup knowledge (only squares that didn't ask for the thing count) and current-era habits
   {id:"thennow",sec:"Current",icon:"bridge",name:"Then and Now",how:"Named 3 players in one OWCS grid who also played in the OWL"},
   {id:"fresh",sec:"Current",icon:"sparkles",name:"Fresh Blood",how:"Named a player whose first OWCS year was 2026, in a square that didn't ask for 2026"},
@@ -3018,7 +3018,9 @@ function awardGamePins(){
   // Deep Bench: a barely-there top-level career in either era
   const benchy=p=>!!p&&((p.y.length&&p.hr>0&&p.hr<5) || (!p.y.length&&p.oy&&p.oy.length===1&&(p.ow||0)<=1));
   if(sq.some(i=>benchy(pl(i))) && earnPin(P,"bench")) got.push("bench");
-  if(sq.filter(i=>free(i,"season","y:2018")&&pl(i)?.y.includes(2018)).length>=3 && earnPin(P,"oldguard")) got.push("oldguard");
+  const firstEra=p=>!!p&&(p.y.includes(2018)||p.t.some(t=>TEAMS[t]?.lg==="APEX"));
+  const noEraAsked=i=>free(i,"season","y:2018")&&!rc(i).some(c=>c.kind==="team"&&TEAMS[c.team].lg==="APEX");
+  if(sq.filter(i=>noEraAsked(i)&&firstEra(pl(i))).length>=3 && earnPin(P,"oldguard")) got.push("oldguard");
   // OWCS and World Cup knowledge
   const owcsGrid=grid.rows.every(c=>c.kind==="team"&&TEAMS[c.team].lg==="OWCS");
   if(owcsGrid && sq.filter(i=>{ const p=pl(i); return p&&(p.y.length||p.hr>0) }).length>=3 && earnPin(P,"thennow")) got.push("thennow");
