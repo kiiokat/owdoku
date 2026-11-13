@@ -31,6 +31,40 @@
   body.practicing{background:radial-gradient(760px 380px at 50% -140px,rgba(47,209,197,.13),transparent 70%),linear-gradient(180deg,#0a1116,#0b0e13 55%)}
   body.practicing .modebar{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(47,209,197,.22)}
   body.practicing .modebar b{color:#7fe6dd}
+  /* ---- Streamer vs Chat ---- */
+  .stream-modal{max-width:460px} .st-lead{font-size:13.5px;line-height:1.55;color:var(--muted);margin:0 0 14px}
+  .st-lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+  .st-row{display:flex;align-items:center;gap:0;border-radius:12px;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line-2);padding:0 12px;margin-bottom:8px}
+  .st-at{color:var(--faint);font-size:14px} .st-row input{flex:1;min-width:0;border:0;background:none;color:var(--text);font:inherit;font-size:15px;padding:12px 2px;outline:none}
+  .st-fine{font-size:11.5px;color:var(--faint);margin:0 0 12px} .stream-modal .btn+.btn{margin-top:8px}
+  .fake-chat{position:fixed;right:14px;bottom:14px;z-index:420;width:300px;padding:10px;border-radius:14px;background:rgba(19,22,30,.96);
+    box-shadow:0 0 0 1px rgba(145,70,255,.45),0 10px 30px rgba(0,0,0,.5);font-size:12px}
+  .fake-chat[hidden]{display:none} .fc-head{display:flex;justify-content:space-between;margin-bottom:8px;color:#cdb8ff} .fc-head span{color:var(--faint)}
+  .fc-row{display:flex;gap:6px;margin-bottom:6px} .fc-row input{min-width:0;border:0;border-radius:8px;padding:7px 8px;background:var(--bg);color:var(--text);font:inherit;box-shadow:inset 0 0 0 1px var(--line-2)}
+  .fc-row input:first-child{width:90px;flex:none} .fc-row input:nth-child(2){flex:1}
+  .fake-chat button{border:0;border-radius:8px;padding:7px 9px;background:var(--surface-2);color:var(--text);font:inherit;font-weight:700;cursor:pointer;box-shadow:0 0 0 1px var(--line-2)}
+  .fc-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px} .fake-chat button.on{background:#9146ff}
+  @media (max-width:859px){ .fake-chat{left:12px;right:12px;width:auto;bottom:auto;top:12px} }
+  body.streaming .stats, body.streaming .fire, body.streaming #giveUpBtn, body.streaming #pTabs .x{display:none!important}
+  body.streaming .modebar{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(145,70,255,.35)} body.streaming .modebar b{color:#c9a8ff}
+  .st-score{display:inline-flex;align-items:center;gap:8px;margin-left:10px;font-family:var(--display);font-weight:800;font-size:14px;color:var(--text)}
+  .st-score .s{color:#ffb35c} .st-score .c{color:#c9a8ff} .st-score i{font-style:normal;color:var(--faint);font-weight:600;font-size:11px}
+  .cell.live{box-shadow:0 0 0 2px #9146ff,0 0 22px rgba(145,70,255,.45);animation:livePulse 1.4s ease-in-out infinite}
+  @keyframes livePulse{50%{box-shadow:0 0 0 2px #b993ff,0 0 32px rgba(145,70,255,.7)}}
+  .cell.own-s{box-shadow:inset 0 0 0 2px rgba(255,157,46,.75)} .cell.own-c{box-shadow:inset 0 0 0 2px rgba(145,70,255,.85)}
+  .own-tag{position:absolute;left:50%;top:-9px;transform:translateX(-50%);max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:9.5px;font-weight:800;letter-spacing:.02em;padding:2px 7px;border-radius:999px;z-index:3}
+  .own-s .own-tag{background:#ff9d2e;color:#2a1600} .own-c .own-tag{background:#9146ff;color:#fff}
+  .st-banner{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:400;display:flex;align-items:center;gap:14px;max-width:min(760px,94vw);
+    padding:12px 14px 12px 18px;border-radius:16px;background:linear-gradient(180deg,#24124a,#170b33);box-shadow:0 0 0 1px rgba(185,147,255,.45),0 12px 34px rgba(0,0,0,.55);color:#fff}
+  .st-banner[hidden]{display:none} .st-banner .bt{font-size:14px;line-height:1.4} .st-banner .bt small{display:block;color:#cdb8ff;font-size:12px;margin-top:2px}
+  .st-banner code{font-family:"Geist Mono",ui-monospace,monospace;font-size:15px;font-weight:700;background:rgba(255,255,255,.12);padding:2px 8px;border-radius:7px;color:#fff}
+  .st-banner button{flex:none;border:0;border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:700;font-size:12px;cursor:pointer}
+  .st-feed{display:flex;flex-direction:column;gap:6px;pointer-events:none}
+  .st-feed[hidden]{display:none}
+  .st-feed div{padding:7px 11px;border-radius:12px;background:rgba(19,22,30,.92);box-shadow:0 0 0 1px var(--line-2),0 6px 16px rgba(0,0,0,.4);font-size:12.5px;line-height:1.35;color:var(--muted);animation:rise .3s var(--ease) both}
+  .st-feed div b{color:var(--text)} .st-feed .ok{box-shadow:0 0 0 1px rgba(76,195,138,.6)} .st-feed .ok b{color:#7ee2ad} .st-feed .sys{color:#cdb8ff}
+  @media (max-width:859px){ .st-feed{position:fixed;left:12px;right:12px;bottom:12px;z-index:350} .st-feed div:nth-child(n+4){display:none} }
   /* fine grain over everything, like printed paper */
   body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -859,6 +893,7 @@
   </div>
   <button class="btn ghost" id="giveUpBtn">Give up</button>
   <button class="btn ghost" id="newPracticeBtn" style="display:none">New practice grid</button>
+  <div class="st-feed" id="stFeed" hidden></div>
   <!-- DEV-ONLY: testing tools, shown only when the address ends in #dev -->
   <div id="devTools" class="dev-tools" style="display:none">
   <span class="dev-lbl">Dev</span>
@@ -867,6 +902,7 @@
   <button class="dev-btn" id="devOWL" title="Random OWL-day grid" aria-label="Random OWL-day grid">🏛️</button>
   <button class="dev-btn" id="devApex" title="Force an APEX-day grid" aria-label="Force an APEX-day grid">⛰️</button>
   <button class="dev-btn" id="devCont" title="Force a Contenders-day grid" aria-label="Force a Contenders-day grid">🌱</button>
+  <button class="dev-btn" id="devStream" title="Fake Streamer vs Chat (test chat, no Twitch)" aria-label="Fake Streamer vs Chat">🎥</button>
   <button class="dev-btn" id="devPin" title="Earn the next pin (reset with rank reset)" aria-label="Earn the next pin">📌</button>
   <button class="dev-btn" id="devFill" title="Fill remaining" aria-label="Fill remaining">⚡</button>
   <button class="dev-btn" id="devFire" title="Add to On Fire meter" aria-label="Add to On Fire meter">🔥</button>
@@ -885,6 +921,25 @@
   </footer>
 </div>
 
+<!-- Streamer vs Chat (unlocked by typing "streamer") -->
+<div class="scrim" id="streamScrim">
+  <div class="modal stream-modal">
+    <h2 class="mtitle">🎥 Streamer vs Chat</h2>
+    <p class="st-lead">Race your Twitch chat for the grid. You pick a square, then you and chat both try to name a player who fits. First correct answer claims it. Most squares wins.</p>
+    <label class="st-lbl" for="stChan">Your Twitch channel</label>
+    <form id="stForm" class="st-row"><span class="st-at">twitch.tv/</span><input id="stChan" placeholder="channel name" autocomplete="off" autocapitalize="off" spellcheck="false"></form>
+    <p class="st-fine">OWdoku only reads your public chat. It doesn't need a Twitch login, and nothing is posted or stored.</p>
+    <button class="btn primary" id="stGo">Connect and play</button>
+    <button class="btn ghost" id="stCancel">Cancel</button>
+  </div>
+</div>
+<div class="st-banner" id="stBanner" hidden></div>
+<!-- DEV-ONLY: a pretend Twitch chat for testing Streamer vs Chat -->
+<div class="fake-chat" id="fakeChat" hidden>
+  <div class="fc-head"><b>🧪 Fake chat</b><span id="fcCount"></span></div>
+  <form id="fcForm" class="fc-row"><input id="fcUser" value="TestViewer" aria-label="Viewer name"><input id="fcMsg" placeholder="!g player name" aria-label="Chat message"><button>Send</button></form>
+  <div class="fc-btns"><button id="fcRight" title="A new viewer sends a correct answer for the live square">✓ Right</button><button id="fcWrong" title="A new viewer sends a wrong answer">✗ Wrong</button><button id="fcJunk" title="Messages that should be ignored">💬 Noise</button><button id="fcAuto" title="Bots guess every few seconds">🤖 Auto</button></div>
+</div>
 <div class="scrim" id="scrim">
   <div class="modal">
     <h3 id="mTitle"></h3>
@@ -2522,7 +2577,9 @@ function load(){
     FORCE_THEME = {OWCS:"owcs",OWL:"owl",Contenders:"contenders",APEX:"apex"}[PRACTICE_LG]||null;
     grid = makeBalancedGrid("practice-"+Math.random());
     FORCE_THEME = null;
+    if(STREAM.on){ state.own=Array(9).fill(null); STREAM.live=-1; STREAM.tried=new Set() }
     state = freshState();
+    if(STREAM.on) state.own=Array(9).fill(null);
   }
   lastScore=null; lastStrikes=null; lastCombo=null; introNext=true; sqHover=-1; RANK_RESULT=null; applyDecay();
   render();
@@ -2770,6 +2827,9 @@ function buildCell(i){
       else if(!state.over) d.onclick=()=>openPicker(i);
       d.onmouseenter=()=>{ sqHover=i; renderSqCard() };
       d.onmouseleave=()=>{ if(sqHover===i){ sqHover=-1; renderSqCard() } };
+      if(STREAM.on){ const o=state.own&&state.own[i];
+        if(o){ d.classList.add(o.by==="s"?"own-s":"own-c"); d.insertAdjacentHTML("beforeend",`<span class="own-tag">${o.by==="s"?"Streamer":"@"+esc(o.user)}</span>`) }
+        else if(STREAM.live===i) d.classList.add("live") }
       d.id="cell"+i; return d;
 }
 function renderStats(){
@@ -3374,6 +3434,7 @@ const showVictory=()=>{ setTimeout(confetti,420); return showCard("victory",3000
 let activeCell=null, hl=0, justFilled=-1, popStyle="pop";
 const REVEAL_STEP_MS = 700;   // gap between each square during a reveal
 function openPicker(i){
+  if(STREAM.on){ if(STREAM.live!==i){ STREAM.live=i; STREAM.tried=new Set(); streamFeed(`Square ${sqName(i)} is live`,"sys"); } streamUI(); render() }
   activeCell=i;
   const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
   document.getElementById("mTitle").innerHTML=`<b>${row.label}</b> × <b>${col.label}</b>`;
@@ -3422,7 +3483,88 @@ function renderResults(){
     box.appendChild(d);
   });
 }
+// ---------- Streamer vs Chat ----------
+// Reads a channel's public Twitch chat anonymously over Twitch's chat websocket (no login, no key).
+// The streamer picks a square; while it's live, chat answers with  !g player name . First correct answer claims it.
+const STREAM={on:false,chan:"",ws:null,live:-1,tried:new Set(),feed:[]};
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const sqName=i=>"ABC"[Math.floor(i/3)]+(i%3+1);
+function openStreamSetup(){ const sc=document.getElementById("streamScrim"), inp=document.getElementById("stChan");
+  inp.value=store.get("owdoku-stream-chan",""); sc.classList.add("open"); setTimeout(()=>inp.focus(),30);
+  const go=()=>{ const c=inp.value.trim().replace(/^.*twitch\.tv\//i,"").replace(/^[#@]/,"").toLowerCase();
+    if(!/^[a-z0-9_]{3,25}$/.test(c)){ toast("Enter your Twitch channel name"); return }
+    store.set("owdoku-stream-chan",c); sc.classList.remove("open"); startStream(c) };
+  document.getElementById("stGo").onclick=go; document.getElementById("stForm").onsubmit=e=>{ e.preventDefault(); go() };
+  document.getElementById("stCancel").onclick=()=>sc.classList.remove("open"); sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") } }
+function startStream(chan,fake){
+  stopStream(true); STREAM.on=true; STREAM.chan=chan; STREAM.feed=[]; document.body.classList.add("streaming");
+  STREAM.fake=!!fake; mode="practice"; setTabs(); load(); renderSide(); streamUI();
+  if(fake){ streamFeed(`Fake chat ready (#${chan}). Pick a square to start!`,"sys"); document.getElementById("fakeChat").hidden=false }
+  else { streamFeed(`Connecting to #${chan}…`,"sys"); streamConnect() } }
+function stopStream(silent){ if(STREAM.ws){ STREAM.ws.onclose=null; try{STREAM.ws.close()}catch(e){} } STREAM.ws=null;
+  fakeAuto(false); document.getElementById("fakeChat").hidden=true;
+  if(!STREAM.on) return; STREAM.on=false; STREAM.live=-1; document.body.classList.remove("streaming");
+  document.getElementById("stBanner").hidden=true; document.getElementById("stFeed").hidden=true; if(!silent) setTabs() }
+function streamConnect(){
+  const ws=new WebSocket("wss://irc-ws.chat.twitch.tv:443"); STREAM.ws=ws;
+  ws.onopen=()=>{ ws.send("CAP REQ :twitch.tv/tags"); ws.send("PASS SCHMOOPIIE"); ws.send("NICK justinfan"+(10000+Math.floor(Math.random()*80000))); ws.send("JOIN #"+STREAM.chan) };
+  ws.onmessage=ev=>{ for(const line of String(ev.data).split("\r\n")){ if(!line) continue;
+    if(line.startsWith("PING")){ ws.send("PONG :tmi.twitch.tv"); continue }
+    if(/ 366 /.test(line)){ streamFeed(`Connected to #${STREAM.chan}. Pick a square to start!`,"sys"); continue }
+    const m=/^(?:@(\S+) )?:(\w+)!\S+ PRIVMSG #\w+ :(.*)$/.exec(line); if(!m) continue;
+    const dn=(/(?:^|;)display-name=([^;]*)/.exec(m[1]||"")||[])[1]||m[2]; streamChat(dn||m[2],m[2],m[3]) } };
+  ws.onclose=()=>{ if(STREAM.on){ streamFeed("Chat disconnected, reconnecting…","sys"); setTimeout(()=>STREAM.on&&streamConnect(),3000) } } }
+// a chat message: only "!g name" (or "!guess name") while a square is live counts
+function streamChat(display,login,text){
+  const m=/^!g(?:uess)?\s+(.+)/i.exec(text.trim()); if(!m||!STREAM.on||STREAM.live<0||state.own[STREAM.live]) return;
+  if(STREAM.tried.has(login)) return;                       // one guess per viewer per square
+  STREAM.tried.add(login);
+  const q=norm(m[1]); if(!q) return;
+  if(!NORM_CACHE) NORM_CACHE=PLAYERS.map(p=>({p,keys:[...nameKeys(p.n),...(ALIASES[p.n]||[])].map(norm)}));
+  const hits=NORM_CACHE.filter(x=>x.keys.includes(q)).map(x=>x.p);
+  const i=STREAM.live, row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
+  const p=hits.find(p=>row.test(p)&&col.test(p)&&!state.cells.includes(p.n)) || hits[0];
+  if(!p){ streamFeed(`<b>${esc(display)}</b>: “${esc(m[1].slice(0,24))}” isn't a player`); return }
+  streamGuess(p,"c",display) }
+function streamGuess(p,by,user){
+  const i=by==="s"?activeCell:STREAM.live; if(i==null||i<0||state.own[i]) return;
+  const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3], used=state.cells.includes(p.n);
+  if(by==="s") closePicker();
+  if(!used && row.test(p)&&col.test(p)){
+    state.cells[i]=p.n; state.own[i]={by,user:user||""}; justFilled=i; STREAM.live=-1; SFX.correct();
+    streamFeed(by==="s" ? `<b>Streamer</b> claimed ${sqName(i)} with ${esc(p.n)}` : `<b>${esc(user)}</b> stole ${sqName(i)} with ${esc(p.n)}!`,"ok");
+    if(by==="c" && document.getElementById("scrim").classList.contains("open")) closePicker();
+    if(state.own.every(Boolean)) streamEnd();
+  } else { SFX.wrong();
+    if(by==="s"){ toast(`${p.n} doesn't fit. Keep trying!`); const el=document.getElementById("cell"+i); el&&el.classList.remove("flash"); setTimeout(()=>openPicker(i),500) }
+    else streamFeed(`<b>${esc(user)}</b>: ${esc(p.n)} doesn't fit`) }
+  render(); streamUI() }
+// DEV-ONLY fake chat: every button speaks as a fresh viewer so the one-guess rule doesn't block it
+let FC_N=0, FC_T=null;
+const fcName=()=>["Gale","Nova","Bastion_Main","tankdiff","SupportGap","OWLfan","pepega","Kiriko4Life","rein_shatter","dpsdiff"][FC_N%10]+(++FC_N);
+function fcSay(user,text){ streamChat(user,user.toLowerCase(),text); document.getElementById("fcCount").textContent=FC_N+" viewers so far" }
+function fcAnswer(right){ const i=STREAM.live; if(i<0||state.own[i]){ toast("Pick a square first"); return }
+  const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
+  const pool=right ? answersFor(row,col).filter(p=>!state.cells.includes(p.n)) : PLAYERS.filter(p=>!(row.test(p)&&col.test(p)));
+  const p=pool[Math.floor(Math.random()*pool.length)]; if(!p) return;
+  const name=Math.random()<.4 ? p.n.toLowerCase() : p.n;   // sloppy casing, like real chat
+  fcSay(fcName(),"!g "+name) }
+function fakeAuto(on){ clearInterval(FC_T); FC_T=null; const b=document.getElementById("fcAuto"); if(b) b.classList.toggle("on",!!on);
+  if(on) FC_T=setInterval(()=>{ if(STREAM.on&&STREAM.live>=0&&!state.own[STREAM.live]) fcAnswer(Math.random()<.3) },2200) }
+function streamEnd(){ const s=state.own.filter(o=>o.by==="s").length, c=9-s; state.over=true;
+  const msg = s>c ? `Streamer wins ${s}–${c}!` : `Chat wins ${c}–${s}!`;
+  streamFeed(`<b>${msg}</b> Hit “New practice grid” for a rematch.`,"ok"); toast(msg); if(s>c) setTimeout(confetti,200) }
+function streamFeed(html,cls=""){ STREAM.feed.push({html,cls}); STREAM.feed=STREAM.feed.slice(-6); const el=document.getElementById("stFeed");
+  el.hidden=!STREAM.on; el.innerHTML=STREAM.feed.slice().reverse().map(f=>`<div class="${f.cls}">${f.html}</div>`).join("") }
+function streamUI(){ if(!STREAM.on) return; const own=state.own||[], s=own.filter(o=>o&&o.by==="s").length, c=own.filter(o=>o&&o.by==="c").length;
+  document.getElementById("modeLbl").innerHTML=`<b>🎥 Streamer vs Chat</b><span class="st-score"><i>You</i><span class="s">${s}</span><i>–</i><span class="c">${c}</span><i>Chat</i></span>`;
+  const b=document.getElementById("stBanner"), i=STREAM.live;
+  if(i>=0 && !own[i]){ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
+    b.innerHTML=`<div class="bt">🎯 <b>${esc(row.label)} × ${esc(col.label)}</b> is live! Chat, type <code>!g player name</code><small>First correct answer steals the square · one guess each</small></div><button id="stPass">Pass</button>`;
+    b.hidden=false; document.getElementById("stPass").onclick=()=>{ STREAM.live=-1; closePicker(); streamFeed(`Square ${sqName(i)} passed`,"sys"); render(); streamUI() } }
+  else b.hidden=true }
 function guess(p){
+  if(STREAM.on) return streamGuess(p,"s");
   const i=activeCell, row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
   closePicker();
   if (row.test(p)&&col.test(p)){ state.cells[i]=p.n; justFilled=i; state.combo=(state.combo||0)+1; if(state.combo>=BLAZE_AT) state.blazed=true; SFX.correct();
@@ -3596,7 +3738,7 @@ function init(){
     L.scrollTop=0;
     document.getElementById("ansScrim").classList.add("open")};
   document.getElementById("ansClose").onclick=()=>document.getElementById("ansScrim").classList.remove("open");
-  document.getElementById("tabDaily").onclick=()=>{if(revealing)return;mode="daily";setTabs();load()};
+  document.getElementById("tabDaily").onclick=()=>{if(revealing)return;stopStream();mode="daily";setTabs();load()};
   document.querySelectorAll("#pTabs button").forEach(b=>b.onclick=()=>{ if(revealing||b.dataset.lg===PRACTICE_LG) return;
     PRACTICE_LG=b.dataset.lg; store.set("owdoku-practice-lg",PRACTICE_LG); setTabs(); load(); });
   document.getElementById("tabPractice").onclick=()=>{if(revealing)return;mode=mode==="practice"?"daily":"practice";setTabs();load();renderSide()};
@@ -3648,7 +3790,7 @@ function init(){
     el.onclick=e=>{if(e.target===el) el.classList.remove("open")};
   }
   tickCountdown(); setInterval(tickCountdown,1000);
-  document.getElementById("newPracticeBtn").onclick=()=>{if(!revealing)load()};
+  document.getElementById("newPracticeBtn").onclick=()=>{if(revealing)return; load(); if(STREAM.on){ streamFeed("New grid! Pick a square to start.","sys"); streamUI() }};
   const help=document.getElementById("helpScrim");
   document.getElementById("helpBtn").onclick=()=>help.classList.add("open");
   document.getElementById("helpClose").onclick=()=>{help.classList.remove("open");store.set("owdoku-seen-help",true)};
@@ -3687,8 +3829,9 @@ function init(){
   let typed="";
   document.addEventListener("keydown",e=>{
     if(e.target.tagName==="INPUT"||e.key.length!==1) return;     // ignore typing in the search box
-    typed=(typed+e.key.toLowerCase()).slice(-5);
-    if(typed==="owdev"){typed="";toggleDev()}
+    typed=(typed+e.key.toLowerCase()).slice(-8);
+    if(typed.endsWith("owdev")){typed="";toggleDev()}
+    if(typed==="streamer"){typed="";openStreamSetup()}
   });
   let taps=[];
   document.getElementById("devTap").addEventListener("click",()=>{
@@ -3726,6 +3869,14 @@ function init(){
     try{ localStorage.removeItem("owdoku-testseed"); localStorage.removeItem("owdoku-testtheme") }catch(e){}
     mode="daily"; setTabs(); load(); renderSide(); toast(dayTheme(todayKey())?"Today's "+THEMES[dayTheme(todayKey())].name:"Today's real grid");
   };
+  // DEV-ONLY: Streamer vs Chat with a fake chat panel instead of Twitch
+  document.getElementById("devStream").onclick=()=>{ if(revealing) return; startStream("devtest",true) };
+  document.getElementById("fcForm").onsubmit=e=>{ e.preventDefault(); const u=document.getElementById("fcUser").value.trim()||"TestViewer", m=document.getElementById("fcMsg");
+    if(m.value.trim()){ fcSay(u,m.value.trim()); m.value="" } };
+  document.getElementById("fcRight").onclick=()=>fcAnswer(true);
+  document.getElementById("fcWrong").onclick=()=>fcAnswer(false);
+  document.getElementById("fcJunk").onclick=()=>{ ["lol","GG","what is this game","!g","!guess","!g notarealplayer123"].forEach(t=>fcSay(fcName(),t)) };
+  document.getElementById("fcAuto").onclick=()=>fakeAuto(!FC_T);
   document.getElementById("devPin").onclick=()=>{ const P=pinStore(), d=PIN_DEFS.find(x=>!P.earned[x.id]); if(!d){ toast("All achievements earned"); return }
     P.earned[d.id]=todayKey(); store.set("owdoku-pins",P); PIN_NEW.push(d.id); renderRank(); showPinPops() };
   document.getElementById("devApex").onclick=()=>forceTheme("apex","APEX","APEX-day grid");
@@ -3758,6 +3909,7 @@ function init(){
 // Practice league: which kind of grid practice builds (OWCS, OWL, Contenders or APEX). Remembered between visits.
 let PRACTICE_LG=store.get("owdoku-practice-lg","OWCS");
 function setTabs(){
+  if(STREAM.on && mode!=="practice") stopStream(true);   // leaving practice ends a Streamer vs Chat session
   document.body.classList.toggle("practicing",mode==="practice");
   const pt=document.getElementById("pTabs"); pt.hidden = mode!=="practice";
   const lgs=["OWCS","OWL","Contenders","APEX"]; pt.style.setProperty("--ti",Math.max(0,lgs.indexOf(PRACTICE_LG)));
@@ -3766,7 +3918,8 @@ function setTabs(){
   document.getElementById("tabArchive").classList.toggle("on",mode==="archive");
   const bar=document.getElementById("modeBar"); bar.hidden = mode==="daily";
   document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice Range</b>"
-    : mode==="archive" ? `<b>Archive #${puzzleNum(dayKey)}</b><i> · doesn't move your rank</i>` : "" }
+    : mode==="archive" ? `<b>Archive #${puzzleNum(dayKey)}</b><i> · doesn't move your rank</i>` : "";
+  if(STREAM.on) streamUI() }
 function openStats(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null});
   const days=Object.values(hist).filter(h=>!h.a), played=days.length;
