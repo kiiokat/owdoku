@@ -76,3 +76,26 @@ for p in P:
 print('regions:',dict(cnt))
 s=s[:blk]+'const PLAYERS = [\n'+'\n'.join('  '+json.dumps(p,ensure_ascii=False,separators=(',',':'))+',' for p in P)+'\n'+s[end:]
 open(H,'w').write(s)
+
+# ---- Overwatch World Cup: main events only (no qualifiers, conference cups or open trials) ----
+s=open(H).read()
+wc_rows=json.load(open(D+'worldcup.json')); wc_rows=wc_rows.get('result',wc_rows) if isinstance(wc_rows,dict) else wc_rows
+WCM=re.compile(r'Overwatch World Cup (\d{4})$')
+wcy=collections.defaultdict(set); wcw=set()
+for r in wc_rows:
+  mm=WCM.match(r['tournament'])
+  if not mm or r['opponenttype']!='team': continue
+  for k,v in (r['opponentplayers'] or {}).items():
+    if re.fullmatch(r'p\d+',k) and v:
+      wcy[pg(v)].add(int(mm.group(1)))
+      if r['placement']=='1': wcw.add(pg(v))
+blk=s.index('const PLAYERS = ['); end=s.index('];',blk)
+P=[json.loads(l.strip().rstrip(',')) for l in s[blk:end].split('\n')[1:] if l.strip().startswith('{')]
+n=w=0
+for p in P:
+  p.pop('wc',None); p.pop('wcw',None); pgn=page_of(p['n'])
+  if pgn and wcy.get(pgn): p['wc']=sorted(wcy[pgn]); n+=1
+  if pgn and pgn in wcw: p['wcw']=1; w+=1
+print('world cup players:',n,'champions:',w)
+s=s[:blk]+'const PLAYERS = [\n'+'\n'.join('  '+json.dumps(p,ensure_ascii=False,separators=(',',':'))+',' for p in P)+'\n'+s[end:]
+open(H,'w').write(s)
