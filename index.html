@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OWdoku — Overwatch League Grid</title>
+<title>OWdoku: the daily pro scene grid</title>
+<meta name="description" content="A free daily grid game about pro Overwatch players. Name a pro who fits both the row and the column.">
+<meta property="og:title" content="OWdoku: the daily pro scene grid">
+<meta property="og:description" content="A free daily grid game about pro Overwatch players. Name a pro who fits both the row and the column.">
+<meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22lgB%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffbf6b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ff8a1f%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2230%22%20fill%3D%22%231a1e28%22/%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%2227%22%20fill%3D%22none%22%20stroke%3D%22url%28%23lgB%29%22%20stroke-width%3D%225%22/%3E%3Cg%20fill%3D%22url%28%23lgB%29%22%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2221%22%20cy%3D%2221%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2232%22%20cy%3D%2221%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2243%22%20cy%3D%2221%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2243%22%20cy%3D%2232%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2243%22%20cy%3D%2243%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2232%22%20cy%3D%2243%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2221%22%20cy%3D%2243%22%20r%3D%224.2%22/%3E%3Ccircle%20class%3D%22o%22%20cx%3D%2221%22%20cy%3D%2232%22%20r%3D%224.2%22/%3E%3C/g%3E%3Ccircle%20class%3D%22core%22%20cx%3D%2232%22%20cy%3D%2232%22%20r%3D%225.2%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -494,6 +498,32 @@
     background:linear-gradient(90deg,transparent,rgba(255,250,220,.35),transparent)}
   #victory.show .vic-shine::before{animation:shine 1.1s var(--ease) .45s both}
   @keyframes shine{to{left:120%}}
+  /* ---- Streamer vs Chat result: same layout as VICTORY, in Twitch purple ---- */
+  #stWin{background:radial-gradient(ellipse 120% 70% at 50% 50%,rgba(60,20,120,.86),rgba(8,4,16,.95) 72%)}
+  #stWin .def-band{background:linear-gradient(90deg,transparent,rgba(145,70,255,.36) 18%,rgba(145,70,255,.36) 82%,transparent)}
+  #stWin .def-band::before,#stWin .def-band::after{background:linear-gradient(90deg,transparent,#bf94ff,transparent)}
+  #stWin .def-word{font-size:clamp(40px,7.5vw,104px);white-space:nowrap;background:linear-gradient(180deg,#f3ebff 0%,#bf94ff 45%,#7a32e6 100%);-webkit-background-clip:text;background-clip:text;
+    filter:drop-shadow(0 0 22px rgba(145,70,255,.6)) drop-shadow(0 4px 0 rgba(30,0,70,.6))}
+  #stWin .def-sub{color:rgba(225,205,255,.92)}
+  #stWin .vic-shine{position:absolute;left:0;right:0;top:50%;height:124px;margin-top:-62px;overflow:hidden;pointer-events:none}
+  #stWin .vic-shine::before{content:"";position:absolute;top:0;bottom:0;width:30%;left:-40%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(240,225,255,.35),transparent)}
+  /* stays up until closed with the ✕ (or Esc) */
+  #stWin.show{animation:stIn .4s var(--ease) forwards;pointer-events:auto}
+  #stWin.show .def-word{animation:slamSt 1.4s var(--ease) both}
+  #stWin.show .def-sub,#stWin.show .st-mvp{animation:subIn 2.4s var(--ease) both}
+  #stWin.show .def-band{animation:bandIn .5s var(--ease) .05s both}
+  @keyframes stIn{from{opacity:0}to{opacity:1}}
+  @keyframes slamSt{0%{transform:skewX(-9deg) scale(1.9);letter-spacing:.45em;opacity:0;filter:blur(10px)}
+    55%{transform:skewX(-9deg) scale(.97);letter-spacing:.06em;opacity:1;filter:drop-shadow(0 0 22px rgba(145,70,255,.6)) drop-shadow(0 4px 0 rgba(30,0,70,.6))}
+    70%,100%{transform:skewX(-9deg) scale(1);letter-spacing:.06em;opacity:1;filter:drop-shadow(0 0 22px rgba(145,70,255,.6)) drop-shadow(0 4px 0 rgba(30,0,70,.6))}}
+  .st-x{position:absolute;top:22px;right:22px;width:42px;height:42px;border-radius:50%;border:0;cursor:pointer;font-size:18px;color:#f3ebff;
+    background:rgba(145,70,255,.22);box-shadow:0 0 0 1px rgba(191,148,255,.45);transition:background .15s,transform .15s}
+  @media (hover:hover){.st-x:hover{background:rgba(145,70,255,.45);transform:scale(1.06)}}
+  #stWin.show .vic-shine::before{animation:shine 1.1s var(--ease) .45s both}
+  .st-mvp{position:absolute;top:calc(50% + 106px);left:24px;right:24px;text-align:center;font:500 16px/1.4 var(--body);color:rgba(240,230,255,.95);text-wrap:balance}
+  .st-mvp b{color:#fff;font-weight:700}
+  .st-mvp span{display:block;margin-bottom:2px;font:600 11px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.3em;text-transform:uppercase;color:#bf94ff}
+  .st-mvp:empty{display:none}
   @keyframes slamWin{0%{transform:skewX(-9deg) scale(1.9);letter-spacing:.45em;opacity:0;filter:blur(10px)}
     16%{transform:skewX(-9deg) scale(.97);letter-spacing:.06em;opacity:1;filter:drop-shadow(0 0 22px rgba(255,200,40,.55)) drop-shadow(0 4px 0 rgba(70,40,0,.6))}
     22%{transform:skewX(-9deg) scale(1.01)}100%{transform:skewX(-9deg) scale(1.06)}}
@@ -584,6 +614,8 @@
 
   /* ---- logo icon: a ring of glowing orbs; they light up in turn now and then ---- */
   h1.logo{display:flex;align-items:center;gap:9px}
+  .logo-txt{display:flex;flex-direction:column;line-height:1}
+  .tagline{margin-top:3px;font:500 12.5px/1.1 var(--body);letter-spacing:0;color:var(--muted);white-space:nowrap}
   h1.logo b{font-weight:800}
   .logo-ic{width:34px;height:34px;flex:none;filter:drop-shadow(0 0 10px rgba(255,157,46,.28));transition:transform .5s var(--bouncy)}
   .logo-ic .o{transform-box:fill-box;transform-origin:center;animation:orb 6s ease-in-out infinite}
@@ -628,6 +660,7 @@
   /* phones: tighter spacing so header, grid, score, meter and button all fit */
   @media (max-width:640px){
     .app{padding-top:12px}
+    .intro.plain{display:none}
     header{margin-bottom:4px}
     .intro{margin:0 0 10px}
     .intro .era{display:none}
@@ -927,7 +960,7 @@
   <div class="ld-text" id="ldText">Loading heroes…</div>
 </div>
 <div class="app">
-  <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><b>OW<span>doku</span></b></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="hdr-menu" id="hdrMenu"><button class="help" id="tabArchive" aria-label="Archive of past grids" data-tip="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="hlbl">Archive</span></button><button class="help" id="tabPractice" aria-label="Practice Range" data-tip="Practice Range"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><span class="hlbl">Practice Range</span></button><button class="help" id="statsBtn" aria-label="Your stats" data-tip="Stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg><span class="hlbl">Stats</span></button><div class="snd-wrap"><button class="help" id="soundBtn" data-nosfx data-tip="Sound" aria-haspopup="true"></button><div class="snd-pop" id="sndPop" hidden><button id="sndMute" data-nosfx></button><button id="sndDown" data-nosfx aria-label="Volume down"></button><button id="sndUp" data-nosfx aria-label="Volume up"></button><div class="snd-lvl" id="sndLvl" aria-hidden="true"></div></div></div><button class="help" id="helpBtn" aria-label="How to play" data-tip="How to play">?<span class="hlbl">How to play</span></button></div></div></header>
+  <header><h1 class="logo"><svg class="logo-ic" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffbf6b"/><stop offset="1" stop-color="#ff8a1f"/></linearGradient></defs><circle cx="32" cy="32" r="30" fill="#1a1e28"/><circle cx="32" cy="32" r="27" fill="none" stroke="url(#lgB)" stroke-width="5"/><g fill="url(#lgB)"><circle class="o" cx="21" cy="21" r="4.2"/><circle class="o" cx="32" cy="21" r="4.2"/><circle class="o" cx="43" cy="21" r="4.2"/><circle class="o" cx="43" cy="32" r="4.2"/><circle class="o" cx="43" cy="43" r="4.2"/><circle class="o" cx="32" cy="43" r="4.2"/><circle class="o" cx="21" cy="43" r="4.2"/><circle class="o" cx="21" cy="32" r="4.2"/></g><circle class="core" cx="32" cy="32" r="5.2" fill="#fff"/></svg><span class="logo-txt"><b>OW<span>doku</span></b><small class="tagline">The daily pro scene grid</small></span></h1><div class="hdr-right"><div id="pnum" class="sub" style="margin:0"></div><button class="help" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><div class="hdr-menu" id="hdrMenu"><button class="help" id="tabArchive" aria-label="Archive of past grids" data-tip="Archive"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span class="hlbl">Archive</span></button><button class="help" id="tabPractice" aria-label="Practice Range" data-tip="Practice Range"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg><span class="hlbl">Practice Range</span></button><button class="help" id="statsBtn" aria-label="Your stats" data-tip="Stats"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 20V10h3v10H4zm6.5 0V4h3v16h-3zM17 20v-7h3v7h-3z" fill="currentColor"/></svg><span class="hlbl">Stats</span></button><div class="snd-wrap"><button class="help" id="soundBtn" data-nosfx data-tip="Sound" aria-haspopup="true"></button><div class="snd-pop" id="sndPop" hidden><button id="sndMute" data-nosfx></button><button id="sndDown" data-nosfx aria-label="Volume down"></button><button id="sndUp" data-nosfx aria-label="Volume up"></button><div class="snd-lvl" id="sndLvl" aria-hidden="true"></div></div></div><button class="help" id="helpBtn" aria-label="How to play" data-tip="How to play">?<span class="hlbl">How to play</span></button></div></div></header>
   <div class="intro"><span class="era">&nbsp;</span><p>Name a pro who fits both the row and the column.</p></div>
   <button class="rank-row" id="rankRow" aria-label="Your rank"></button>
   <div class="board">
@@ -1007,7 +1040,7 @@
 <div class="fake-chat" id="fakeChat" hidden>
   <div class="fc-head"><b>🧪 Fake chat</b><span id="fcCount"></span></div>
   <form id="fcForm" class="fc-row"><input id="fcUser" value="TestViewer" aria-label="Viewer name"><input id="fcMsg" placeholder="player name" aria-label="Chat message"><button>Send</button></form>
-  <div class="fc-btns"><button id="fcRight" title="A new viewer names a correct player (one vote)">✓ Right</button><button id="fcPair" title="Two new viewers name the same correct player">✓✓ Pair</button><button id="fcWrong" title="A new viewer sends a wrong answer">✗ Wrong</button><button id="fcJunk" title="Messages that should be ignored">💬 Noise</button><button id="fcAuto" title="Bots guess every few seconds">🤖 Auto</button></div>
+  <div class="fc-btns"><button id="fcRight" title="A new viewer names a correct player (one vote)">✓ Right</button><button id="fcPair" title="Two new viewers name the same correct player">✓✓ Pair</button><button id="fcWrong" title="A new viewer sends a wrong answer">✗ Wrong</button><button id="fcJunk" title="Messages that should be ignored">💬 Noise</button><button id="fcAuto" title="Bots guess every few seconds">🤖 Auto</button><button id="fcChatWin" title="Fill the open squares so chat wins">🏆 Chat win</button><button id="fcStWin" title="Fill the open squares so the streamer wins">🏆 Streamer win</button></div>
 </div>
 <div class="scrim" id="scrim">
   <div class="modal">
@@ -1153,6 +1186,7 @@
 <div id="defeat" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="def-word">Defeat</div><div class="def-sub" id="defSub">Out of strikes</div></div>
 <div id="rankup" class="owcard" aria-live="polite"><div class="ru-stack"><div class="ru-em"></div><div class="ru-sub def-sub"></div><div class="ru-row"><div class="def-band"></div><div class="ru-name"></div></div></div></div>
 <div id="pinPop" class="pin-pop" aria-live="polite"></div>
+<div id="stWin" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="vic-shine"></div><div class="def-word" id="stWinWord">Chat Victory</div><div class="def-sub" id="stWinSub"></div><div class="st-mvp" id="stWinMvp"></div><button class="st-x" id="stWinX" aria-label="Close">✕</button></div>
 <div id="victory" class="owcard" aria-live="assertive"><div class="def-band"></div><div class="vic-shine"></div><div class="def-word">Victory</div><div class="def-sub">Perfect grid</div></div>
 
 <script>
@@ -2869,6 +2903,7 @@ function render(){
   const owlDay = !th && mode!=="practice" && ((store.get("owdoku-testseed",null)&&store.get("owdoku-testtheme",null)==="owl") || (!store.get("owdoku-testseed",null)&&dayLeague(dayKey)==="OWL"));
   if(era){ era.textContent = th ? THEMES[th].icon+" "+THEMES[th].name+" "+LEAGUE_SPAN[th].replace(/^.*?(\(.*\))$/,"$1") : owlDay ? "🏛️ OWL Day (2018–2023)" : gridLeagues(); era.classList.toggle("themed",!!th||owlDay) }
   if(ip) ip.textContent = th ? THEMES[th].blurb+". This grid has its own achievements, and rank is paused today." : "Name a pro who fits both the row and the column.";
+  document.querySelector(".intro").classList.toggle("plain",!th);   // phones hide the plain instruction line; themed-day notes still show
   const g=document.getElementById("grid"); g.innerHTML="";
   g.appendChild(Object.assign(document.createElement("div"),{className:"hdr"}));
   grid.cols.forEach(c=>{const d=document.createElement("div");d.className="hdr col";d.innerHTML=headerHTML(c);g.appendChild(d)});
@@ -2964,6 +2999,18 @@ const SFX = (()=>{
     correct(){ [72,76,79,84].forEach((n,k)=>tone(N(n),{t:k*.055,dur:.22,vol:.09,type:"triangle"})); tone(N(96),{t:.2,dur:.3,vol:.025}) },
     wrong(){ tone(160,{dur:.22,vol:.13,type:"sawtooth",slide:.55,filter:700}); tone(120,{t:.07,dur:.2,vol:.1,type:"square",slide:.6,filter:500}) },
     reveal(k=0){ tick(.05,1400); tone(N(67+[0,2,4,7,9,12,14,16,19][Math.min(8,k)]),{t:.18,dur:.2,vol:.06,type:"sine"}); if(k>=8) tone(N(91),{t:.24,dur:.35,vol:.025}) },
+    // Streamer vs Chat: chat messages stay silent; only these three moments make a sound
+    online(){ tone(N(67),{dur:.16,vol:.06,type:"sine"}); tone(N(74),{t:.1,dur:.16,vol:.06,type:"sine"}); tone(N(79),{t:.2,dur:.4,vol:.07,type:"sine"}) },   // soft rising "connected" chime
+    suspense(){ [0,.16].forEach(t=>{ tone(N(83),{t,dur:.09,vol:.05,type:"square",filter:2200}); tick(.04,2600) }) },   // two quick pings: chat is one guess away
+    steal(){ const c=ac(); if(!c) return;   // chat claims a square: a quick swipe, then a cheeky two-note "gotcha"
+      const len=Math.floor(c.sampleRate*.18), b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
+      for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.sin(Math.PI*i/len);
+      const sN=c.createBufferSource(), bp=c.createBiquadFilter(), g=c.createGain(); sN.buffer=b; bp.type="bandpass"; bp.Q.value=1.2;
+      bp.frequency.setValueAtTime(3000,c.currentTime); bp.frequency.exponentialRampToValueAtTime(600,c.currentTime+.18);
+      g.gain.value=.08; sN.connect(bp); bp.connect(g); g.connect(master); sN.start();
+      tone(N(76),{t:.12,dur:.14,vol:.07,type:"square",filter:1600}); tone(N(70),{t:.24,dur:.24,vol:.07,type:"square",filter:1400}) },
+    winner(){ [60,64,67].forEach((n,k)=>tone(N(n),{t:k*.12,dur:.18,vol:.07,type:"sawtooth",filter:1800}));                 // short brass-style fanfare
+      [72,76,79].forEach(n=>tone(N(n),{t:.4,dur:1.1,vol:.05,type:"sawtooth",filter:2000})); tone(N(48),{t:.4,dur:1.1,vol:.12,type:"triangle"}) },
     finish(){ [67,72,76].forEach((n,k)=>tone(N(n),{t:k*.09,dur:.35,vol:.07,type:"triangle"})) },
     ignite(big){ const c=ac(); if(!c) return;
       const len=Math.floor(c.sampleRate*.5), b=c.createBuffer(1,len,c.sampleRate), d=b.getChannelData(0);
@@ -3566,7 +3613,12 @@ function renderResults(){
 // ---------- Streamer vs Chat ----------
 // Reads a channel's public Twitch chat anonymously over Twitch's chat websocket (no login, no key).
 // The streamer picks a square; while it's live, chat answers with  !g player name . First correct answer claims it.
-const STREAM={on:false,chan:"",ws:null,live:-1,tried:new Set(),votes:new Map(),close:false,seen:new Map(),feed:[]};
+const STREAM={on:false,chan:"",ws:null,live:-1,tried:new Set(),votes:new Map(),close:false,seen:new Map(),feed:[],mvp:new Map()};
+// MVP points for the result screen: each correct guess that helped chat take a square is 2 (3 for whoever named it first);
+// a correct guess on a square the streamer then took anyway is 1 ("made it close"). Ties go to whoever scored first.
+function mvpAdd(name,pts){ const m=STREAM.mvp.get(name)||{pts:0,at:Date.now()}; m.pts+=pts; STREAM.mvp.set(name,m) }
+function mvpTop(){ return [...STREAM.mvp].sort((a,b)=>b[1].pts-a[1].pts||a[1].at-b[1].at).slice(0,3).map(x=>x[0]) }
+const andList=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
 // how many different chatters must agree: 2, or 3 once 30+ people have chatted in the last two minutes
 function chatNeed(){ const now=Date.now(); let n=0; for(const t of STREAM.seen.values()) if(now-t<120000) n++; return n>30?3:2 }
 function newLive(){ STREAM.tried=new Set(); STREAM.votes=new Map(); STREAM.close=false }
@@ -3584,7 +3636,7 @@ function openStreamSetup(){ if(!streamOK()) return; const sc=document.getElement
   document.getElementById("stGo").onclick=go; document.getElementById("stForm").onsubmit=e=>{ e.preventDefault(); go() };
   document.getElementById("stCancel").onclick=()=>sc.classList.remove("open"); sc.onclick=e=>{ if(e.target===sc) sc.classList.remove("open") } }
 function startStream(chan,fake){
-  stopStream(true); STREAM.on=true; STREAM.chan=chan; STREAM.feed=[]; document.body.classList.add("streaming");
+  stopStream(true); STREAM.on=true; STREAM.chan=chan; STREAM.feed=[]; STREAM.mvp=new Map(); document.body.classList.add("streaming");
   STREAM.fake=!!fake; ["stBar","stBoard","stNew"].forEach(id=>document.getElementById(id).hidden=false);
   mode="practice"; setTabs(); load(); renderSide(); streamUI();
   if(fake){ streamFeed(`Fake chat ready (#${chan}). Pick a square to start!`,"sys"); document.getElementById("fakeChat").hidden=false }
@@ -3600,7 +3652,7 @@ function streamConnect(){
   ws.onopen=()=>{ ws.send("CAP REQ :twitch.tv/tags"); ws.send("PASS SCHMOOPIIE"); ws.send("NICK justinfan"+(10000+Math.floor(Math.random()*80000))); ws.send("JOIN #"+STREAM.chan) };
   ws.onmessage=ev=>{ for(const line of String(ev.data).split("\r\n")){ if(!line) continue;
     if(line.startsWith("PING")){ ws.send("PONG :tmi.twitch.tv"); continue }
-    if(/ 366 /.test(line)){ STREAM.joined=true; streamFeed(`Connected to #${STREAM.chan}. Pick a square to start!`,"sys"); continue }
+    if(/ 366 /.test(line)){ STREAM.joined=true; SFX.online(); streamFeed(`Connected to #${STREAM.chan}. Pick a square to start!`,"sys"); continue }
     const m=/^(?:@(\S+) )?:(\w+)!\S+ PRIVMSG #\w+ :(.*)$/.exec(line); if(!m) continue;
     const dn=(/(?:^|;)display-name=([^;]*)/.exec(m[1]||"")||[])[1]||m[2]; streamChat(dn||m[2],m[2],m[3]) } };
   ws.onclose=()=>{ if(STREAM.on){ streamFeed("Chat disconnected, reconnecting…","sys"); setTimeout(()=>STREAM.on&&streamConnect(),3000) } } }
@@ -3617,20 +3669,21 @@ function streamChat(display,login,text){
   STREAM.tried.add(login);
   const i=STREAM.live, row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
   const p=hits.find(p=>row.test(p)&&col.test(p)&&!state.cells.includes(p.n)) || hits[0];
-  if(!(row.test(p)&&col.test(p))||state.cells.includes(p.n)){ SFX.wrong(); streamFeed(`<b>${esc(display)}</b>: ${esc(p.n)} doesn't fit`); return }
+  if(!(row.test(p)&&col.test(p))||state.cells.includes(p.n)){ streamFeed(`<b>${esc(display)}</b>: ${esc(p.n)} doesn't fit`); return }
   const v=STREAM.votes.get(p.n)||[]; v.push(display); STREAM.votes.set(p.n,v);
-  if(v.length>=chatNeed()) return streamGuess(p,"c",v.join(" + "));
-  STREAM.close=true; streamFeed(`<b>${esc(display)}</b> locked in a guess…`); streamUI() }
+  if(v.length>=chatNeed()){ v.forEach((n,k)=>mvpAdd(n,k===0?3:2)); return streamGuess(p,"c",v.join(" + ")) }
+  if(!STREAM.close) SFX.suspense(); STREAM.close=true; streamFeed(`<b>${esc(display)}</b> locked in a guess…`); streamUI() }
 function streamGuess(p,by,user){
   const i=by==="s"?activeCell:STREAM.live; if(i==null||i<0||state.own[i]) return;
   const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3], used=state.cells.includes(p.n);
   if(by==="s") closePicker();
   if(!used && row.test(p)&&col.test(p)){
-    state.cells[i]=p.n; state.own[i]={by,user:user||""}; justFilled=i; STREAM.live=-1; SFX.correct();
+    if(by==="s" && i===STREAM.live) for(const v of STREAM.votes.values()) v.forEach(n=>mvpAdd(n,1));
+    state.cells[i]=p.n; state.own[i]={by,user:user||""}; justFilled=i; STREAM.live=-1; if(by==="s") SFX.correct(); else SFX.steal();
     streamFeed(by==="s" ? `<b>${esc(stName())}</b> claimed ${sqName(i)} with ${esc(p.n)}` : `<b>${esc(user)}</b> stole ${sqName(i)} with ${esc(p.n)}!`,"ok"); newLive();
     if(by==="c" && document.getElementById("scrim").classList.contains("open")) closePicker();
     if(state.own.every(Boolean)) streamEnd();
-  } else { SFX.wrong();
+  } else { if(by==="s") SFX.wrong();
     if(by==="s"){ toast(`${p.n} doesn't fit. Keep trying!`); const el=document.getElementById("cell"+i); el&&el.classList.remove("flash"); setTimeout(()=>openPicker(i),500) }
     else streamFeed(`<b>${esc(user)}</b>: ${esc(p.n)} doesn't fit`) }
   render(); streamUI() }
@@ -3649,7 +3702,32 @@ function fakeAuto(on){ clearInterval(FC_T); FC_T=null; const b=document.getEleme
   if(on) FC_T=setInterval(()=>{ if(STREAM.on&&STREAM.live>=0&&!state.own[STREAM.live]) fcAnswer(Math.random()<.45) },2200) }
 function streamEnd(){ const s=state.own.filter(o=>o.by==="s").length, c=9-s; state.over=true;
   const msg = s>c ? `${stName()} wins ${s}–${c}!` : `Chat wins ${c}–${s}!`;
-  streamFeed(`<b>${msg}</b> Hit “New grid” for a rematch.`,"ok"); toast(msg); if(s>c) setTimeout(confetti,200) }
+  streamFeed(`<b>${msg}</b> Hit “New grid” for a rematch.`,"ok");
+  const top=mvpTop().map(esc), chatWon=c>s;
+  document.getElementById("stWinWord").textContent = chatWon ? "Chat Victory!" : "Streamer Victory!";
+  document.getElementById("stWinSub").textContent = chatWon ? `Chat wins ${c}–${s}` : `${stName()} wins ${s}–${c}`;
+  document.getElementById("stWinMvp").innerHTML = !top.length ? "" : chatWon
+    ? `<span>MVPs</span><b>${andList(top)}</b>`
+    : `<b>${andList(top)}</b> made it close…`;
+  setTimeout(showStWin,550) }
+function showStWin(){ const d=document.getElementById("stWin"); d.classList.remove("show"); void d.offsetWidth; d.classList.add("show");
+  SFX.winner(); setTimeout(confetti,420); setTimeout(()=>document.getElementById("stWinX").focus(),300) }
+function closeStWin(){ document.getElementById("stWin").classList.remove("show") }
+// DEV-ONLY: finish the grid with a forced winner (fills the open squares with real answers)
+function fcForceWin(chatWins){ if(!STREAM.on||!state.own) return toast("Start Streamer vs Chat first");
+  fakeAuto(false); const open=[...Array(9).keys()].filter(i=>!state.own[i]);
+  if(!open.length) return toast("This grid is already finished. Hit “New grid”.");
+  const s0=state.own.filter(o=>o&&o.by==="s").length, c0=state.own.filter(o=>o&&o.by==="c").length;
+  let s=s0,c=c0; const bots=["Kiriko4Life","tankdiff","SupportGap","OWLfan","rein_shatter"];
+  open.forEach((i,k)=>{ const row=grid.rows[Math.floor(i/3)], col=grid.cols[i%3];
+    const p=answersFor(row,col).find(p=>!state.cells.includes(p.n)); if(!p) return;
+    // give the chosen side enough of the open squares to win
+    const toChat = chatWins ? (c<=s || k%3) : (s<=c ? false : k%3===0);
+    if(toChat){ const voters=[bots[k%5],bots[(k+1)%5]]; voters.forEach((n,j)=>mvpAdd(n,j?2:3)); c++ ; state.own[i]={by:"c",user:voters.join(" + ")} }
+    else { mvpAdd(bots[(k+2)%5],1); s++; state.own[i]={by:"s",user:""} }
+    state.cells[i]=p.n });
+  if(chatWins? c<=s : s<=c) return toast("Too many squares already taken to force that result. Try “New grid”.");
+  STREAM.live=-1; render(); streamUI(); streamEnd() }
 function streamFeed(html,cls=""){ STREAM.feed.push({html,cls}); STREAM.feed=STREAM.feed.slice(-6); const el=document.getElementById("stFeed");
   el.hidden=!STREAM.on; el.innerHTML=STREAM.feed.slice().reverse().map(f=>`<div class="${f.cls}">${f.html}</div>`).join("") }
 function streamUI(){ if(!STREAM.on||!state||!grid) return; const own=state.own||[], s=own.filter(o=>o&&o.by==="s").length, c=own.filter(o=>o&&o.by==="c").length;
@@ -3992,7 +4070,7 @@ function init(){
   };
   // Streamer page controls: league, new grid, exit
   document.getElementById("sbLg").onchange=e=>{ if(revealing) return; PRACTICE_LG=e.target.value; store.set("owdoku-practice-lg",PRACTICE_LG); load(); streamFeed(`New ${PRACTICE_LG} grid! Pick a square to start.`,"sys"); streamUI() };
-  document.getElementById("stNew").onclick=()=>{ if(revealing) return; load(); streamFeed("New grid! Pick a square to start.","sys"); streamUI() };
+  document.getElementById("stNew").onclick=()=>{ if(revealing) return; STREAM.mvp=new Map(); load(); streamFeed("New grid! Pick a square to start.","sys"); streamUI() };
   document.getElementById("sbExit").onclick=()=>{ if(revealing) return; stopStream(); mode="daily"; setTabs(); load(); renderSide() };
   // a link straight to streamer mode: owdoku.pages.dev/#streamer
   if(location.hash==="#streamer") setTimeout(()=>{ history.replaceState(null,"",location.pathname+location.search); openStreamSetup() },600);
@@ -4005,6 +4083,10 @@ function init(){
   document.getElementById("fcWrong").onclick=()=>fcAnswer(false);
   document.getElementById("fcJunk").onclick=()=>{ ["lol","GG","proper is cracked","what is this game","!g","!g notarealplayer123"].forEach(t=>fcSay(fcName(),t)) };
   document.getElementById("fcAuto").onclick=()=>fakeAuto(!FC_T);
+  document.getElementById("fcChatWin").onclick=()=>fcForceWin(true);
+  document.getElementById("fcStWin").onclick=()=>fcForceWin(false);
+  document.getElementById("stWinX").onclick=closeStWin;
+  addEventListener("keydown",e=>{ if(e.key==="Escape" && document.getElementById("stWin").classList.contains("show")) closeStWin() });
   document.getElementById("devPin").onclick=()=>{ const P=pinStore(), d=PIN_DEFS.find(x=>!P.earned[x.id]); if(!d){ toast("All achievements earned"); return }
     P.earned[d.id]=todayKey(); store.set("owdoku-pins",P); PIN_NEW.push(d.id); renderRank(); showPinPops() };
   document.getElementById("devApex").onclick=()=>forceTheme("apex","APEX","APEX-day grid");
