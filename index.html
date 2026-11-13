@@ -3506,11 +3506,13 @@ function stopStream(silent){ if(STREAM.ws){ STREAM.ws.onclose=null; try{STREAM.w
   if(!STREAM.on) return; STREAM.on=false; STREAM.live=-1; document.body.classList.remove("streaming");
   document.getElementById("stBanner").hidden=true; document.getElementById("stFeed").hidden=true; if(!silent) setTabs() }
 function streamConnect(){
-  const ws=new WebSocket("wss://irc-ws.chat.twitch.tv:443"); STREAM.ws=ws;
+  const ws=new WebSocket("wss://irc-ws.chat.twitch.tv:443"); STREAM.ws=ws; STREAM.joined=false;
+  // Twitch stays silent when a channel doesn't exist, so say so if the join never confirms
+  clearTimeout(STREAM.jt); STREAM.jt=setTimeout(()=>{ if(STREAM.on&&STREAM.ws===ws&&!STREAM.joined) streamFeed(`No reply from #${STREAM.chan}. Check the channel name (type “streamer” again to change it).`,"sys") },8000);
   ws.onopen=()=>{ ws.send("CAP REQ :twitch.tv/tags"); ws.send("PASS SCHMOOPIIE"); ws.send("NICK justinfan"+(10000+Math.floor(Math.random()*80000))); ws.send("JOIN #"+STREAM.chan) };
   ws.onmessage=ev=>{ for(const line of String(ev.data).split("\r\n")){ if(!line) continue;
     if(line.startsWith("PING")){ ws.send("PONG :tmi.twitch.tv"); continue }
-    if(/ 366 /.test(line)){ streamFeed(`Connected to #${STREAM.chan}. Pick a square to start!`,"sys"); continue }
+    if(/ 366 /.test(line)){ STREAM.joined=true; streamFeed(`Connected to #${STREAM.chan}. Pick a square to start!`,"sys"); continue }
     const m=/^(?:@(\S+) )?:(\w+)!\S+ PRIVMSG #\w+ :(.*)$/.exec(line); if(!m) continue;
     const dn=(/(?:^|;)display-name=([^;]*)/.exec(m[1]||"")||[])[1]||m[2]; streamChat(dn||m[2],m[2],m[3]) } };
   ws.onclose=()=>{ if(STREAM.on){ streamFeed("Chat disconnected, reconnecting…","sys"); setTimeout(()=>STREAM.on&&streamConnect(),3000) } } }
