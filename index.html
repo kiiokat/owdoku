@@ -2953,8 +2953,8 @@ PIN_DEFS.push(
   {id:"untouch",sec:"Daily",icon:"shield",name:"Untouchable",how:"Finished 9/9 without a wrong guess"},
   {id:"comeback",sec:"Daily",icon:"muscle",name:"Comeback",how:"Finished 9/9 after two wrong guesses"},
   {id:"globe",sec:"Daily",icon:"globe",name:"Globetrotter",how:"Answers from 5 different countries in one grid, in squares that didn't ask for a country"},
-  {id:"champs",sec:"Daily",icon:"trophy",name:"Champions' Circle",how:"Named 3 OWL champions in one grid, in squares that didn't ask for one"},
-  {id:"bench",sec:"Daily",icon:"chair",name:"Deep Bench",how:"Named a player with under 5 recorded OWL hours"},
+  {id:"champs",sec:"Daily",icon:"trophy",name:"Champions' Circle",how:"Named 3 champions in one grid (OWL, OWCS international or World Cup), in squares that didn't ask for a champion"},
+  {id:"bench",sec:"Daily",icon:"chair",name:"Deep Bench",how:"Named a player who barely played at the top level: under 5 OWL hours, or a single OWCS season with no more than one international event"},
   {id:"oldguard",sec:"Daily",icon:"clock",name:"Old Guard",how:"Named 3 players from the 2018 season in one grid, in squares that didn't ask for 2018"},
   // OWCS and World Cup knowledge (only squares that didn't ask for the thing count) and current-era habits
   {id:"thennow",sec:"Current",icon:"bridge",name:"Then and Now",how:"Named 3 players in one OWCS grid who also played in the OWL"},
@@ -3013,8 +3013,11 @@ function awardGamePins(){
   if(win && state.strikes===2 && earnPin(P,"comeback")) got.push("comeback");
   const free=(i,kind,id)=>!rc(i).some(c=>c.kind===kind&&(!id||c.id===id));
   if(new Set(sq.filter(i=>free(i,"nat")).map(i=>pl(i)?.c).filter(Boolean)).size>=5 && earnPin(P,"globe")) got.push("globe");
-  if(sq.filter(i=>free(i,"champ")&&pl(i)?.ch?.length).length>=3 && earnPin(P,"champs")) got.push("champs");
-  if(sq.some(i=>{ const p=pl(i); return p&&p.y.length&&p.hr>0&&p.hr<5 }) && earnPin(P,"bench")) got.push("bench");
+  const anyChamp=p=>!!(p&&(p.ch?.length||p.ww||p.wcw)), noChampAsked=i=>free(i,"champ")&&free(i,"owwin")&&free(i,"wcw");
+  if(sq.filter(i=>noChampAsked(i)&&anyChamp(pl(i))).length>=3 && earnPin(P,"champs")) got.push("champs");
+  // Deep Bench: a barely-there top-level career in either era
+  const benchy=p=>!!p&&((p.y.length&&p.hr>0&&p.hr<5) || (!p.y.length&&p.oy&&p.oy.length===1&&(p.ow||0)<=1));
+  if(sq.some(i=>benchy(pl(i))) && earnPin(P,"bench")) got.push("bench");
   if(sq.filter(i=>free(i,"season","y:2018")&&pl(i)?.y.includes(2018)).length>=3 && earnPin(P,"oldguard")) got.push("oldguard");
   // OWCS and World Cup knowledge
   const owcsGrid=grid.rows.every(c=>c.kind==="team"&&TEAMS[c.team].lg==="OWCS");
