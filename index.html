@@ -527,6 +527,9 @@
   .mrow .go{font-size:12px;font-weight:650;color:var(--accent-2);white-space:nowrap}
   .mrow .go.prog{color:#8fd6ff}
   .linkbtn{display:block;margin:10px auto 0;background:none;border:0;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .tell{margin:10px 2px 0;font-size:12.5px;line-height:1.45;color:var(--muted);text-align:center}
+  .tell button{border:0;background:none;padding:0;font:inherit;font-weight:700;color:var(--accent-2);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+  body.practicing .tell, body.streaming .tell{display:none}
   .nudge{display:flex;align-items:center;gap:10px;width:100%;margin-top:9px;padding:11px 14px;border:0;border-radius:999px;cursor:pointer;color:var(--text);
     font-size:14px;font-weight:550;text-align:left;background:linear-gradient(90deg,rgba(255,157,46,.12),var(--surface) 70%);
     box-shadow:0 0 0 1px rgba(255,157,46,.3),0 1px 2px rgba(0,0,0,.3);transition:transform .3s var(--spring),box-shadow .2s}
@@ -952,6 +955,7 @@
     <div class="next" id="nextBox">Next puzzle in <b data-countdown>--:--:--</b></div>
     <button class="btn primary" id="shareBtn" data-nosfx>Copy result</button>
     <button class="btn ghost" id="answersBtn">See all answers</button>
+    <p class="tell" id="tellBox">Enjoyed it? Send OWdoku to a friend who follows pro Overwatch. <button id="tellCopy" data-nosfx>Copy link</button></p>
     <button class="nudge" id="nudgeRow" style="display:none"></button>
   </div>
   <button class="btn ghost" id="giveUpBtn">Give up</button>
@@ -3840,6 +3844,9 @@ function init(){
     finish(); save(); render(); window.scrollTo({top:0,behavior:"smooth"});
     const st=state, sent=afterGame();
     showDefeat("You gave up").then(()=>sent.finally(()=>{ if(state===st) revealRemaining(false,()=>{ if(state===st) showRankUp().then(()=>{ if(state===st) openMore() }) }) })); };
+  document.getElementById("tellCopy").onclick=async e=>{ const b=e.currentTarget, url=location.origin+location.pathname;
+    try{ await navigator.clipboard.writeText(url); b.textContent="Link copied!" }catch(_){ b.textContent=url }
+    SFX.tap(); setTimeout(()=>b.textContent="Copy link",1800) };
   document.getElementById("shareBtn").onclick=async()=>{
     try{await navigator.clipboard.writeText(shareText());SFX.copy();toast("Copied!")}catch(e){toast("Couldn't copy here")}};
   document.getElementById("answersBtn").onclick=()=>{
