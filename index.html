@@ -27,6 +27,10 @@
   body{margin:0;color:var(--text);font-family:var(--body);display:flex;justify-content:center;min-height:100vh;
     background:radial-gradient(640px 320px at 50% -120px,rgba(255,157,46,.10),transparent 70%),var(--bg);
     -webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11"}
+  /* Practice Range: a cool teal wash fades in over the usual warm backdrop */
+  body.practicing{background:radial-gradient(760px 380px at 50% -140px,rgba(47,209,197,.13),transparent 70%),linear-gradient(180deg,#0a1116,#0b0e13 55%)}
+  body.practicing .modebar{box-shadow:var(--sh-1),inset 0 0 0 1px rgba(47,209,197,.22)}
+  body.practicing .modebar b{color:#7fe6dd}
   /* fine grain over everything, like printed paper */
   body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -3761,7 +3765,7 @@ function setTabs(){
   document.getElementById("tabPractice").classList.toggle("on",mode==="practice");
   document.getElementById("tabArchive").classList.toggle("on",mode==="archive");
   const bar=document.getElementById("modeBar"); bar.hidden = mode==="daily";
-  document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice Mode</b>"
+  document.getElementById("modeLbl").innerHTML = mode==="practice" ? "<b>Practice Range</b>"
     : mode==="archive" ? `<b>Archive #${puzzleNum(dayKey)}</b><i> · doesn't move your rank</i>` : "" }
 function openStats(){
   const hist=store.get("owdoku-history",{}), s=store.get("owdoku-streak",{n:0,best:0,last:null});
